@@ -36,9 +36,8 @@
 
 > ✅ **Checkpoint 1.1** ถ่ายภาพหน้าจอ Firebase Console ที่แสดงหน้า Project Overview ของโปรเจกต์ที่สร้างเสร็จแล้ว
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+<img width="1470" height="922" alt="image" src="https://github.com/user-attachments/assets/63271283-d67d-4493-ae79-3e9138929691" />
+
 
 ### ขั้นตอนที่ 1.2: 🔧 ทำตามขั้นตอน — ติดตั้งเครื่องมือและเชื่อมโปรเจกต์ด้วย FlutterFire CLI
 
@@ -164,9 +163,35 @@ Future<void> main() async {
 
 > ✅ **Checkpoint 2.1** ทดสอบสมัครสมาชิกด้วย Email ใหม่สำเร็จ ถ่ายภาพหน้าจอ Firebase Console เมนู Authentication → Users ที่แสดงบัญชีที่เพิ่งสมัคร จากนั้นทดสอบกรณีผิดพลาด 2 กรณี คือ (ก) สมัครซ้ำด้วย Email เดิม และ (ข) ใส่รหัสผ่านสั้นเกินไป ถ่ายภาพหน้าจอข้อความ Error ทั้งสองกรณี พร้อมอธิบายว่าโค้ดส่วนใดใน `auth_service.dart` เป็นตัวจัดการแต่ละกรณี
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบายของแต่ละกรณี
-```
+- ทดสอบสมัครสมาชิกด้วย Email ใหม่สำเร็จ
+<img width="1206" height="2622" alt="Screenshot iPhone 17 09-10-2569 BE at 14 57 53" src="https://github.com/user-attachments/assets/e42ffe88-9b6b-4203-95d1-766f493f1d08" />
+
+<img width="1470" height="922" alt="image" src="https://github.com/user-attachments/assets/d09799a5-c921-4bba-9743-0ad0a6a08a90" />
+
+ทดสอบกรณีผิดพลาด 2 กรณี คือ 
+- (ก) สมัครซ้ำด้วย Email เดิม
+<img width="1206" height="2622" alt="Screenshot iPhone 17 09-10-2569 BE at 15 31 26" src="https://github.com/user-attachments/assets/4e46e3cb-3bf3-4a8b-88a2-6a12146344e9" />
+
+- (ข) ใส่รหัสผ่านสั้นเกินไป
+<img width="1206" height="2622" alt="Screenshot iPhone 17 09-10-2569 BE at 15 31 44" src="https://github.com/user-attachments/assets/280ef04a-bf13-4efc-be5f-4885372448e9" />
+
+#### อธิบายโค้ดใน `auth_service.dart` ที่จัดการ Error
+
+ทั้งสองกรณีเกิดตอนเรียก `signUp()` ซึ่งเรียก `createUserWithEmailAndPassword` ของ Firebase
+
+**หลักการทำงาน**
+
+1. เมื่อ Firebase ปฏิเสธคำขอ จะโยน `FirebaseAuthException` ออกมา
+2. บล็อก `on FirebaseAuthException catch (e)` ใน `signUp()` จะจับไว้ แล้วส่ง `e` ไปให้ `_handleFirebaseAuthException(e)`
+3. เมธอดนี้ใช้ `switch (e.code)` แปลง code เป็นข้อความภาษาไทย แล้วส่งกลับไปแสดงบนหน้าจอ
+
+**แต่ละกรณีถูกจัดการที่ไหน**
+
+| กรณี | `e.code` | `case` ที่จัดการ | ข้อความที่แสดง |
+|---|---|---|---|
+| (ก) สมัครซ้ำด้วย Email เดิม | `email-already-in-use` | `case 'email-already-in-use'` | อีเมลนี้ถูกใช้งานแล้วในระบบ |
+| (ข) รหัสผ่านสั้นเกินไป | `weak-password` | `case 'weak-password'` | รหัสผ่านคาดเดาง่ายเกินไป ต้องมีอย่างน้อย 6 ตัวอักษร |
+
 
 ---
 
@@ -383,10 +408,35 @@ avdmanager list avd
 
 > ✅ **Checkpoint 3.1** ทดสอบกดปุ่มเข้าสู่ระบบด้วย Google ด้วยบัญชี Google จริงของคุณ ถ่ายภาพหน้าจอตอนเลือกบัญชี Google และภาพหน้าจอ Firebase Console ที่แสดงว่ามีผู้ใช้ใหม่ Provider เป็น Google เพิ่มเข้ามา อธิบายว่า `idToken` กับ `accessToken` ที่ได้จาก Google นำไปใช้ทำอะไรต่อในขั้นตอนการยืนยันตัวตนกับ Firebase (อ้างอิงหัวข้อ 9.4)
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
+- ทดสอบกดปุ่มเข้าสู่ระบบด้วย Google ด้วยบัญชี Google จริงของคุณ
+<img width="1206" height="2622" alt="Screenshot iPhone 17 09-10-2569 BE at 17 05 41" src="https://github.com/user-attachments/assets/22ff33f1-fadc-4bb0-97c8-c33a6ed5a7c2" />
 
+<img width="1206" height="2622" alt="Screenshot iPhone 17 09-10-2569 BE at 17 05 48" src="https://github.com/user-attachments/assets/6bcce29d-4d2b-4e5c-a64b-9f9cec14ed0c" />
+
+
+- ภาพหน้าจอ Firebase Console
+<img width="1469" height="922" alt="image" src="https://github.com/user-attachments/assets/6e60e94b-284a-41ee-b3fd-afe3e947c7ab" />
+
+#### อธิบายว่า `idToken` กับ `accessToken` ที่ได้จาก Google นำไปใช้ทำอะไรต่อในขั้นตอนการยืนยันตัวตนกับ Firebase
+
+- idToken
+  - เป็น JWT ที่ Google เซ็นรับรองไว้ ข้างในมีอีเมล ชื่อ และ ID ของผู้ใช้
+  - ใช้เป็น **หลักฐานยืนยันตัวตน** ว่าคนนี้เป็นเจ้าของบัญชี Google นี้จริง
+  - Firebase ตรวจว่าลายเซ็นถูกต้อง ยังไม่หมดอายุ และออกให้แอปของเราจริง
+
+- accessToken
+  - เป็นโทเค็นที่ให้สิทธิ์เรียกใช้ Google API ในนามผู้ใช้ ตาม scope ที่ขอ (ในโค้ดขอ scope email)
+  - ใน google_sign_in เวอร์ชันนี้ต้องขอแยกผ่าน authorizationClient
+  - Firebase ใช้ประกอบกับ idToken เพื่อดึงข้อมูลโปรไฟล์จาก Google
+
+- ขั้นตอนการนำไปใช้กับ Firebase <br>
+  1.authenticate() เปิดหน้าเลือกบัญชี Google แล้วได้ googleUser<br>
+  2.อ่าน idToken จาก googleUser.authentication.idToken<br>
+  3.ขอ accessToken จาก googleUser.authorizationClient.authorizationForScopes(['email'])<br>
+  4.ห่อทั้งสองเป็น credential ด้วย GoogleAuthProvider.credential(idToken, accessToken)<br>
+  5.ส่งให้ FirebaseAuth.signInWithCredential(credential)<br>
+  6.Firebase ตรวจโทเค็นกับ Google ถ้าถูกต้องจะสร้างผู้ใช้ใหม่หรือเข้าสู่บัญชีเดิม แล้วออก session ของ Firebase ให้แอป<br>
+  7.authStateChanges() ส่งค่า User ใหม่ออกมา และผู้ใช้จะปรากฏใน Firebase Console โดย Provider เป็น Google<br>
 ---
 
 ## ส่วนที่ 4: AuthGate — สลับหน้าจอตามสถานะผู้ใช้
@@ -521,12 +571,29 @@ Widget build(BuildContext context) {
 เพิ่มปุ่ม "ออกจากระบบ" ใน AppBar ของ `HomePage` ที่เรียก `AuthService().signOut()`
 
 > ✅ **Checkpoint 4.1** ถ่ายภาพหน้าจอ 3 ภาพเรียงกัน คือ (ก) แอปตอนเพิ่งเปิดขึ้นมาครั้งแรกแบบยังไม่ล็อกอิน แสดงหน้า Login (ข) หลังล็อกอินสำเร็จ แอปสลับไปแสดง `MainScaffold` อัตโนมัติโดยไม่ต้องกดอะไรเพิ่ม และ (ค) หลังกด "ออกจากระบบ" แอปสลับกลับไปหน้า Login เอง อธิบายว่าทำไมการใช้ `StreamBuilder` ฟัง `authStateChanges()` จึงทำให้ไม่ต้องเขียนโค้ดสั่ง Navigate ไปมาเอง
+- (ก) แอปตอนเพิ่งเปิดขึ้นมาครั้งแรกแบบยังไม่ล็อกอิน แสดงหน้า Login
+<img width="1206" height="2622" alt="Screenshot iPhone 17 09-10-2569 BE at 18 59 40" src="https://github.com/user-attachments/assets/16ecf133-b891-4eac-a3bb-6aae6f26d448" />
 
+- (ข) หลังล็อกอินสำเร็จ แอปสลับไปแสดง `MainScaffold` อัตโนมัติโดยไม่ต้องกดอะไรเพิ่ม
+<img width="1206" height="2622" alt="Screenshot iPhone 17 09-10-2569 BE at 19 00 10" src="https://github.com/user-attachments/assets/67c8a830-3b7d-4b81-ad2d-152353673914" />
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ (3 ภาพ) และคำอธิบาย
-```
+- (ค) หลังกด "ออกจากระบบ" แอปสลับกลับไปหน้า Login เอง
+<img width="1206" height="2622" alt="Screen Recording iPhone 17 09-10-2569 BE at 19 28 02" src="https://github.com/user-attachments/assets/54fce60f-42b2-408b-82c1-fb4e0293a544" />
 
+คำอธิบาย ทำไมการใช้ StreamBuilder ฟัง authStateChanges() จึงทำให้ไม่ต้องเขียนโค้ดสั่ง Navigate ไปมาเอง?
+1. **การทำงานแบบ Reactive ผ่าน Stream (`authStateChanges()`)**:
+   - `FirebaseAuth.instance.authStateChanges()` ส่งค่ากลับมาเป็น `Stream<User?>` ซึ่งทำหน้าที่แจ้งเตือน (emit) สถานะของ Authentication ทันทีที่มีการเปลี่ยนแปลงในระบบ:
+     - เมื่อผู้ใช้เข้าสู่ระบบสำเร็จ → ส่งออบเจกต์ `User`
+     - เมื่อผู้ใช้กดออกจากระบบ (`signOut()`) หรือยังไม่ได้เข้าสู่ระบบ → ส่งค่า `null`
+2. **การ Rebuild อัตโนมัติของ `StreamBuilder`**:
+   - `AuthGate` ทำหน้าที่เป็น Root Widget คอยดักฟัง (Listen) สตรีมดังกล่าวผ่าน `StreamBuilder<User?>`
+   - ทุกครั้งที่ค่าใน Stream เปลี่ยนแปลง ฟังก์ชัน `builder` ของ `StreamBuilder` จะถูกเรียกทำงานใหม่ทันทีโดยอัตโนมัติ:
+     - หาก `snapshot.data == null` → แสดงวิดเจ็ต `LoginPage()`
+     - หาก `snapshot.data` มีข้อมูล `User` → แสดงวิดเจ็ต `MainScaffold(...)`
+3. **การสลับหน้าจอในระดับ Widget Tree (Declarative UI)**:
+   - สถาปัตยกรรมของ Flutter เป็นแบบ Declarative UI การแสดงผลหน้าจอจะเปลี่ยนไปตาม State ที่เป็นจริง
+   - เมื่อใช้ `StreamBuilder` ในการสลับวิดเจ็ตโดยตรง จึงไม่จำเป็นต้องเขียนคำสั่งแบบ Imperative เช่น `Navigator.push()` หรือ `Navigator.pop()` เพื่อจัดการหน้าจอด้วยตนเอง
+   - ช่วยลดความซับซ้อน ป้องกันปัญหา Route Stack ซ้อนทับ และทำให้ระบบ Authentication จัดการสถานะได้อย่างปลอดภัยและแม่นยำตลอดทั้งแอป
 ---
 
 ## ส่วนที่ 5: ขยาย Repository Pattern ด้วย ItemRepositoryFirestore
@@ -538,9 +605,22 @@ Widget build(BuildContext context) {
 1. ทำไมเราจึง "เพิ่ม Implementation ใหม่" (`ItemRepositoryFirestore`) แทนที่จะแก้ไข `ItemRepositoryApi` เดิม หรือเขียนโค้ดเรียก Firestore ตรงจาก `HomePage`?
 2. ถ้าในอนาคตอาจารย์สั่งให้เปลี่ยนจาก Fake Store API ไปใช้ API อื่น ต้องแก้ไฟล์กี่ไฟล์ ถ้าทุก Widget เรียกผ่าน Interface `ItemRepository` เท่านั้น?
 
-```text
-บันทึกคำตอบของคุณที่นี่
-```
+#### คำตอบ
+1. ทำไมเพิ่ม ItemRepositoryFirestore ใหม่ แทนแก้ของเดิมหรือเรียก Firestore จาก HomePage
+- ไม่แก้ ItemRepositoryApi
+  - โค้ดเดิมทำงานถูกต้องและทดสอบแล้ว การแก้ไฟล์เดิมเสี่ยงทำให้ฟีเจอร์ที่ใช้ได้อยู่พัง (หลัก Open/Closed: เปิดให้ขยาย ปิดไม่ให้แก้
+  - คลาสเดียวควรรับผิดชอบแหล่งข้อมูลเดียว (Single Responsibility) Fake Store API ใช้ HTTP/JSON ส่วน Firestore ใช้ Collection/Snapshot/Stream ถ้ารวมกันคลาสจะซับซ้อนและมีเหตุผลให้ต้องแก้สองทาง
+- ไม่เรียก Firestore จาก HomePage ตรงๆ
+  - UI จะผูกแน่นกับ Firebase (tight coupling) เปลี่ยนแหล่งข้อมูลต้องไล่แก้ทุกหน้า
+  - เขียน unit test ยาก เพราะต้อง mock Firebase ทั้งก้อน และใช้ logic ซ้ำในหน้าอื่นไม่ได้
+- ผลที่ได้ เมื่อสร้างเป็น implementation ใหม่ของ interface ItemRepository เดียวกัน UI รู้จักแค่ interface จึงสลับ API ↔ Firestore ↔ Fake (สำหรับเทสต์) ได้โดยไม่แตะ UI
+
+2. ถ้าเปลี่ยนไปใช้ API อื่น ต้องแก้กี่ไฟล์
+- 2 ไฟล์ <br>
+  1.สร้างไฟล์ใหม่ เช่น item_repository_other_api.dart ที่ implements ItemRepository (เพิ่มใหม่ ไม่ได้แก้ของเดิม) <br>
+  2.แก้จุดสร้าง instance จุดเดียว (เช่น main.dart) จาก ItemRepositoryApi() เป็นคลาสใหม่ 
+- HomePage และ Widget อื่น แก้ 0 ไฟล์ เพราะเรียกผ่าน interface และไม่รู้ว่าข้อมูลมาจากไหน
+- ข้อควรระวัง ถ้า JSON ของ API ใหม่ต่างจากเดิม ให้แปลงเป็น model Item เดิมภายใน repository ใหม่ เพื่อไม่ให้กระทบ UI
 
 ### ขั้นตอนที่ 5.2: **นักศึกษาเขียน Code เอง** — ItemRepositoryFirestore
 
@@ -610,10 +690,20 @@ final pages = [
 > 🔧 **อย่าลืมแก้ `auth_gate.dart` ด้วย** ตอนนี้ `MainScaffold` รับ `itemRepositories` (List) แล้ว ให้กลับไปเปลี่ยนบรรทัด `itemRepository: itemRepositories.first` ใน `AuthGate.build()` (ขั้นตอนที่ 4.1) เป็น `itemRepositories: itemRepositories` ตามเดิม ไม่เช่นนั้นจะเกิด Error ตรงกันข้ามกับก่อนหน้านี้ (ส่งพารามิเตอร์ชื่อ `itemRepository` ที่ `MainScaffold` ไม่รู้จักอีกต่อไป)
 
 > ✅ **Checkpoint 5.1** ถ่ายภาพหน้าจอ Home ที่แสดงสินค้าจากทั้งสองแหล่งข้อมูลปนกันอยู่ในลิสต์เดียว พร้อม Badge ที่แยกแหล่งที่มาชัดเจน (ถ้ายังไม่เคยมีประกาศจริงใน Firestore เลย ให้ทำส่วนที่ 6 ให้เสร็จก่อนแล้วย้อนกลับมาถ่ายภาพ Checkpoint นี้) อธิบายว่าการออกแบบให้ `HomePage` ไม่รู้จัก `ItemRepositoryApi`/`ItemRepositoryFirestore` โดยตรง แต่รู้จักผ่าน Interface `ItemRepository` เท่านั้น ช่วยให้ทดสอบหรือเปลี่ยนแหล่งข้อมูลในอนาคตง่ายขึ้นอย่างไร
+<img width="1206" height="2622" alt="image" src="https://github.com/user-attachments/assets/dd5659f8-644b-46a0-ae65-127d60fa9b75" />
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
+#### อธิบายว่าการออกแบบให้ `HomePage` ไม่รู้จัก `ItemRepositoryApi`/`ItemRepositoryFirestore` โดยตรง แต่รู้จักผ่าน Interface `ItemRepository` เท่านั้น ช่วยให้ทดสอบหรือเปลี่ยนแหล่งข้อมูลในอนาคตง่ายขึ้นอย่างไร
+
+HomePage รับ List<ItemRepository> และเรียกแค่ getItems() โดยไม่รู้ว่าเบื้องหลังเป็น ItemRepositoryApi (HTTP) หรือ ItemRepositoryFirestore (Firebase) การออกแบบนี้ช่วยได้ 2 เรื่อง
+1. ทดสอบง่ายขึ้น
+- เขียน Fake repository ง่ายๆ ที่คืนรายการสินค้าตายตัว แล้วส่งเข้า HomePage ตอนเทสต์ได้เลย ไม่ต้องต่ออินเทอร์เน็ต ไม่ต้อง mock Firebase และไม่ต้องล็อกอิน
+- จำลองสถานการณ์ได้ตามต้องการ เช่น ลิสต์ว่าง, ข้อมูลเยอะ หรือ repository ที่ throw error แล้วเช็กว่า UI แสดงผลถูก
+- ผลเทสต์ไม่แกว่งตาม API ภายนอกที่อาจล่ม (เหมือน Fake Store API ที่เคยล่มจนต้องมี fallback)
+
+2. เปลี่ยนหรือเพิ่มแหล่งข้อมูลง่ายขึ้น
+- โปรเจกต์นี้พิสูจน์แล้ว: เพิ่ม ItemRepositoryFirestore เป็นแหล่งที่ 2 โดย HomePage เปลี่ยนแค่รับเป็น List แล้วรวมผลด้วย Future.wait ไม่ต้องรู้ว่าแต่ละตัวทำงานอย่างไร
+- ถ้าอาจารย์สั่งเปลี่ยนไปใช้ API อื่น แค่เขียนคลาสใหม่ที่ implements ItemRepository แล้วเปลี่ยนจุดสร้าง instance ใน main.dart ส่วน HomePage, MainScaffold และ AuthGate ไม่ต้องแก้
+- ข้อผิดพลาดและการแปลงข้อมูล (เช่น JSON → Item) อยู่ในคลาส repository ของแต่ละแหล่ง ไม่รั่วเข้า UI
 
 ---
 
@@ -662,16 +752,31 @@ final pages = [
 - ระหว่างอัปโหลดให้แสดง Progress Indicator ตามที่อธิบายไว้ในหัวข้อ 9.7
 
 > ✅ **Checkpoint 6.1** โพสต์ขายจริงอย่างน้อย 2 รายการผ่านแอป ถ่ายภาพหน้าจอ Firebase Console เมนู Firestore Database ที่แสดง Collection `items` มีเอกสารที่โพสต์เข้ามาจริง พร้อม field `sellerId` ที่ตรงกับ `uid` ของบัญชีที่ใช้ทดสอบ และยืนยันว่าร่างทั้งสองรายการหายไปจาก `MyDraftsPage` แล้ว
+- ก่อนโพสต์ มีร่าง Samsung Galaxy และ Lenovo ThinkPad
+<img width="1206" height="2622" alt="image" src="https://github.com/user-attachments/assets/cf59ae16-a175-4461-9642-236e89c00720" />
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+- หลังโพสต์ทั้งสองรายการ หน้าร่างว่าง "ยังไม่มีร่างประกาศ"
+<img width="1206" height="2622" alt="image" src="https://github.com/user-attachments/assets/1bd37341-ac0c-4e56-aa43-9442f1de4ca6" />
+
+- Firestore
+  - ชิ้นที่ 1  
+    <img width="1470" height="922" alt="image" src="https://github.com/user-attachments/assets/bf0c9fd0-0be8-4a6c-a5b8-45dc583cfd5a" />
+  - ชิ้นที่ 2
+    <img width="1470" height="922" alt="image" src="https://github.com/user-attachments/assets/6e569872-1a6a-4b2d-92af-383d9cede629" />
+
+
+
 
 > ✅ **Checkpoint 6.2** ถ่ายภาพหน้าจอ Firebase Console เมนู Storage ที่แสดงไฟล์รูปภาพที่อัปโหลดสำเร็จ และภาพหน้าจอ Firestore ที่แสดงว่าเอกสารมี field `imageUrl` เป็น URL จริงที่เปิดดูได้ ถ่ายภาพหน้าจอแอปที่แสดงรูปสินค้านั้นบนหน้า Home ผ่าน `Image.network(imageUrl)` ด้วย (ย้อนกลับไปถ่ายภาพ Checkpoint 5.1 ให้ครบตอนนี้ ถ้ายังไม่ได้ทำ)
+`uid` ของบัญชีที่ใช้ทดสอบ และยืนยันว่าร่างทั้งสองรายการหายไปจาก `MyDraftsPage` แล้ว
+- Home
+<img width="1206" height="2622" alt="image" src="https://github.com/user-attachments/assets/4dff0dbe-a4ab-45e8-a42e-f24e9f9fa3b8" />
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+- Firestore ที่แสดงว่าเอกสารมี field `imageUrl`
+<img width="1470" height="922" alt="image" src="https://github.com/user-attachments/assets/14a61d6f-dd12-45d8-93a3-858aaf6c9dcc" />
+
+- หน้า Firebase Console เมนู Storage 
+<img width="1470" height="922" alt="image" src="https://github.com/user-attachments/assets/0ed306bb-098c-494b-b651-8eb6bad26ccc" />
 
 ---
 
@@ -702,9 +807,15 @@ service cloud.firestore {
 
 > ✅ **Checkpoint 7.1 (Self-Study)** ถ่ายภาพหน้าจอผลการทดลองทั้ง 2 กรณีใน Rules Playground เขียนอธิบายสั้น ๆ ว่าทำไม Client-side Validation (การไม่แสดงปุ่มแก้ไขให้เห็น) เพียงอย่างเดียวจึงไม่เพียงพอต่อความปลอดภัยของข้อมูลจริง
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
+- (ก) UID เจ้าของ = Simulated write allowed
+<img width="1470" height="922" alt="image" src="https://github.com/user-attachments/assets/09a16181-a557-4e24-b1bf-1fc60058b38c" />
+
+- (ข) UID อื่น (someone-else) = Simulated write denied
+<img width="1470" height="922" alt="image" src="https://github.com/user-attachments/assets/cd51791c-9b9b-477c-a384-70b1bd75d46c" />
+
+- คำอธิบาย
+> การซ่อนปุ่มแก้ไขในแอปไม่ปลอดภัยพอ เพราะคนที่เขียนโปรแกรมเป็นสามารถเลี่ยงแอป แล้วสั่งแก้หรือลบข้อมูลในฐานข้อมูลโดยตรงได้เลย
+> ดังนั้นต้องมีกฎป้องกันที่ฐานข้อมูล (Security Rules) ซึ่งตรวจทุกคำสั่งเสมอ จากการทดลอง คนที่เป็นเจ้าของประกาศ (uid ตรงกับ sellerId) แก้ได้ แต่คนอื่นถูกปฏิเสธ
 
 ---
 
@@ -721,9 +832,17 @@ service cloud.firestore {
 
 > ✅ **Checkpoint 8.1** ถ่ายภาพหน้าจอผลการทดสอบทั้ง 4 ข้อ 
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ 
-```
+1. ล็อกอินค้างไว้ แล้วปิดแอปทิ้งไปทั้งหมด (ไม่ใช่แค่ย่อ) 
+<img width="1206" height="2622" alt="image" src="image/Screen Recording 22.10.25_full.gif" />
+
+2. ปิด WiFi/Data ของเครื่องให้หมด แล้วลองเปิดแท็บ "รายการโปรด" และ "ร่างของฉัน"
+<img width="1206" height="2622" alt="image" src="image/Screen Recording 22.18.40_full.gif" />
+
+3. ขณะยังปิดเครือข่ายอยู่ ลองกด "โพสต์ขายจริง" กับร่างสักชิ้น
+<img width="1206" height="2622" alt="image" src="image/Screen Recording 22.23.04_full.gif" />
+
+4. เปิดเครือข่ายกลับมา แล้วลองกด "โพสต์ขายจริง" รายการเดิมอีกครั้ง
+<img width="1206" height="2622" alt="image" src="image/Screenshot iPhone 17 09-10-2569 BE at 22.25.23.png">
 
 ---
 
