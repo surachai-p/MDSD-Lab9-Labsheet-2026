@@ -36,9 +36,7 @@
 
 > ✅ **Checkpoint 1.1** ถ่ายภาพหน้าจอ Firebase Console ที่แสดงหน้า Project Overview ของโปรเจกต์ที่สร้างเสร็จแล้ว
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+![alt text](images/image.png)
 
 ### ขั้นตอนที่ 1.2: 🔧 ทำตามขั้นตอน — ติดตั้งเครื่องมือและเชื่อมโปรเจกต์ด้วย FlutterFire CLI
 
@@ -164,9 +162,55 @@ Future<void> main() async {
 
 > ✅ **Checkpoint 2.1** ทดสอบสมัครสมาชิกด้วย Email ใหม่สำเร็จ ถ่ายภาพหน้าจอ Firebase Console เมนู Authentication → Users ที่แสดงบัญชีที่เพิ่งสมัคร จากนั้นทดสอบกรณีผิดพลาด 2 กรณี คือ (ก) สมัครซ้ำด้วย Email เดิม และ (ข) ใส่รหัสผ่านสั้นเกินไป ถ่ายภาพหน้าจอข้อความ Error ทั้งสองกรณี พร้อมอธิบายว่าโค้ดส่วนใดใน `auth_service.dart` เป็นตัวจัดการแต่ละกรณี
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบายของแต่ละกรณี
-```
+ทดสอบสมัครสมาชิกด้วย Email ใหม่สำเร็จ
+![alt text](images/image-1.png)
+
+ภาพหน้าจอ Firebase Console เมนู Authentication → Users ที่แสดงบัญชีที่เพิ่งสมัคร
+![alt text](images/image-2.png)
+
+
+(ก) สมัครซ้ำด้วย Email เดิม
+![alt text](images/image-3.png)
+
+(ข) ใส่รหัสผ่านสั้นเกินไป 
+![alt text](images/image-4.png)
+
+
+# คำอธิบาย Checkpoint 2.1
+
+เวลาสมัครสมาชิกแล้วมีปัญหา Firebase จะส่ง Error กลับมาพร้อม "รหัสสาเหตุ" (`code`) โค้ดใน `auth_service.dart` มี 2 ส่วนที่ช่วยกันจัดการ
+
+1. **`try/catch` ใน `signUp()`** คอยจับ Error ที่ Firebase ส่งมา
+2. **`_translateErrorCode()`** แปลรหัสสาเหตุให้เป็นข้อความภาษาไทยที่ผู้ใช้อ่านเข้าใจ
+
+---
+
+## กรณี (ก): สมัครซ้ำด้วย Email เดิม
+
+- Firebase เจอว่าอีเมลนี้มีคนใช้แล้ว จึงส่ง code `email-already-in-use`
+- `try/catch` ใน `signUp()` จับ Error นี้ไว้
+- `_translateErrorCode()` แปลผ่าน `case 'email-already-in-use'`
+- ผู้ใช้เห็นข้อความ: **"อีเมลนี้ถูกใช้สมัครสมาชิกแล้ว"**
+
+## กรณี (ข): ใส่รหัสผ่านสั้นเกินไป
+
+- Firebase เจอว่ารหัสผ่านสั้นกว่า 6 ตัว จึงส่ง code `weak-password`
+- `try/catch` ใน `signUp()` จับ Error นี้ไว้
+- `_translateErrorCode()` แปลผ่าน `case 'weak-password'`
+- ผู้ใช้เห็นข้อความ: **"รหัสผ่านสั้นหรือคาดเดาง่ายเกินไป (ต้องมีอย่างน้อย 6 ตัวอักษร)"**
+
+---
+
+## สรุป
+
+| กรณี | code จาก Firebase | ส่วนที่แปลข้อความ |
+|---|---|---|
+| (ก) สมัครซ้ำ | `email-already-in-use` | `case 'email-already-in-use'` |
+| (ข) รหัสผ่านสั้น | `weak-password` | `case 'weak-password'` |
+
+ทั้งสองกรณีเดินทางเส้นเดียวกัน คือ **Firebase ส่ง Error → `try/catch` จับ → `_translateErrorCode()` แปลเป็นไทย → `LoginPage` แสดงเป็นข้อความสีแดง** ผู้ใช้จึงไม่เห็น Error ดิบของ Firebase
+
+
 
 ---
 
@@ -383,9 +427,54 @@ avdmanager list avd
 
 > ✅ **Checkpoint 3.1** ทดสอบกดปุ่มเข้าสู่ระบบด้วย Google ด้วยบัญชี Google จริงของคุณ ถ่ายภาพหน้าจอตอนเลือกบัญชี Google และภาพหน้าจอ Firebase Console ที่แสดงว่ามีผู้ใช้ใหม่ Provider เป็น Google เพิ่มเข้ามา อธิบายว่า `idToken` กับ `accessToken` ที่ได้จาก Google นำไปใช้ทำอะไรต่อในขั้นตอนการยืนยันตัวตนกับ Firebase (อ้างอิงหัวข้อ 9.4)
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
+ภาพหน้าจอตอนเลือกบัญชี Google และภาพหน้าจอ Firebase Console ที่แสดงว่ามีผู้ใช้ใหม่ Provider เป็น Google เพิ่มเข้ามา
+![alt text](images/image-5.png)
+
+![alt text](images/image-6.png)
+
+![alt text](images/image-7.png)
+
+
+# คำอธิบาย Checkpoint 3.1: idToken และ accessToken
+
+เมื่อผู้ใช้เลือกบัญชีใน Google Sign-In แอปจะได้ Token 2 ตัวจาก Google แล้วนำไปแลกเป็นการล็อกอินกับ Firebase
+
+---
+
+## idToken
+
+- เป็น "บัตรยืนยันตัวตน" ที่ Google ออกให้ ระบุว่าผู้ใช้คนนี้คือใคร (อีเมล ชื่อ รูปโปรไฟล์)
+- Firebase ใช้ตัวนี้เป็นหลัก เพื่อตรวจสอบกับ Google ว่าบัตรเป็นของจริงและยังไม่หมดอายุ
+- ในโค้ดได้มาจาก `googleUser.authentication.idToken`
+
+## accessToken
+
+- เป็น "กุญแจ" ที่อนุญาตให้เรียกใช้บริการของ Google ในนามผู้ใช้ ตามสิทธิ์ (scope) ที่ขอไว้ ในใบงานนี้คือ `email`
+- ใน `GoogleAuthProvider.credential` เป็นข้อมูลเสริมที่แนบไปด้วย
+- ในโค้ดได้มาจาก `authorizationClient.authorizationForScopes(['email'])`
+
+---
+
+## ขั้นตอนการนำไปใช้
+
+1. ผู้ใช้เลือกบัญชี Google → ได้ `idToken` และ `accessToken`
+2. นำทั้งสองมาห่อเป็น Credential ด้วย `GoogleAuthProvider.credential(idToken: ..., accessToken: ...)`
+3. ส่ง Credential ให้ `_auth.signInWithCredential(credential)`
+4. Firebase ตรวจสอบ Token กับ Google
+5. ถ้าถูกต้อง Firebase จะสร้างบัญชีใหม่ (ถ้าเพิ่งเคยเข้าครั้งแรก) หรือล็อกอินบัญชีเดิม โดยมี Provider เป็น Google
+6. `authStateChanges()` ส่งสถานะผู้ใช้ใหม่ออกมา ทำให้ `AuthGate` สลับหน้าให้อัตโนมัติ
+
+---
+
+## สรุป
+
+| Token | เปรียบเสมือน | หน้าที่ในขั้นตอนกับ Firebase |
+|---|---|---|
+| `idToken` | บัตรประชาชน | พิสูจน์ตัวตนผู้ใช้ Firebase ใช้ตรวจสอบเป็นหลัก |
+| `accessToken` | กุญแจเข้าใช้บริการ Google | แนบเป็นข้อมูลเสริมใน Credential |
+
+ทั้งสองถูกส่งให้ Firebase ผ่าน `signInWithCredential()` เพื่อแลกเป็นบัญชี Firebase ที่ล็อกอินแล้ว
+
 
 ---
 
@@ -522,10 +611,52 @@ Widget build(BuildContext context) {
 
 > ✅ **Checkpoint 4.1** ถ่ายภาพหน้าจอ 3 ภาพเรียงกัน คือ (ก) แอปตอนเพิ่งเปิดขึ้นมาครั้งแรกแบบยังไม่ล็อกอิน แสดงหน้า Login (ข) หลังล็อกอินสำเร็จ แอปสลับไปแสดง `MainScaffold` อัตโนมัติโดยไม่ต้องกดอะไรเพิ่ม และ (ค) หลังกด "ออกจากระบบ" แอปสลับกลับไปหน้า Login เอง อธิบายว่าทำไมการใช้ `StreamBuilder` ฟัง `authStateChanges()` จึงทำให้ไม่ต้องเขียนโค้ดสั่ง Navigate ไปมาเอง
 
+(ก) แอปตอนเพิ่งเปิดขึ้นมาครั้งแรกแบบยังไม่ล็อกอิน แสดงหน้า Login
+![alt text](images/image-9.png)
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ (3 ภาพ) และคำอธิบาย
-```
+(ข) หลังล็อกอินสำเร็จ แอปสลับไปแสดง MainScaffold อัตโนมัติโดยไม่ต้องกดอะไรเพิ่ม
+![alt text](images/image-8.png)
+
+
+(ค) หลังกด "ออกจากระบบ" แอปสลับกลับไปหน้า Login เอง 
+![alt text](images/image-10.png)
+
+
+# ทำไมใช้ StreamBuilder ฟัง authStateChanges() แล้วไม่ต้องเขียน Navigate เอง
+
+## หลักการ
+
+`authStateChanges()` เป็น Stream ที่ Firebase ส่งค่าใหม่ออกมาทุกครั้งที่สถานะล็อกอินเปลี่ยน
+
+- ล็อกอินสำเร็จ → ส่ง `User`
+- ออกจากระบบ → ส่ง `null`
+
+`StreamBuilder` ใน `AuthGate` คอยฟัง Stream นี้ และเรียก `builder` ใหม่ทุกครั้งที่ได้ค่าใหม่ แล้วเลือกหน้าที่จะแสดงตามสถานะ
+
+| ค่าที่ได้จาก Stream | หน้าที่แสดง |
+|---|---|
+| ยังรอผลรอบแรก | วงกลมโหลด |
+| `null` (ยังไม่ล็อกอิน) | `LoginPage` |
+| `User` (ล็อกอินแล้ว) | `MainScaffold` |
+
+## ขั้นตอนที่เกิดขึ้นจริง
+
+1. ผู้ใช้กดเข้าสู่ระบบ → `LoginPage` เรียก `AuthService` เพื่อล็อกอินกับ Firebase เท่านั้น
+2. Firebase เปลี่ยนสถานะผู้ใช้ → `authStateChanges()` ส่ง `User` ออกมา
+3. `StreamBuilder` ได้ค่าใหม่ → `builder` ทำงานใหม่ → แสดง `MainScaffold` แทน `LoginPage`
+4. เมื่อกดออกจากระบบ → Stream ส่ง `null` → `builder` แสดง `LoginPage` กลับมาเอง
+
+## ทำไมจึงไม่ต้องเขียน Navigator
+
+- **หน้าที่ถูกแยกชัดเจน** `LoginPage` และปุ่มออกจากระบบมีหน้าที่แค่ "เปลี่ยนสถานะผู้ใช้" ส่วน `AuthGate` มีหน้าที่ "เลือกหน้าตามสถานะ" ไม่มีหน้าใดต้องรู้ว่าหน้าถัดไปคืออะไร
+- **สถานะเป็นแหล่งความจริงเดียว** หน้าจอที่เห็นสะท้อนสถานะล็อกอินจริงเสมอ ไม่ต้องจำว่าต้อง push หรือ pop เมื่อไร
+- **ครอบคลุมทุกกรณีอัตโนมัติ** เช่น เปิดแอปใหม่แล้ว Firebase จำการล็อกอินไว้ได้ ก็เข้า `MainScaffold` ทันทีโดยไม่ต้องเขียนโค้ดเช็คเพิ่ม หรือ Session หมดอายุก็เด้งกลับหน้า Login เอง
+- **ไม่เกิดปัญหา Navigation Stack** ถ้าใช้ `Navigator.push` เอง ผู้ใช้อาจกดย้อนกลับจาก `MainScaffold` ไปเจอหน้า Login ได้ แต่ `AuthGate` เปลี่ยน "เนื้อหาของหน้าเดียว" จึงไม่มีปัญหานี้
+
+## สรุป
+
+`StreamBuilder` ทำให้ UI ตอบสนองต่อสถานะล็อกอินโดยอัตโนมัติ (Reactive) แทนที่เราจะสั่งเปลี่ยนหน้าเอง เราเพียงบอกว่า "สถานะแบบนี้ให้แสดงหน้าไหน" แล้ว Stream จะจัดการการสลับให้ทุกครั้งที่สถานะเปลี่ยน
+
 
 ---
 
@@ -539,7 +670,25 @@ Widget build(BuildContext context) {
 2. ถ้าในอนาคตอาจารย์สั่งให้เปลี่ยนจาก Fake Store API ไปใช้ API อื่น ต้องแก้ไฟล์กี่ไฟล์ ถ้าทุก Widget เรียกผ่าน Interface `ItemRepository` เท่านั้น?
 
 ```text
-บันทึกคำตอบของคุณที่นี่
+# ขั้นตอนที่ 5.1: คิดเอง
+
+## ข้อ 1: ทำไมต้อง "เพิ่ม" Implementation ใหม่
+
+**ไม่แก้ `ItemRepositoryApi` เดิม**
+- คลาสเดิมทำหน้าที่เดียว คือดึงข้อมูลจาก API ถ้าเอา Firestore ไปรวมด้วย จะซับซ้อนและเสี่ยงทำของเดิมที่ใช้ได้อยู่พัง
+- การเพิ่มคลาสใหม่โดยไม่แตะของเดิมจึงปลอดภัยกว่า
+
+**ไม่เรียก Firestore ตรงจาก `HomePage`**
+- UI จะผูกติดกับ Firestore ถ้าเปลี่ยนแหล่งข้อมูลต้องรื้อหน้าจอด้วย
+- ทดสอบยากและต้องเขียนโค้ดซ้ำหลายหน้า
+
+**สรุป** `ItemRepositoryFirestore` แค่ `implements ItemRepository` แล้ว `HomePage` เรียก `getItems()` ได้เหมือนเดิม โดยไม่ต้องรู้ว่าข้อมูลมาจากไหน
+
+## ข้อ 2: เปลี่ยนไปใช้ API อื่น ต้องแก้กี่ไฟล์
+
+**แก้ไฟล์เดิมเพียง 1 ไฟล์ คือ `main.dart`** (เปลี่ยนตัว Repository ในลิสต์) บวกกับสร้างไฟล์ Repository ใหม่อีก 1 ไฟล์
+
+`HomePage`, `MainScaffold` และ Widget อื่นไม่ต้องแก้เลย เพราะรู้จักแค่ Interface `ItemRepository` ไม่รู้จักคลาสจริงข้างหลัง
 ```
 
 ### ขั้นตอนที่ 5.2: **นักศึกษาเขียน Code เอง** — ItemRepositoryFirestore
@@ -663,15 +812,44 @@ final pages = [
 
 > ✅ **Checkpoint 6.1** โพสต์ขายจริงอย่างน้อย 2 รายการผ่านแอป ถ่ายภาพหน้าจอ Firebase Console เมนู Firestore Database ที่แสดง Collection `items` มีเอกสารที่โพสต์เข้ามาจริง พร้อม field `sellerId` ที่ตรงกับ `uid` ของบัญชีที่ใช้ทดสอบ และยืนยันว่าร่างทั้งสองรายการหายไปจาก `MyDraftsPage` แล้ว
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+- โพสต์ขายจริงอย่างน้อย 2 รายการผ่านแอป 
+![alt text](images/image-11.png)
+![alt text](images/image-12.png)
+
+- เมนู Firestore Database ที่แสดง Collection `items` มีเอกสารที่โพสต์เข้ามาจริง
+![alt text](images/image-14.png)
+![alt text](images/image-15.png)
 
 > ✅ **Checkpoint 6.2** ถ่ายภาพหน้าจอ Firebase Console เมนู Storage ที่แสดงไฟล์รูปภาพที่อัปโหลดสำเร็จ และภาพหน้าจอ Firestore ที่แสดงว่าเอกสารมี field `imageUrl` เป็น URL จริงที่เปิดดูได้ ถ่ายภาพหน้าจอแอปที่แสดงรูปสินค้านั้นบนหน้า Home ผ่าน `Image.network(imageUrl)` ด้วย (ย้อนกลับไปถ่ายภาพ Checkpoint 5.1 ให้ครบตอนนี้ ถ้ายังไม่ได้ทำ)
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+![alt text](images/image-16.png)
+![alt text](images/image-17.png)
+
+
+# หมายเหตุ Checkpoint 6.2
+
+## เหตุผลที่ไม่ได้ใช้ Firebase Storage
+
+Firebase Storage ต้องอัปเกรดเป็นแผน **Blaze (ผูกบัญชี Billing)** แต่โปรเจกต์ใช้แผน **Spark (ฟรี)** จึงไม่สามารถใช้งาน Storage ได้
+
+## วิธีที่ใช้แทน
+
+ใช้ **Base64 เก็บรูปภาพใน Cloud Firestore** แทน โดยมีขั้นตอนดังนี้
+
+1. คงชื่อเมธอด `StorageService.uploadListingImage(File, String)` ตามใบงาน
+2. ย่อรูปให้กว้างไม่เกิน 600 พิกเซล และบีบอัดเป็น JPEG คุณภาพ 70
+3. แปลงรูปเป็น Base64 แล้วบันทึกลง field `imageUrl` ใน Firestore
+4. ใช้ `ItemImage` แสดงรูป โดยใช้ `Image.memory` สำหรับ Base64 และ `Image.network` สำหรับ URL ทั่วไป
+
+## หลักฐานที่ใช้แทน
+
+- ภาพหน้า Storage ที่แจ้งว่าต้องใช้แผน Blaze
+- ภาพ Firestore ที่แสดง field `imageUrl`
+- ภาพหน้า Home ที่แสดงรูปสินค้าและ Badge "🎓 นักศึกษา"
+
+## ข้อจำกัด
+
+วิธีนี้ทำให้ข้อมูลมีขนาดใหญ่ โหลดหน้า Home ช้าลง และใช้โควตา Firestore มากขึ้น จึงเหมาะสำหรับการทดสอบในใบงานเท่านั้น หากเป็นแอปจริงควรใช้ Firebase Storage และเก็บเฉพาะ URL ใน Firestore
 
 ---
 
@@ -702,9 +880,26 @@ service cloud.firestore {
 
 > ✅ **Checkpoint 7.1 (Self-Study)** ถ่ายภาพหน้าจอผลการทดลองทั้ง 2 กรณีใน Rules Playground เขียนอธิบายสั้น ๆ ว่าทำไม Client-side Validation (การไม่แสดงปุ่มแก้ไขให้เห็น) เพียงอย่างเดียวจึงไม่เพียงพอต่อความปลอดภัยของข้อมูลจริง
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
+(ก) ผู้ใช้ที่ล็อกอินพยายามแก้ไขเอกสารที่ตัวเอง `sellerId` ตรงกัน (ควรผ่าน)
+![alt text](images/image-21.png)
+
+(ข) ผู้ใช้คนเดียวกันพยายามแก้ไขเอกสารของคนอื่น (ควรถูกปฏิเสธ)
+![alt text](images/image-20.png)
+
+# Checkpoint 7.1: ทำไม Client-side Validation อย่างเดียวจึงไม่เพียงพอ
+
+การไม่แสดงปุ่มแก้ไข/ลบในแอปเป็นเพียงการควบคุมที่ฝั่ง Client ซึ่งอยู่ในเครื่องผู้ใช้ และผู้ใช้ควบคุมได้เอง
+ผู้ไม่หวังดีไม่จำเป็นต้องใช้แอปของเรา เขาสามารถเขียนโค้ดของตัวเองหรือเรียก
+Firestore API โดยตรงด้วยข้อมูลโปรเจกต์ (ซึ่งอยู่ในแอปที่ปล่อยให้ดาวน์โหลดได้
+และไม่ใช่ความลับ) เพื่อแก้ไขหรือลบประกาศของคนอื่นได้ โดยข้าม UI ทั้งหมด
+
+Firebase Security Rules ทำงานที่ฝั่งเซิร์ฟเวอร์ของ Firebase และตรวจทุกคำขอก่อนอ่านหรือเขียนข้อมูล
+ไม่ว่าคำขอนั้นมาจากแอปของเราหรือจากที่อื่น ผู้ใช้เปลี่ยนแปลงกฎนี้ไม่ได้
+ในการทดลอง กรณี (ก) เจ้าของเอกสารที่ `sellerId` ตรงกับ `request.auth.uid` แก้ไขได้ (allowed)
+ส่วนกรณี (ข) ผู้ใช้อื่นที่ `uid` ไม่ตรงกับ `sellerId` ถูกปฏิเสธ (denied)
+
+สรุป: Client-side Validation ช่วยให้ประสบการณ์ใช้งานดี แต่ไม่ใช่การรักษาความปลอดภัย
+ความปลอดภัยที่แท้จริงต้องบังคับที่ฝั่งเซิร์ฟเวอร์ด้วย Security Rules
 
 ---
 
@@ -721,9 +916,22 @@ service cloud.firestore {
 
 > ✅ **Checkpoint 8.1** ถ่ายภาพหน้าจอผลการทดสอบทั้ง 4 ข้อ 
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ 
-```
+- ล็อกอินค้างไว้ แล้วปิดแอปทิ้งไปทั้งหมด (ไม่ใช่แค่ย่อ) จากนั้นเปิดแอปใหม่อีกครั้ง — ควรเข้าหน้า MainScaffold ทันทีโดยไม่ต้องล็อกอินซ้ำ (Firebase Auth จำสถานะล็อกอินไว้ให้อัตโนมัติ)
+![alt text](images/image-23.png)
+![alt text](images/image-22.png)
+![alt text](images/image-24.png)
+
+
+-  ปิด WiFi/Data ของเครื่องให้หมด แล้วลองเปิดแท็บ "รายการโปรด" และ "ร่างของฉัน" — ควรยังใช้งานได้ปกติเพราะเก็บอยู่ใน Local Database (Drift) ไม่ต้องพึ่งเครือข่าย
+![alt text](images/image-25.png)
+![alt text](images/image-26.png)
+
+- ขณะยังปิดเครือข่ายอยู่ ลองกด "โพสต์ขายจริง" กับร่างสักชิ้น — ควรเกิด Error เพราะ Firestore/Storage ต้องการเครือข่ายเสมอ (ต่างจาก Local Database) ตรวจสอบว่าแอปแสดงข้อความ Error ที่เข้าใจได้ ไม่ Crash
+![alt text](images/image-27.png)
+
+- เปิดเครือข่ายกลับมา แล้วลองกด "โพสต์ขายจริง" รายการเดิมอีกครั้ง — ควรสำเร็จตามปกติ
+![alt text](images/image-28.png)
+![alt text](images/image-29.png)
 
 ---
 

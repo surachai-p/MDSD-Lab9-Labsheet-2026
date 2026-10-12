@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "867733714632",
+    "project_id": "campus-marketplace-tanawat",
+    "storage_bucket": "campus-marketplace-tanawat.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:867733714632:android:5e04c56a110dc7ed2a17fd",
+        "android_client_info": {
+          "package_name": "com.example.campus_marketplace_w7"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "867733714632-icladafhk0kkf78hog3ptl7ago28i6ee.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.campus_marketplace_w7",
+            "certificate_hash": "2f62df6b3aa02c352ac02ccb91116b6e6f424816"
+          }
+        },
+        {
+          "client_id": "867733714632-q7jr8o1v9achm3kssjigpvlirqq5nbcl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9gHkts3Tg7_E13grKWEjDkRt04XikBRU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "867733714632-q7jr8o1v9achm3kssjigpvlirqq5nbcl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "867733714632-sstsadv5lbpduf04jphk0kk7lf59ooul.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.campusMarketplaceW7"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
