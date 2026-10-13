@@ -36,9 +36,9 @@
 
 > ✅ **Checkpoint 1.1** ถ่ายภาพหน้าจอ Firebase Console ที่แสดงหน้า Project Overview ของโปรเจกต์ที่สร้างเสร็จแล้ว
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+<img width="1917" height="960" alt="image" src="https://github.com/user-attachments/assets/c5901b07-541f-44e5-aa34-81cf323a6f3d" />
+
+``
 
 ### ขั้นตอนที่ 1.2: 🔧 ทำตามขั้นตอน — ติดตั้งเครื่องมือและเชื่อมโปรเจกต์ด้วย FlutterFire CLI
 
@@ -164,9 +164,10 @@ Future<void> main() async {
 
 > ✅ **Checkpoint 2.1** ทดสอบสมัครสมาชิกด้วย Email ใหม่สำเร็จ ถ่ายภาพหน้าจอ Firebase Console เมนู Authentication → Users ที่แสดงบัญชีที่เพิ่งสมัคร จากนั้นทดสอบกรณีผิดพลาด 2 กรณี คือ (ก) สมัครซ้ำด้วย Email เดิม และ (ข) ใส่รหัสผ่านสั้นเกินไป ถ่ายภาพหน้าจอข้อความ Error ทั้งสองกรณี พร้อมอธิบายว่าโค้ดส่วนใดใน `auth_service.dart` เป็นตัวจัดการแต่ละกรณี
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบายของแต่ละกรณี
-```
+
+<img width="1917" height="957" alt="image" src="https://github.com/user-attachments/assets/120fd3dd-a488-49c4-8a7c-6615b637bb4b" />
+
+``
 
 ---
 
@@ -383,9 +384,19 @@ avdmanager list avd
 
 > ✅ **Checkpoint 3.1** ทดสอบกดปุ่มเข้าสู่ระบบด้วย Google ด้วยบัญชี Google จริงของคุณ ถ่ายภาพหน้าจอตอนเลือกบัญชี Google และภาพหน้าจอ Firebase Console ที่แสดงว่ามีผู้ใช้ใหม่ Provider เป็น Google เพิ่มเข้ามา อธิบายว่า `idToken` กับ `accessToken` ที่ได้จาก Google นำไปใช้ทำอะไรต่อในขั้นตอนการยืนยันตัวตนกับ Firebase (อ้างอิงหัวข้อ 9.4)
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
+<img width="869" height="1883" alt="image" src="https://github.com/user-attachments/assets/d31533bc-cd66-4635-a23e-c1d362e06f81" />
+
+<img width="1842" height="721" alt="image" src="https://github.com/user-attachments/assets/e0e0a005-3282-4ed2-852a-42ccede4f401" />
+
+* **`idToken` (Identity Token)** เป็น JSON Web Token (JWT) ที่ออกโดย Google Identity Service เพื่อยืนยันตัวตนของผู้ใช้งาน (ประกอบด้วยข้อมูลพื้นฐาน เช่น Email, Name, Profile Picture) โดย **Firebase Authentication** จะใช้ `idToken` เป็นหลักในการพิสูจน์และตรวจสอบความถูกต้องว่าผู้ใช้เป็นตัวจริง
+* **`accessToken`:** เป็น OAuth 2.0 Access Token ที่ใช้สำหรับเป็นใบเบิกทางในการขอสิทธิ์เข้าถึงข้อมูลหรือบริการต่างๆ ของ Google APIs (Google Services) ตาม Scope ที่ขอไว้
+* **กระบวนการทำงานในระบบ (Authentication Handshake)**
+  1. แอปพลิเคชันทำการร้องขอ Token ทั้งสองจาก Google Sign-In SDK
+  2. นำ `idToken` และ `accessToken` มาประกอบกันเป็น Credentials ผ่านเมธอด `GoogleAuthProvider.credential(idToken: idToken, accessToken: accessToken)`
+  3. ส่ง Credentials ดังกล่าวให้ Firebase ผ่าน `FirebaseAuth.instance.signInWithCredential(...)`
+  4. Firebase ทำการ Verify ความถูกต้องของ Token และสร้าง User Session พร้อมออก User UID ในระบบให้อัตโนมัติ
+---
+``
 
 ---
 
@@ -523,10 +534,20 @@ Widget build(BuildContext context) {
 > ✅ **Checkpoint 4.1** ถ่ายภาพหน้าจอ 3 ภาพเรียงกัน คือ (ก) แอปตอนเพิ่งเปิดขึ้นมาครั้งแรกแบบยังไม่ล็อกอิน แสดงหน้า Login (ข) หลังล็อกอินสำเร็จ แอปสลับไปแสดง `MainScaffold` อัตโนมัติโดยไม่ต้องกดอะไรเพิ่ม และ (ค) หลังกด "ออกจากระบบ" แอปสลับกลับไปหน้า Login เอง อธิบายว่าทำไมการใช้ `StreamBuilder` ฟัง `authStateChanges()` จึงทำให้ไม่ต้องเขียนโค้ดสั่ง Navigate ไปมาเอง
 
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ (3 ภาพ) และคำอธิบาย
-```
+<img width="869" height="1883" alt="image" src="https://github.com/user-attachments/assets/27a80471-8c1d-4957-975c-a77e93357be0" />
 
+<img width="869" height="1883" alt="image" src="https://github.com/user-attachments/assets/ca732086-3961-4daf-90a2-4948c9a6e3ee" />
+
+<img width="869" height="1883" alt="image" src="https://github.com/user-attachments/assets/4d61a348-eb18-4bec-90f1-ece11daa0da0" />
+
+<img width="869" height="1883" alt="image" src="https://github.com/user-attachments/assets/62cbbb18-6c0c-49eb-a916-9b67273a262b" />
+
+* **เหตุผลที่ไม่ต้องใช้ Navigator สลับหน้า**  
+  `FirebaseAuth.instance.authStateChanges()` ทำหน้าที่เป็น Event Stream ที่ส่งสถานะการเข้าสู่ระบบ (`User?`) แบบเรียลไทม์ และ `StreamBuilder` ใน `AuthGate` จะ Rebuild หน้าจอให้อัตโนมัติตามสถานะล่าสุด:
+  * ถ้าสถานะเป็น `null` ➔ แสดง `LoginPage()`
+  * ถ้าสถานะมีข้อมูล `User` ➔ แสดง `MainScaffold()`
+  
+  ทำให้โครงสร้าง UI สลับเปลี่ยนตามสถานะของ Firebase Session โดยตรง จึงไม่ต้องเขียนโค้ดสั่ง `Navigator.push()` หรือ `Navigator.pop()` เพื่อสลับหน้าจอด้วยตนเอง
 ---
 
 ## ส่วนที่ 5: ขยาย Repository Pattern ด้วย ItemRepositoryFirestore
@@ -538,9 +559,13 @@ Widget build(BuildContext context) {
 1. ทำไมเราจึง "เพิ่ม Implementation ใหม่" (`ItemRepositoryFirestore`) แทนที่จะแก้ไข `ItemRepositoryApi` เดิม หรือเขียนโค้ดเรียก Firestore ตรงจาก `HomePage`?
 2. ถ้าในอนาคตอาจารย์สั่งให้เปลี่ยนจาก Fake Store API ไปใช้ API อื่น ต้องแก้ไฟล์กี่ไฟล์ ถ้าทุก Widget เรียกผ่าน Interface `ItemRepository` เท่านั้น?
 
-```text
-บันทึกคำตอบของคุณที่นี่
-```
+สาเหตุที่เพิ่ม Implementation ใหม่ (ItemRepositoryFirestore) แทนการแก้ไขของเดิมหรือเรียกใช้ตรงจาก HomePage
+   - เพื่อปฏิบัติตามหลักการ Single Responsibility Principle (SRP) และ Open/Closed Principle (OCP) โดยการสร้าง Class ใหม่ที่ทำหน้าที่จัดการข้อมูล Firestore โดยเฉพาะ ทำให้โค้ดเดิมที่ไม่เกี่ยวข้องไม่ต้องถูกแก้ไขและเสี่ยงต่อการเกิดบั๊ก
+   - การซ่อน Logic การดึงข้อมูลไว้หลัง Interface ทำให้ UI Layer (HomePage) ทำหน้าที่จัดการเฉพาะส่วนแสดงผลเท่านั้น ไม่ต้องผูกติดกับ Firebase/Firestore Direct Calls ทำให้โค้ดมีความยืดหยุ่น ดูแลรักษาง่าย และทดสอบได้สะดวก
+
+2. จำนวนไฟล์ที่ต้องแก้ไขหากในอนาคตต้องการเปลี่ยนแหล่งข้อมูล API
+   - แก้ไขเพียงไฟล์เดียว คือไฟล์ที่ทำการสร้างหรือส่งผ่าน Instance ของ Repository (เช่น main.dart หรือ auth_gate.dart)
+   - ไม่ต้องแก้ไขไฟล์ Widget ต่าง ๆ เช่น HomePage แม้แต่บรรทัดเดียว เนื่องจาก Widget ทั้งหมดรับและเรียกใช้งานผ่าน Interface ItemRepository เท่านั้น
 
 ### ขั้นตอนที่ 5.2: **นักศึกษาเขียน Code เอง** — ItemRepositoryFirestore
 
@@ -611,10 +636,24 @@ final pages = [
 
 > ✅ **Checkpoint 5.1** ถ่ายภาพหน้าจอ Home ที่แสดงสินค้าจากทั้งสองแหล่งข้อมูลปนกันอยู่ในลิสต์เดียว พร้อม Badge ที่แยกแหล่งที่มาชัดเจน (ถ้ายังไม่เคยมีประกาศจริงใน Firestore เลย ให้ทำส่วนที่ 6 ให้เสร็จก่อนแล้วย้อนกลับมาถ่ายภาพ Checkpoint นี้) อธิบายว่าการออกแบบให้ `HomePage` ไม่รู้จัก `ItemRepositoryApi`/`ItemRepositoryFirestore` โดยตรง แต่รู้จักผ่าน Interface `ItemRepository` เท่านั้น ช่วยให้ทดสอบหรือเปลี่ยนแหล่งข้อมูลในอนาคตง่ายขึ้นอย่างไร
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
+<img width="869" height="1883" alt="image" src="https://github.com/user-attachments/assets/ce316739-3eff-4f44-ad3b-07279e3102a7" />
 
+<img width="869" height="1883" alt="image" src="https://github.com/user-attachments/assets/ab8e9228-eb3d-439f-8b4d-6b2f78fce9fe" />
+
+<img width="869" height="1883" alt="image" src="https://github.com/user-attachments/assets/3b29837f-d397-497f-8c6c-a5285c995b36" />
+
+<img width="869" height="1883" alt="image" src="https://github.com/user-attachments/assets/998b340d-acf0-4f9d-a630-fb91fc2b08f7" />
+
+การออกแบบให้ `HomePage` สื่อสารผ่าน Interface `ItemRepository` โดยไม่ผูกติดกับ Implementation Concrete Class (`ItemRepositoryApi` หรือ `ItemRepositoryFirestore`) มีประโยชน์หลักในด้านความยืดหยุ่นและการทดสอบระบบ ดังนี้:
+
+* **การทดสอบระบบที่ง่ายและรวดเร็วขึ้น (Testability):**  
+  ในการทำ Unit Test หรือ UI Test สามารถสร้าง Mock Repository (เช่น `ItemRepositoryMock`) ขึ้นมาเพื่อส่งข้อมูลจำลองให้กับ `HomePage` ได้ทันที โดยไม่ต้องพึ่งพาการเชื่อมต่อเครือข่ายจริง (Network Request) หรือการดึงข้อมูลจาก Firebase Firestore จริง ทำให้การทดสอบทำงานได้รวดเร็ว แม่นยำ และไม่ส่งผลกระทบต่อข้อมูลในระบบจริง
+
+* **การเปลี่ยนหรือเพิ่มแหล่งข้อมูลในอนาคตทำได้ง่าย (Extensibility & Maintainability):**  
+  หากในอนาคตมีการเปลี่ยนแหล่งข้อมูล เช่น สลับไปใช้ API ตัวใหม่, เปลี่ยนระบบ Database หรือเพิ่ม Local Cache (เช่น SQLite / Drift) สามารถสร้าง Class ใหม่ที่ `implements ItemRepository` แล้วนำไปส่งต่อให้ `HomePage` ผ่าน Constructor ได้ทันที โดย**ไม่ต้องแก้ไขโค้ดการทำงานและการแสดงผลภายใน `HomePage` แม้แต่บรรทัดเดียว**
+
+* **เป็นไปตามหลักการออกแบบ Loose Coupling & Dependency Inversion:**  
+  ช่วยแยกความรับผิดชอบของ UI Layer (ส่วนแสดงผล) ออกจาก Data Layer (ส่วนจัดการข้อมูล) อย่างชัดเจน ส่งผลให้โครงสร้างโปรเจกต์มีความเป็นระเบียบ ซ่อมบำรุงง่าย และลดความเสี่ยงในการเกิดบั๊กจากการแก้ไขโค้ดข้าม Layer
 ---
 
 ## ส่วนที่ 6: "โพสต์ขายจริง" — เชื่อม MyDraftsPage เข้ากับ Storage และ Firestore
@@ -663,17 +702,17 @@ final pages = [
 
 > ✅ **Checkpoint 6.1** โพสต์ขายจริงอย่างน้อย 2 รายการผ่านแอป ถ่ายภาพหน้าจอ Firebase Console เมนู Firestore Database ที่แสดง Collection `items` มีเอกสารที่โพสต์เข้ามาจริง พร้อม field `sellerId` ที่ตรงกับ `uid` ของบัญชีที่ใช้ทดสอบ และยืนยันว่าร่างทั้งสองรายการหายไปจาก `MyDraftsPage` แล้ว
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+<img width="869" height="1883" alt="image" src="https://github.com/user-attachments/assets/22cf7bd3-5d1c-430b-9721-43c08d63c32e" />
+
+<img width="1917" height="951" alt="image" src="https://github.com/user-attachments/assets/fc4cf695-3597-43ec-9c6b-d6ef5db5cb45" />
+
 
 > ✅ **Checkpoint 6.2** ถ่ายภาพหน้าจอ Firebase Console เมนู Storage ที่แสดงไฟล์รูปภาพที่อัปโหลดสำเร็จ และภาพหน้าจอ Firestore ที่แสดงว่าเอกสารมี field `imageUrl` เป็น URL จริงที่เปิดดูได้ ถ่ายภาพหน้าจอแอปที่แสดงรูปสินค้านั้นบนหน้า Home ผ่าน `Image.network(imageUrl)` ด้วย (ย้อนกลับไปถ่ายภาพ Checkpoint 5.1 ให้ครบตอนนี้ ถ้ายังไม่ได้ทำ)
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+<img width="1917" height="951" alt="image" src="https://github.com/user-attachments/assets/fc4cf695-3597-43ec-9c6b-d6ef5db5cb45" />
 
----
+- **Firestore Integration:** ข้อมูลสินค้าที่ถูกโพสต์จากหน้าร่างประกาศ (`MyDraftsPage`) ถูกบันทึกลงใน Collection `items` บน Cloud Firestore สำเร็จ พร้อมเก็บฟิลด์ `sellerId` ตรงตาม UID ของผู้ใช้ และ `imageUrl` สำหรับแสดงผลรูปภาพ
+- **Multi-Source Aggregation (Checkpoint 5.1):** หน้าหลัก (`HomePage`) ดึงข้อมูลผ่าน `Future.wait()` จากทั้ง `ItemRepositoryApi` และ `ItemRepositoryFirestore` มารวมกันเป็น List เดียวและแสดงผลผ่าน `Image.network(item.imageUrl)` ได้อย่างสมบูรณ์
 
 ## ส่วนที่ 7 (Self-Study): สำรวจ Firebase Security Rules
 
@@ -702,9 +741,11 @@ service cloud.firestore {
 
 > ✅ **Checkpoint 7.1 (Self-Study)** ถ่ายภาพหน้าจอผลการทดลองทั้ง 2 กรณีใน Rules Playground เขียนอธิบายสั้น ๆ ว่าทำไม Client-side Validation (การไม่แสดงปุ่มแก้ไขให้เห็น) เพียงอย่างเดียวจึงไม่เพียงพอต่อความปลอดภัยของข้อมูลจริง
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
+<img width="1816" height="853" alt="image" src="https://github.com/user-attachments/assets/7d4ec3ff-0fcb-4d35-b0f5-098d1b1a361b" />
+
+* **เหตุผลที่ Client-side Validation (การไม่แสดงปุ่มแก้ไขบน UI) เพียงอย่างเดียวไม่เพียงพอต่อความปลอดภัยของข้อมูลจริง**
+  1. **UI เป็นเพียงส่วนประสานผู้ใช้ (UX) ไม่ใช่ระบบรักษาความปลอดภัย** การซ่อนปุ่มแก้ไข/ลบบนหน้าจอ Flutter ช่วยเพียงป้องกันไม่ให้ผู้ใช้งานทั่วไปกดผิดพลาดเท่านั้น แต่ผู้ไม่ประสงค์ดีสามารถดักจับ HTTP Request, แอบดึง API Key/Firebase Config หรือใช้ Firebase SDK สั่งอัปเดต/ลบเอกสารใน Firestore โดยตรงได้โดยไม่ต้องผ่านหน้าจอแอปพลิเคชัน
+  2. **ความปลอดภัยที่แท้จริงต้องควบคุมที่ฝั่ง Server-side (Database Security Rules)** การตั้งค่า Security Rules บน Firestore จะช่วยตรวจสอบสิทธิ์และยืนยันตัวตน (`request.auth.uid == resource.data.sellerId`) ทุกครั้งที่มีการแก้ไขหรือลบข้อมูล ทำให้รับประกันได้ว่าข้อมูลจะไม่ถูกดัดแปลงโดยบุคคลอื่นที่ไม่ใช่เจ้าของเอกสาร แม้จะพยายามส่ง Request ตรงมาจากภายนอกก็ตาม
 
 ---
 
@@ -721,9 +762,16 @@ service cloud.firestore {
 
 > ✅ **Checkpoint 8.1** ถ่ายภาพหน้าจอผลการทดสอบทั้ง 4 ข้อ 
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ 
-```
+1. ล็อกอินค้างไว้ แล้วปิดแอปทิ้งไปทั้งหมด (ไม่ใช่แค่ย่อ) จากนั้นเปิดแอปใหม่อีกครั้ง — ควรเข้าหน้า `MainScaffold` ทันทีโดยไม่ต้องล็อกอินซ้ำ (Firebase Auth จำสถานะล็อกอินไว้ให้อัตโนมัติ)
+<img width="869" height="1883" alt="image" src="https://github.com/user-attachments/assets/2c25a6c6-ea87-4d2e-bead-a3311449dbbb" />
+<img width="869" height="1883" alt="image" src="https://github.com/user-attachments/assets/2837d1b5-225b-40cf-b832-d166f73b05d3" />
+
+
+2. ปิด WiFi/Data ของเครื่องให้หมด แล้วลองเปิดแท็บ "รายการโปรด" และ "ร่างของฉัน" — ควรยังใช้งานได้ปกติเพราะเก็บอยู่ใน Local Database (Drift) ไม่ต้องพึ่งเครือข่าย
+<img width="869" height="1883" alt="image" src="https://github.com/user-attachments/assets/b59bdbeb-7004-481b-acc1-136b98b2d4b4" />
+<img width="869" height="1883" alt="image" src="https://github.com/user-attachments/assets/9404948f-d2d4-4382-89e2-200030f63a1a" />
+<img width="869" height="1883" alt="image" src="https://github.com/user-attachments/assets/4006030a-14c6-4fdf-b2c7-37324e366f0b" />
+
 
 ---
 
