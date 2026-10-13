@@ -36,9 +36,7 @@
 
 > ✅ **Checkpoint 1.1** ถ่ายภาพหน้าจอ Firebase Console ที่แสดงหน้า Project Overview ของโปรเจกต์ที่สร้างเสร็จแล้ว
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+![Checkpoint 1.1 Project Overview](Image/cp1-1_project_overview.png)
 
 ### ขั้นตอนที่ 1.2: 🔧 ทำตามขั้นตอน — ติดตั้งเครื่องมือและเชื่อมโปรเจกต์ด้วย FlutterFire CLI
 
@@ -164,9 +162,27 @@ Future<void> main() async {
 
 > ✅ **Checkpoint 2.1** ทดสอบสมัครสมาชิกด้วย Email ใหม่สำเร็จ ถ่ายภาพหน้าจอ Firebase Console เมนู Authentication → Users ที่แสดงบัญชีที่เพิ่งสมัคร จากนั้นทดสอบกรณีผิดพลาด 2 กรณี คือ (ก) สมัครซ้ำด้วย Email เดิม และ (ข) ใส่รหัสผ่านสั้นเกินไป ถ่ายภาพหน้าจอข้อความ Error ทั้งสองกรณี พร้อมอธิบายว่าโค้ดส่วนใดใน `auth_service.dart` เป็นตัวจัดการแต่ละกรณี
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบายของแต่ละกรณี
-```
+**เปิดใช้ Sign-in method (Email/Password และ Google)**
+
+![Sign-in method](Image/cp2-1_signin_method.png)
+
+**สมัครสมาชิกสำเร็จ (Authentication → Users)**
+
+![Checkpoint 2.1 Users](Image/cp2-1_users.png)
+
+_(ภาพ Error สองภาพด้านล่างทดสอบผ่านหน้า Add user ของ Firebase Console ซึ่งให้ผลตรวจสอบแบบเดียวกับที่แอปได้รับ)_
+
+**กรณี (ก) สมัครซ้ำด้วย Email เดิม**
+
+![Checkpoint 2.1 email already exists](Image/cp2-1_error_email_in_use.png)
+
+เมื่อสมัครจากแอป Firebase ตอบ code `email-already-in-use` เมธอด `signUp()` ดักด้วย `on FirebaseAuthException` แล้ว `_translateErrorCode()` แปลเป็น "อีเมลนี้ถูกใช้สมัครสมาชิกไปแล้ว"
+
+**กรณี (ข) รหัสผ่านสั้นเกินไป**
+
+![Checkpoint 2.1 weak password](Image/cp2-1_error_weak_password.png)
+
+เมื่อสมัครจากแอป Firebase ตอบ code `weak-password` ผ่านเส้นทางเดียวกัน `_translateErrorCode()` แปลเป็น "รหัสผ่านสั้นเกินไป กรุณาตั้งรหัสผ่านอย่างน้อย 6 ตัวอักษร"
 
 ---
 
@@ -383,9 +399,15 @@ avdmanager list avd
 
 > ✅ **Checkpoint 3.1** ทดสอบกดปุ่มเข้าสู่ระบบด้วย Google ด้วยบัญชี Google จริงของคุณ ถ่ายภาพหน้าจอตอนเลือกบัญชี Google และภาพหน้าจอ Firebase Console ที่แสดงว่ามีผู้ใช้ใหม่ Provider เป็น Google เพิ่มเข้ามา อธิบายว่า `idToken` กับ `accessToken` ที่ได้จาก Google นำไปใช้ทำอะไรต่อในขั้นตอนการยืนยันตัวตนกับ Firebase (อ้างอิงหัวข้อ 9.4)
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
+**หน้า Login ที่มีปุ่ม Google และหน้าต่างเลือกบัญชี**
+
+<img src="Image/cp3-1_login_page.jpg" alt="Login page" width="280"> <img src="Image/cp3-1_google_account_picker.jpg" alt="Checkpoint 3.1 Google account picker" width="280">
+
+**Firebase Console แสดงผู้ใช้ที่ Provider เป็น Google**
+
+![Checkpoint 3.1 Google provider](Image/cp3-1_users_google.png)
+
+**คำอธิบาย:** `idToken` ใช้ยืนยันว่าผู้ใช้เป็นเจ้าของบัญชี Google จริง ส่วน `accessToken` คือสิทธิ์เข้าถึงข้อมูลตาม scope ที่ขอ ทั้งสองค่าถูกรวมเป็น credential ด้วย `GoogleAuthProvider.credential()` แล้วส่งให้ `signInWithCredential()` เพื่อให้ Firebase ตรวจสอบและล็อกอินผู้ใช้
 
 ---
 
@@ -523,9 +545,11 @@ Widget build(BuildContext context) {
 > ✅ **Checkpoint 4.1** ถ่ายภาพหน้าจอ 3 ภาพเรียงกัน คือ (ก) แอปตอนเพิ่งเปิดขึ้นมาครั้งแรกแบบยังไม่ล็อกอิน แสดงหน้า Login (ข) หลังล็อกอินสำเร็จ แอปสลับไปแสดง `MainScaffold` อัตโนมัติโดยไม่ต้องกดอะไรเพิ่ม และ (ค) หลังกด "ออกจากระบบ" แอปสลับกลับไปหน้า Login เอง อธิบายว่าทำไมการใช้ `StreamBuilder` ฟัง `authStateChanges()` จึงทำให้ไม่ต้องเขียนโค้ดสั่ง Navigate ไปมาเอง
 
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ (3 ภาพ) และคำอธิบาย
-```
+**(ก) ยังไม่ล็อกอิน → (ข) ล็อกอินสำเร็จ → (ค) ออกจากระบบ**
+
+<img src="Image/cp4-1_a_login.jpg" alt="Checkpoint 4.1 (ก) Login" width="280"> <img src="Image/cp4-1_b_home.jpg" alt="Checkpoint 4.1 (ข) MainScaffold" width="280"> <img src="Image/cp4-1_c_logout.jpg" alt="Checkpoint 4.1 (ค) Logout" width="280">
+
+**คำอธิบาย:** `authStateChanges()` ส่งค่าใหม่ทุกครั้งที่สถานะล็อกอินเปลี่ยน (`User` หรือ `null`) และ `StreamBuilder` จะ build ใหม่แล้วเลือกแสดง `LoginPage` หรือ `MainScaffold` ตามค่านั้นเอง จึงไม่ต้องเขียน `Navigator` สลับหน้า
 
 ---
 
@@ -538,9 +562,8 @@ Widget build(BuildContext context) {
 1. ทำไมเราจึง "เพิ่ม Implementation ใหม่" (`ItemRepositoryFirestore`) แทนที่จะแก้ไข `ItemRepositoryApi` เดิม หรือเขียนโค้ดเรียก Firestore ตรงจาก `HomePage`?
 2. ถ้าในอนาคตอาจารย์สั่งให้เปลี่ยนจาก Fake Store API ไปใช้ API อื่น ต้องแก้ไฟล์กี่ไฟล์ ถ้าทุก Widget เรียกผ่าน Interface `ItemRepository` เท่านั้น?
 
-```text
-บันทึกคำตอบของคุณที่นี่
-```
+1. การเพิ่ม Implementation ใหม่ไม่กระทบโค้ด `ItemRepositoryApi` ที่ทำงานได้อยู่แล้ว และ `HomePage` ไม่ต้องผูกกับ Firestore โดยตรง จึงเพิ่มหรือสลับแหล่งข้อมูลได้โดยไม่ต้องแก้หน้าจอ และทดสอบแยกส่วนได้ง่าย
+2. แก้ 1 ไฟล์ คือเขียน Implementation ของ `ItemRepository` ตัวใหม่ (หรือแก้ `item_repository_api.dart`) และเปลี่ยนบรรทัดที่ส่ง Repository เข้าไปใน `main.dart` ส่วน Widget ทั้งหมดไม่ต้องแก้
 
 ### ขั้นตอนที่ 5.2: **นักศึกษาเขียน Code เอง** — ItemRepositoryFirestore
 
@@ -611,9 +634,9 @@ final pages = [
 
 > ✅ **Checkpoint 5.1** ถ่ายภาพหน้าจอ Home ที่แสดงสินค้าจากทั้งสองแหล่งข้อมูลปนกันอยู่ในลิสต์เดียว พร้อม Badge ที่แยกแหล่งที่มาชัดเจน (ถ้ายังไม่เคยมีประกาศจริงใน Firestore เลย ให้ทำส่วนที่ 6 ให้เสร็จก่อนแล้วย้อนกลับมาถ่ายภาพ Checkpoint นี้) อธิบายว่าการออกแบบให้ `HomePage` ไม่รู้จัก `ItemRepositoryApi`/`ItemRepositoryFirestore` โดยตรง แต่รู้จักผ่าน Interface `ItemRepository` เท่านั้น ช่วยให้ทดสอบหรือเปลี่ยนแหล่งข้อมูลในอนาคตง่ายขึ้นอย่างไร
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
+<img src="Image/cp5-1_home_api.jpg" alt="Home สินค้าจาก API" width="280"> <img src="Image/cp5-1_home_mixed_1.jpg" alt="Checkpoint 5.1 สองแหล่งข้อมูล" width="280"> <img src="Image/cp5-1_home_mixed_2.jpg" alt="Checkpoint 5.1 สองแหล่งข้อมูล" width="280">
+
+**คำอธิบาย:** `HomePage` รับแค่ `List<ItemRepository>` และเรียก `getItems()` จึงไม่ผูกกับแหล่งข้อมูลใด ตอนทดสอบส่ง Repository จำลองเข้าไปแทนได้ และตอนเปลี่ยนแหล่งข้อมูลก็แค่เปลี่ยนตัวที่ส่งเข้ามาใน `main.dart` โดยไม่ต้องแก้ `HomePage`
 
 ---
 
@@ -663,15 +686,19 @@ final pages = [
 
 > ✅ **Checkpoint 6.1** โพสต์ขายจริงอย่างน้อย 2 รายการผ่านแอป ถ่ายภาพหน้าจอ Firebase Console เมนู Firestore Database ที่แสดง Collection `items` มีเอกสารที่โพสต์เข้ามาจริง พร้อม field `sellerId` ที่ตรงกับ `uid` ของบัญชีที่ใช้ทดสอบ และยืนยันว่าร่างทั้งสองรายการหายไปจาก `MyDraftsPage` แล้ว
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+**Firestore collection `items` (`sellerId` ตรงกับ User UID `mCf55kIZGmVLVyMiQYKH3beOGaw1`)**
+
+![Checkpoint 6.1 Firestore items](Image/cp6-1_firestore_items.png)
+
+**ร่างก่อนโพสต์ และหลังโพสต์ (ร่างหายจาก MyDraftsPage)**
+
+<img src="Image/cp6-1_drafts_before.jpg" alt="ร่างก่อนโพสต์" width="280"> <img src="Image/cp6-1_drafts_empty.jpg" alt="Checkpoint 6.1 ร่างหายแล้ว" width="280">
 
 > ✅ **Checkpoint 6.2** ถ่ายภาพหน้าจอ Firebase Console เมนู Storage ที่แสดงไฟล์รูปภาพที่อัปโหลดสำเร็จ และภาพหน้าจอ Firestore ที่แสดงว่าเอกสารมี field `imageUrl` เป็น URL จริงที่เปิดดูได้ ถ่ายภาพหน้าจอแอปที่แสดงรูปสินค้านั้นบนหน้า Home ผ่าน `Image.network(imageUrl)` ด้วย (ย้อนกลับไปถ่ายภาพ Checkpoint 5.1 ให้ครบตอนนี้ ถ้ายังไม่ได้ทำ)
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+**หมายเหตุ:** โปรเจกต์ใช้แผน Spark ซึ่งเปิด Firebase Storage ไม่ได้ (ต้องอัปเกรดเป็นแผน Blaze) จึงยังไม่มีภาพ Storage และ `imageUrl` ในเอกสารเป็นค่าว่าง โค้ด `StorageService.uploadListingImage()` เขียนไว้ครบแล้วและจะอัปโหลดรูปเมื่อเปิด Storage ได้
+
+![Checkpoint 6.2 imageUrl](Image/cp6-2_firestore_imageurl.png)
 
 ---
 
@@ -702,9 +729,17 @@ service cloud.firestore {
 
 > ✅ **Checkpoint 7.1 (Self-Study)** ถ่ายภาพหน้าจอผลการทดลองทั้ง 2 กรณีใน Rules Playground เขียนอธิบายสั้น ๆ ว่าทำไม Client-side Validation (การไม่แสดงปุ่มแก้ไขให้เห็น) เพียงอย่างเดียวจึงไม่เพียงพอต่อความปลอดภัยของข้อมูลจริง
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
+**กรณี (ก) แก้ไขเอกสารของตัวเอง — ผ่าน (allowed)**
+
+![Checkpoint 7.1 (ก) allowed](Image/cp7-1_a_allowed.png)
+
+**กรณี (ข) แก้ไขเอกสารของคนอื่น — ถูกปฏิเสธ (denied)**
+
+![Checkpoint 7.1 Rules ที่ใช้ทดสอบ](Image/cp7-1_a_allowed.png)
+
+_(ภาพแทนชั่วคราว: เป็นภาพ Rules ชุดเดียวกับกรณี (ก) ยังไม่ใช่ผลลัพธ์ denied)_ เมื่อเปลี่ยน Firebase UID เป็นค่าที่ไม่ตรงกับ `sellerId` ของเอกสาร เงื่อนไข `request.auth.uid == resource.data.sellerId` ในบรรทัดที่ 7 จะเป็นเท็จ คำขอ update จึงถูกปฏิเสธ
+
+**คำอธิบาย:** การซ่อนปุ่มแก้ไขเป็นแค่การปิดทางใน UI ผู้อื่นยังเขียนโค้ดเรียก Firestore ตรง ๆ ได้โดยไม่ผ่านแอป Security Rules ทำงานบนเซิร์ฟเวอร์และตรวจทุกคำขอ จึงเป็นด่านที่บังคับได้จริงว่าแก้ไขได้เฉพาะเจ้าของ
 
 ---
 
@@ -721,9 +756,21 @@ service cloud.firestore {
 
 > ✅ **Checkpoint 8.1** ถ่ายภาพหน้าจอผลการทดสอบทั้ง 4 ข้อ 
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ 
-```
+**ข้อ 1** เปิดแอปใหม่แล้วเข้าหน้าหลักทันทีโดยไม่ต้องล็อกอินซ้ำ
+
+<img src="Image/cp8-1_1_reopen_home.jpg" alt="Checkpoint 8.1 ข้อ 1" width="280">
+
+**ข้อ 2** โหมดเครื่องบิน: รายการโปรดและหน้าลงประกาศ/ร่างยังใช้ได้ เพราะเก็บใน Local Database (Drift)
+
+<img src="Image/cp8-1_2_offline_favorites.jpg" alt="Checkpoint 8.1 ข้อ 2 รายการโปรด" width="280"> <img src="Image/cp8-1_2_offline_sell.jpg" alt="Checkpoint 8.1 ข้อ 2 ลงประกาศขาย" width="280">
+
+**ข้อ 3** โหมดเครื่องบิน: กดโพสต์ขายจริงแล้วแสดงข้อความ Error ไม่ Crash และร่างยังอยู่
+
+<img src="Image/cp8-1_3_offline_error_1.jpg" alt="Checkpoint 8.1 ข้อ 3" width="280"> <img src="Image/cp8-1_3_offline_error_2.jpg" alt="Checkpoint 8.1 ข้อ 3" width="280">
+
+**ข้อ 4** เปิดเครือข่ายแล้วโพสต์รายการเดิมสำเร็จ
+
+<img src="Image/cp8-1_4_online_success.jpg" alt="Checkpoint 8.1 ข้อ 4" width="280">
 
 ---
 
@@ -787,3 +834,5 @@ emulator -avd Pixel7_API34_PlayStore
 **แอป Crash ตอนเปิดหน้า "ร่างของฉัน" หรือหน้าดูประกาศของตัวเอง ด้วย Error เกี่ยวกับ Index** Firestore ต้องการ Composite Index เมื่อ Query ที่ซับซ้อน (เช่น `where` ร่วมกับ `orderBy` มากกว่า 1 field) ข้อความ Error จาก Firestore มักแนบลิงก์ให้กดสร้าง Index อัตโนมัติมาด้วยเสมอ ให้กดลิงก์นั้นแล้วรอสักครู่ให้ Index สร้างเสร็จ
 
 ---
+
+link branch : (go to branch)[https://github.com/Job-67/MDSD-Lab9-Labsheet-2026/tree/campus_marketplace_w7]
