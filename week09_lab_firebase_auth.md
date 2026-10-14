@@ -36,9 +36,10 @@
 
 > ✅ **Checkpoint 1.1** ถ่ายภาพหน้าจอ Firebase Console ที่แสดงหน้า Project Overview ของโปรเจกต์ที่สร้างเสร็จแล้ว
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
+``
+![alt text](images/image.png)
 ```
+
 
 ### ขั้นตอนที่ 1.2: 🔧 ทำตามขั้นตอน — ติดตั้งเครื่องมือและเชื่อมโปรเจกต์ด้วย FlutterFire CLI
 
@@ -164,8 +165,15 @@ Future<void> main() async {
 
 > ✅ **Checkpoint 2.1** ทดสอบสมัครสมาชิกด้วย Email ใหม่สำเร็จ ถ่ายภาพหน้าจอ Firebase Console เมนู Authentication → Users ที่แสดงบัญชีที่เพิ่งสมัคร จากนั้นทดสอบกรณีผิดพลาด 2 กรณี คือ (ก) สมัครซ้ำด้วย Email เดิม และ (ข) ใส่รหัสผ่านสั้นเกินไป ถ่ายภาพหน้าจอข้อความ Error ทั้งสองกรณี พร้อมอธิบายว่าโค้ดส่วนใดใน `auth_service.dart` เป็นตัวจัดการแต่ละกรณี
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบายของแต่ละกรณี
+``
+![alt text](images/image-1.png)
+![alt text](images/image-2.png)
+![alt text](images/image-3.png)
+กรณี (ก) สมัครซ้ำ: เมื่อเรียก createUserWithEmailAndPassword ด้วยอีเมลที่มีอยู่แล้ว Firebase โยน FirebaseAuthException ที่มี code = 'email-already-in-use' ซึ่งถูกดักโดยบล็อก on FirebaseAuthException catch (e) ในเมธอด signUp() แล้วส่ง e.code ไปให้ _translateErrorCode() ซึ่งตรงกับ case 'email-already-in-use' และคืนข้อความภาษาไทย
+
+กรณี (ข) รหัสผ่านสั้น: Firebase โยน FirebaseAuthException ที่มี code = 'weak-password' ถูกดักที่บล็อก catch เดียวกันใน signUp() แล้วแปลผ่าน case 'weak-password' ใน _translateErrorCode()
+
+ข้อความที่แปลแล้วถูกโยนต่อเป็น Exception ไปให้ LoginPage เก็บใน _errorMessage และแสดงเป็นข้อความสีแดง ผู้ใช้จึงไม่เห็น Error ดิบของ Firebase
 ```
 
 ---
@@ -383,8 +391,11 @@ avdmanager list avd
 
 > ✅ **Checkpoint 3.1** ทดสอบกดปุ่มเข้าสู่ระบบด้วย Google ด้วยบัญชี Google จริงของคุณ ถ่ายภาพหน้าจอตอนเลือกบัญชี Google และภาพหน้าจอ Firebase Console ที่แสดงว่ามีผู้ใช้ใหม่ Provider เป็น Google เพิ่มเข้ามา อธิบายว่า `idToken` กับ `accessToken` ที่ได้จาก Google นำไปใช้ทำอะไรต่อในขั้นตอนการยืนยันตัวตนกับ Firebase (อ้างอิงหัวข้อ 9.4)
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
+``
+![alt text](images/image-4.png)
+![alt text](images/image-5.png)
+
+idToken เป็นหลักฐานระบุตัวตนที่ Google เซ็นรับรองว่าผู้ใช้คือใคร ส่วน accessToken เป็นสิทธิ์เข้าถึงบริการของ Google ตาม scope ที่ขอ ทั้งสองถูกรวมเป็น GoogleAuthProvider.credential(...) แล้วส่งให้ signInWithCredential() เพื่อให้ Firebase ตรวจสอบกับ Google และสร้างหรือล็อกอินบัญชีผู้ใช้ให้
 ```
 
 ---
@@ -523,8 +534,18 @@ Widget build(BuildContext context) {
 > ✅ **Checkpoint 4.1** ถ่ายภาพหน้าจอ 3 ภาพเรียงกัน คือ (ก) แอปตอนเพิ่งเปิดขึ้นมาครั้งแรกแบบยังไม่ล็อกอิน แสดงหน้า Login (ข) หลังล็อกอินสำเร็จ แอปสลับไปแสดง `MainScaffold` อัตโนมัติโดยไม่ต้องกดอะไรเพิ่ม และ (ค) หลังกด "ออกจากระบบ" แอปสลับกลับไปหน้า Login เอง อธิบายว่าทำไมการใช้ `StreamBuilder` ฟัง `authStateChanges()` จึงทำให้ไม่ต้องเขียนโค้ดสั่ง Navigate ไปมาเอง
 
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ (3 ภาพ) และคำอธิบาย
+``
+บันทึกรูปผลลัพธ์ที่นี่ (3 ภาพ) 
+ก
+![alt text](images/image-log.png)
+ข 
+![alt text](images/image-list.png)
+
+ค
+![alt text](images/image-6.png)
+
+StreamBuilder ฟัง authStateChanges() ซึ่งเป็น Stream ที่ Firebase ยิงค่าใหม่ทุกครั้งที่สถานะล็อกอินเปลี่ยน (ล็อกอินได้ User, ออกจากระบบได้ null) ทุกครั้งที่มีค่าใหม่ builder ถูกเรียกซ้ำและเลือก Widget ตามสถานะ หน้าจอจึงสลับเองโดยไม่ต้องเขียน Navigator
+
 ```
 
 ---
@@ -536,11 +557,11 @@ Widget build(BuildContext context) {
 ก่อนเขียนโค้ด ให้ตอบคำถามต่อไปนี้ (อ้างอิง `campus_marketplace_lab_roadmap.md` ข้อ 5.6 และเนื้อหาหัวข้อ 9.5):
 
 1. ทำไมเราจึง "เพิ่ม Implementation ใหม่" (`ItemRepositoryFirestore`) แทนที่จะแก้ไข `ItemRepositoryApi` เดิม หรือเขียนโค้ดเรียก Firestore ตรงจาก `HomePage`?
-2. ถ้าในอนาคตอาจารย์สั่งให้เปลี่ยนจาก Fake Store API ไปใช้ API อื่น ต้องแก้ไฟล์กี่ไฟล์ ถ้าทุก Widget เรียกผ่าน Interface `ItemRepository` เท่านั้น?
+--- เพราะ ItemRepositoryApi ทำงานได้ดีอยู่แล้ว การแก้อาจทำให้พัง ส่วนการเรียก Firestore ตรงจาก HomePage ทำให้หน้าจอผูกติดกับ Firestore ทดสอบยากและเปลี่ยนแหล่งข้อมูลยาก การสร้างคลาสใหม่ที่ implements ItemRepository คือเปิดให้ขยายโดยไม่แก้ของเดิม (Open/Closed Principle) HomePage ยังเรียกผ่าน Interface เหมือนเดิม
 
-```text
-บันทึกคำตอบของคุณที่นี่
-```
+2. ถ้าในอนาคตอาจารย์สั่งให้เปลี่ยนจาก Fake Store API ไปใช้ API อื่น ต้องแก้ไฟล์กี่ไฟล์ ถ้าทุก Widget เรียกผ่าน Interface `ItemRepository` เท่านั้น?
+--- แก้ 1 ไฟล์ คือเขียน Implementation ใหม่ (หรือแก้ไฟล์ Implementation เดิม) แล้วเปลี่ยนจุดสร้างใน main.dart เพราะทุก Widget เรียกผ่าน ItemRepository เท่านั้น ไม่รู้ว่าเบื้องหลังคืออะไร
+
 
 ### ขั้นตอนที่ 5.2: **นักศึกษาเขียน Code เอง** — ItemRepositoryFirestore
 
@@ -611,9 +632,6 @@ final pages = [
 
 > ✅ **Checkpoint 5.1** ถ่ายภาพหน้าจอ Home ที่แสดงสินค้าจากทั้งสองแหล่งข้อมูลปนกันอยู่ในลิสต์เดียว พร้อม Badge ที่แยกแหล่งที่มาชัดเจน (ถ้ายังไม่เคยมีประกาศจริงใน Firestore เลย ให้ทำส่วนที่ 6 ให้เสร็จก่อนแล้วย้อนกลับมาถ่ายภาพ Checkpoint นี้) อธิบายว่าการออกแบบให้ `HomePage` ไม่รู้จัก `ItemRepositoryApi`/`ItemRepositoryFirestore` โดยตรง แต่รู้จักผ่าน Interface `ItemRepository` เท่านั้น ช่วยให้ทดสอบหรือเปลี่ยนแหล่งข้อมูลในอนาคตง่ายขึ้นอย่างไร
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
 
 ---
 
@@ -663,14 +681,18 @@ final pages = [
 
 > ✅ **Checkpoint 6.1** โพสต์ขายจริงอย่างน้อย 2 รายการผ่านแอป ถ่ายภาพหน้าจอ Firebase Console เมนู Firestore Database ที่แสดง Collection `items` มีเอกสารที่โพสต์เข้ามาจริง พร้อม field `sellerId` ที่ตรงกับ `uid` ของบัญชีที่ใช้ทดสอบ และยืนยันว่าร่างทั้งสองรายการหายไปจาก `MyDraftsPage` แล้ว
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
+``
+![alt text](images/image-7.png)
+![alt text](images/image-8.png)
+![alt text](images/image-9.png)
+
 ```
 
 > ✅ **Checkpoint 6.2** ถ่ายภาพหน้าจอ Firebase Console เมนู Storage ที่แสดงไฟล์รูปภาพที่อัปโหลดสำเร็จ และภาพหน้าจอ Firestore ที่แสดงว่าเอกสารมี field `imageUrl` เป็น URL จริงที่เปิดดูได้ ถ่ายภาพหน้าจอแอปที่แสดงรูปสินค้านั้นบนหน้า Home ผ่าน `Image.network(imageUrl)` ด้วย (ย้อนกลับไปถ่ายภาพ Checkpoint 5.1 ให้ครบตอนนี้ ถ้ายังไม่ได้ทำ)
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
+```
+![alt text](images/image-10.png)
+![alt text](images/image-11.png)
 ```
 
 ---
@@ -702,9 +724,10 @@ service cloud.firestore {
 
 > ✅ **Checkpoint 7.1 (Self-Study)** ถ่ายภาพหน้าจอผลการทดลองทั้ง 2 กรณีใน Rules Playground เขียนอธิบายสั้น ๆ ว่าทำไม Client-side Validation (การไม่แสดงปุ่มแก้ไขให้เห็น) เพียงอย่างเดียวจึงไม่เพียงพอต่อความปลอดภัยของข้อมูลจริง
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
 ```
+![alt text](images/image-12.png)
+![alt text](images/image-13.png)
+`
 
 ---
 
@@ -721,8 +744,18 @@ service cloud.firestore {
 
 > ✅ **Checkpoint 8.1** ถ่ายภาพหน้าจอผลการทดสอบทั้ง 4 ข้อ 
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ 
+``
+1. ล็อกอินค้างไว้ แล้วปิดแอปทิ้งไปทั้งหมด
+![alt text](images/image-14.png)
+![alt text](images/image-15.png)
+2. ปิด WiFi/Data ของเครื่องให้หมด
+![alt text](images/image-16.png)
+![alt text](images/image-17.png)
+3. ขณะยังปิดเครือข่ายอยู่ ลองกด "โพสต์ขายจริง"
+![alt text](images/image-18.png)
+4. เปิดเครือข่ายกลับมา แล้วลองกด "โพสต์ขายจริง"
+![alt text](images/image-19.png)
+![alt text](images/image-20.png)
 ```
 
 ---
