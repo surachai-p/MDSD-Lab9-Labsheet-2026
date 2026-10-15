@@ -39,6 +39,7 @@
 ```text
 บันทึกรูปผลลัพธ์ที่นี่
 ```
+<img width="1917" height="1023" alt="image" src="https://github.com/user-attachments/assets/ff4446b6-0e65-4725-903d-5778c52d1f50" />
 
 ### ขั้นตอนที่ 1.2: 🔧 ทำตามขั้นตอน — ติดตั้งเครื่องมือและเชื่อมโปรเจกต์ด้วย FlutterFire CLI
 
@@ -166,6 +167,22 @@ Future<void> main() async {
 
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบายของแต่ละกรณี
+```
+<img width="423" height="967" alt="image" src="https://github.com/user-attachments/assets/366b9e0b-44d1-4ea7-abe1-4964632b74b5" />
+<img width="1465" height="650" alt="image" src="https://github.com/user-attachments/assets/f2831f87-ee8f-4df2-92fb-11ba522ac885" />
+
+## (ก)
+<img width="425" height="576" alt="image" src="https://github.com/user-attachments/assets/a6f09e3d-9d01-48ce-b076-6f30bc602851" />
+
+```
+พอสมัครด้วยอีเมลที่มีบัญชีอยู่แล้ว Firebase จะโยน FirebaseAuthException ที่มี code เป็น email-already-in-use ออกมา ใน signUp() ของ auth_service.dart มี on FirebaseAuthException catch (e) ดักไว้ แล้วส่ง e.code ไปให้เมธอด _translate() ซึ่งเข้า case 'email-already-in-use' และคืนข้อความ "อีเมลนี้ถูกใช้สมัครไปแล้ว" ให้หน้า Login แสดงเป็นตัวอักษรสีแดง
+```
+
+## (ข)
+<img width="422" height="512" alt="image" src="https://github.com/user-attachments/assets/80e569d6-bfa1-4e9a-9f95-2774f651663f" />
+
+```
+รหัสผ่านที่ใส่ไปมีแค่ 3 ตัว ซึ่งสั้นกว่า 6 ตัวที่ Firebase กำหนด มันเลยโยน FirebaseAuthException ที่มี code เป็น weak-password ถูกจับด้วย catch ตัวเดิมใน signUp() แล้ว _translate() เข้า case 'weak-password' คืนข้อความ "รหัสผ่านสั้นหรือคาดเดาง่ายเกินไป อย่างน้อย 6 ตัวอักษร
 ```
 
 ---
@@ -386,7 +403,12 @@ avdmanager list avd
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
 ```
+<img width="365" height="811" alt="image" src="https://github.com/user-attachments/assets/4c04cfdc-de93-4748-9151-44e8441fa393" />
+<img width="1211" height="498" alt="image" src="https://github.com/user-attachments/assets/b68fae3e-06c2-4000-84d7-ebeaddeeb731" />
 
+```text
+หลังผู้ใช้เลือกบัญชี Google แอปจะได้ idToken ซึ่งเป็นตัวยืนยันว่าผู้ใช้คือใคร เปรียบเหมือนบัตรประชาชน กับ accessToken ซึ่งเป็นสิทธิ์เข้าถึงข้อมูลเพิ่มเติม เช่น อีเมล เปรียบเหมือนบัตรผ่านชั่วคราวที่มีวันหมดอายุ ทั้งสองตัวถูกส่งเข้า GoogleAuthProvider.credential() เพื่อสร้าง Credential แล้วเรียก signInWithCredential() นำไปแลกเป็น Session ของ Firebase Authentication Firebase ต้องเห็นครบทั้งคู่จึงจะยอมให้ล็อกอิน พอสำเร็จ ผู้ใช้จะมีสถานะล็อกอินเหมือนการใช้ Email/Password และ authStateChanges จะส่งค่าใหม่ออกมาทันที ซึ่งเป็นสิ่งที่ AuthGate ในส่วนที่ 4 ใช้สลับหน้าจอ
+```
 ---
 
 ## ส่วนที่ 4: AuthGate — สลับหน้าจอตามสถานะผู้ใช้
@@ -526,7 +548,13 @@ Widget build(BuildContext context) {
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ (3 ภาพ) และคำอธิบาย
 ```
+<img width="370" height="697" alt="image" src="https://github.com/user-attachments/assets/96dc7047-3c4a-45f6-a9e7-2ee312f8c3e2" />
+<img width="368" height="840" alt="image" src="https://github.com/user-attachments/assets/273287b6-97a3-4e0f-8332-0ef4017f5a2a" />
+<img width="373" height="841" alt="image" src="https://github.com/user-attachments/assets/3e3079bc-5b74-4ace-9da8-c349168c7331" />
 
+```text
+authStateChanges() เป็น Stream ที่ Firebase ปล่อยค่าใหม่ทุกครั้งที่สถานะผู้ใช้เปลี่ยน ได้ User เมื่อล็อกอิน และ null เมื่อออกจากระบบ StreamBuilder เรียก builder ใหม่ทุกครั้งที่มีค่าใหม่ จึงสร้างหน้าจอตามสถานะล่าสุดให้อัตโนมัติ null แสดง LoginPage, มี User แสดง MainScaffold ฟังก์ชัน login/logout แค่เปลี่ยนสถานะผู้ใช้ โดยไม่ต้องรู้ว่าหน้าถัดไปคืออะไร จึงไม่ต้องเขียน Navigator.push/pop เอง และเมื่อเปิดแอปใหม่ Firebase จำ session เดิมไว้ AuthGate ก็พาไปหน้าที่ถูกต้องให้เอง
+```
 ---
 
 ## ส่วนที่ 5: ขยาย Repository Pattern ด้วย ItemRepositoryFirestore
@@ -539,7 +567,9 @@ Widget build(BuildContext context) {
 2. ถ้าในอนาคตอาจารย์สั่งให้เปลี่ยนจาก Fake Store API ไปใช้ API อื่น ต้องแก้ไฟล์กี่ไฟล์ ถ้าทุก Widget เรียกผ่าน Interface `ItemRepository` เท่านั้น?
 
 ```text
-บันทึกคำตอบของคุณที่นี่
+1. ถ้าไปแก้ ItemRepositoryApi ที่ใช้งานได้อยู่แล้ว มีโอกาสทำให้ส่วนเดิมพังได้ การเพิ่มคลาสใหม่ที่ implements ItemRepository ไม่กระทบของเดิมเลย ส่วนการเรียก Firestore ตรงจาก HomePage จะทำให้ UI ผูกติดกับ Firestore และต้องรู้เรื่อง collection กับการแปลงข้อมูลเอง ซึ่งไม่ใช่หน้าที่ของ UI
+
+2. แก้แค่ 1-2 ไฟล์ คือไฟล์ repository ที่เปลี่ยน API หรือสร้างคลาสใหม่ กับ main.dart ที่ใช้สร้างตัว repository ส่วน HomePage กับ Widget อื่นไม่ต้องแก้ เพราะรู้จักแค่ Interface ItemRepository และเรียก getItems() เท่านั้น
 ```
 
 ### ขั้นตอนที่ 5.2: **นักศึกษาเขียน Code เอง** — ItemRepositoryFirestore
@@ -612,8 +642,9 @@ final pages = [
 > ✅ **Checkpoint 5.1** ถ่ายภาพหน้าจอ Home ที่แสดงสินค้าจากทั้งสองแหล่งข้อมูลปนกันอยู่ในลิสต์เดียว พร้อม Badge ที่แยกแหล่งที่มาชัดเจน (ถ้ายังไม่เคยมีประกาศจริงใน Firestore เลย ให้ทำส่วนที่ 6 ให้เสร็จก่อนแล้วย้อนกลับมาถ่ายภาพ Checkpoint นี้) อธิบายว่าการออกแบบให้ `HomePage` ไม่รู้จัก `ItemRepositoryApi`/`ItemRepositoryFirestore` โดยตรง แต่รู้จักผ่าน Interface `ItemRepository` เท่านั้น ช่วยให้ทดสอบหรือเปลี่ยนแหล่งข้อมูลในอนาคตง่ายขึ้นอย่างไร
 
 ```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
+HomePage รู้จักแค่ Interface ItemRepository และเรียก getItems() เท่านั้น ไม่รู้ว่าข้างหลังเป็น API หรือ Firestore ตอนทดสอบจึงสร้าง Fake Repository ที่คืนข้อมูลตัวอย่างมาใส่แทนได้เลย โดยไม่ต้องต่อเน็ตหรือ Firebase ส่วนการเปลี่ยนหรือเพิ่มแหล่งข้อมูลก็แค่สร้างคลาสใหม่ที่ implements ItemRepository แล้วใส่เข้า List ใน main.dart ไม่ต้องแก้ HomePage เลย เหมือนตอนที่เพิ่ม Firestore เข้ามา
 ```
+<img width="346" height="657" alt="image" src="https://github.com/user-attachments/assets/7c66a28f-9119-4045-b281-d598ea0f097d" />
 
 ---
 
@@ -666,12 +697,21 @@ final pages = [
 ```text
 บันทึกรูปผลลัพธ์ที่นี่
 ```
+<img width="362" height="841" alt="image" src="https://github.com/user-attachments/assets/5ddf860a-8bd0-45d2-8fca-023261f78a15" />
+<img width="1418" height="622" alt="image" src="https://github.com/user-attachments/assets/62a962cb-e1ed-4298-a433-ae19bcea94a4" />
+<img width="1458" height="893" alt="image" src="https://github.com/user-attachments/assets/b6753f9b-b178-4ea4-a698-307e457b8557" />
+
+# ร่างที่โพสต์หายไป
+<img width="372" height="840" alt="image" src="https://github.com/user-attachments/assets/6ac62464-1e38-4b40-b783-439129a8e31a" />
 
 > ✅ **Checkpoint 6.2** ถ่ายภาพหน้าจอ Firebase Console เมนู Storage ที่แสดงไฟล์รูปภาพที่อัปโหลดสำเร็จ และภาพหน้าจอ Firestore ที่แสดงว่าเอกสารมี field `imageUrl` เป็น URL จริงที่เปิดดูได้ ถ่ายภาพหน้าจอแอปที่แสดงรูปสินค้านั้นบนหน้า Home ผ่าน `Image.network(imageUrl)` ด้วย (ย้อนกลับไปถ่ายภาพ Checkpoint 5.1 ให้ครบตอนนี้ ถ้ายังไม่ได้ทำ)
 
 ```text
 บันทึกรูปผลลัพธ์ที่นี่
 ```
+<img width="370" height="842" alt="image" src="https://github.com/user-attachments/assets/3b48381b-eac8-4828-b857-87faee3a5a23" />
+<img width="1443" height="611" alt="image" src="https://github.com/user-attachments/assets/91746c58-ccf4-45c8-b555-5f0227e8f4b5" />
+<img width="1418" height="655" alt="image" src="https://github.com/user-attachments/assets/b600c40a-f28a-4fa2-9734-5620eac1c3b2" />
 
 ---
 
@@ -703,8 +743,15 @@ service cloud.firestore {
 > ✅ **Checkpoint 7.1 (Self-Study)** ถ่ายภาพหน้าจอผลการทดลองทั้ง 2 กรณีใน Rules Playground เขียนอธิบายสั้น ๆ ว่าทำไม Client-side Validation (การไม่แสดงปุ่มแก้ไขให้เห็น) เพียงอย่างเดียวจึงไม่เพียงพอต่อความปลอดภัยของข้อมูลจริง
 
 ```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
+Client-side Validation เช่นการไม่แสดงปุ่มแก้ไขหรือลบ ป้องกันได้แค่ที่หน้าจอของแอปเราเท่านั้น แต่ Firestore เปิดให้เรียกผ่าน SDK หรือ REST API ได้โดยตรง ผู้ไม่หวังดีสามารถเขียนโค้ดของตัวเองหรือดัดแปลงแอป เพื่อสั่งแก้ไขหรือลบเอกสารของคนอื่นโดยข้ามหน้าจอของเราไปเลย โค้ดที่รันบนเครื่องผู้ใช้จึงไว้ใจไม่ได้ ต้องตรวจสิทธิ์ที่ฝั่งเซิร์ฟเวอร์ ซึ่งก็คือ Security Rules ที่เช็กว่า request.auth.uid ตรงกับ sellerId ของเอกสารหรือไม่ ถ้าไม่ตรงจะถูกปฏิเสธไม่ว่าคำขอจะมาจากแอปหรือไม่ก็ตาม
 ```
+
+## ก
+<img width="1488" height="897" alt="image" src="https://github.com/user-attachments/assets/f7d1867b-bb68-4da3-b547-eef11f5496ad" />
+
+
+##ข
+<img width="1130" height="610" alt="image" src="https://github.com/user-attachments/assets/c9d9807c-011a-4d3b-b234-d8d439707a62" />
 
 ---
 
@@ -724,6 +771,20 @@ service cloud.firestore {
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ 
 ```
+
+## 1
+<img width="371" height="840" alt="image" src="https://github.com/user-attachments/assets/56a1972f-e84b-4e95-879c-23551f514d30" />
+
+## 2
+<img width="355" height="847" alt="image" src="https://github.com/user-attachments/assets/b4af9fc0-94b6-499f-ada3-fd81e61dded8" />
+<img width="368" height="840" alt="image" src="https://github.com/user-attachments/assets/858e1471-7c06-4049-8d2d-10b7240101c4" />
+<img width="361" height="835" alt="image" src="https://github.com/user-attachments/assets/62880d6c-17ac-4746-ac98-01abed732e02" />
+
+## 3
+<img width="382" height="847" alt="image" src="https://github.com/user-attachments/assets/86236084-2da8-4d8e-a285-e98fb8418c79" />
+
+## 4
+<img width="366" height="847" alt="image" src="https://github.com/user-attachments/assets/3869383e-6973-44c8-88d6-3866a9a1a32e" />
 
 ---
 
