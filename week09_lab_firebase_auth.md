@@ -23,22 +23,23 @@
 - ติดตั้ง Node.js (เวอร์ชัน LTS ปัจจุบัน) เพื่อใช้คำสั่ง `npm install -g firebase-tools` และ `dart pub global activate flutterfire_cli`
 - เครื่อง Android จริงหรือ Emulator ที่มีการตั้งค่า Google Play Services (จำเป็นสำหรับทดสอบ Google Sign-In) หรือ iOS Simulator/เครื่องจริงที่ล็อกอิน Apple ID ไว้แล้ว
 
-> ⚠️ **ข้อควรรู้เรื่องความปลอดภัยของไฟล์ตั้งค่า Firebase**: ไฟล์ `google-services.json` (Android), `GoogleService-Info.plist` (iOS) และ `firebase_options.dart` ที่ได้จากคำสั่ง `flutterfire configure` **ไม่ใช่ความลับแบบเดียวกับ Gemini API Key** ในสัปดาห์ที่ 7 — Google ยืนยันว่าไฟล์เหล่านี้ฝังอยู่ในตัวแอปที่ปล่อยให้ผู้ใช้ดาวน์โหลดได้อย่างปลอดภัย เพราะเป็นเพียงตัวระบุโปรเจกต์ ไม่ใช่กุญแจเข้าถึงข้อมูล **ความปลอดภัยที่แท้จริงของ Firebase อยู่ที่ Security Rules**  ไม่ใช่การซ่อนไฟล์ตั้งค่าเหล่านี้ แต่ถึงอย่างนั้น ทีมพัฒนาส่วนใหญ่ก็ยังนิยม `.gitignore` ไฟล์เหล่านี้ไว้เพื่อป้องกันความสับสนเวลาสมาชิกในทีมใช้ Firebase Project คนละตัวกัน ให้ทำตามนี้ไว้เป็นนิสัยที่ดีเช่นกัน
+> ⚠️ **ข้อควรรู้เรื่องความปลอดภัยของไฟล์ตั้งค่า Firebase**: ไฟล์ `google-services.json` (Android), `GoogleService-Info.plist` (iOS) และ `firebase_options.dart` ที่ได้จากคำสั่ง `flutterfire configure` **ไม่ใช่ความลับแบบเดียวกับ Gemini API Key** ในสัปดาห์ที่ 7 — Google ยืนยันว่าไฟล์เหล่านี้ฝังอยู่ในตัวแอปที่ปล่อยให้ผู้ใช้ดาวน์โหลดได้อย่างปลอดภัย เพราะเป็นเพียงตัวระบุโปรเจกต์ ไม่ใช่กุญแจเข้าถึงข้อมูล **ความปลอดภัยที่แท้จริงของ Firebase อยู่ที่ Security Rules** ไม่ใช่การซ่อนไฟล์ตั้งค่าเหล่านี้ แต่ถึงอย่างนั้น ทีมพัฒนาส่วนใหญ่ก็ยังนิยม `.gitignore` ไฟล์เหล่านี้ไว้เพื่อป้องกันความสับสนเวลาสมาชิกในทีมใช้ Firebase Project คนละตัวกัน ให้ทำตามนี้ไว้เป็นนิสัยที่ดีเช่นกัน
 
 ---
+
 ## ขั้นตอนการทดลอง
+
 ## ส่วนที่ 1: ตั้งค่า Firebase Project และเชื่อมกับ Flutter
 
 ### ขั้นตอนที่ 1.1: 🔧 ทำตามขั้นตอน — สร้าง Firebase Project
-**ให้ใช้ gmail account ส่วนตัวเพื่อไม่ใช่ account นักศึกษาของสถาบัน**
-เปิด https://console.firebase.google.com กด **Create a new Firebase project** หรือ **Get stared by setting up a Firebase project** ตั้งชื่อโปรเจกต์ **ตั้งชื่อไม่ให้ชื่อซ้ำกับที่มีอยู่ใน Firebase**(เช่น `campus-marketplace-2026-<ชื่อนักศึกษาภาษาอังกฤษ>` ) ปิดการใช้งาน Google Analytics ได้หากไม่ต้องการ (ไม่จำเป็นสำหรับใบงานนี้) 
 
+**ให้ใช้ gmail account ส่วนตัวเพื่อไม่ใช่ account นักศึกษาของสถาบัน**
+
+เปิด https://console.firebase.google.com กด **Create a new Firebase project** หรือ **Get stared by setting up a Firebase project** ตั้งชื่อโปรเจกต์ **ตั้งชื่อไม่ให้ชื่อซ้ำกับที่มีอยู่ใน Firebase** (เช่น `campus-marketplace-2026-<ชื่อนักศึกษาภาษาอังกฤษ>`) ปิดการใช้งาน Google Analytics ได้หากไม่ต้องการ (ไม่จำเป็นสำหรับใบงานนี้)
 
 > ✅ **Checkpoint 1.1** ถ่ายภาพหน้าจอ Firebase Console ที่แสดงหน้า Project Overview ของโปรเจกต์ที่สร้างเสร็จแล้ว
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+<img width="1919" height="984" alt="image" src="https://github.com/user-attachments/assets/6f12e501-b76a-40bc-b4f9-411d85d723d5" />
 
 ### ขั้นตอนที่ 1.2: 🔧 ทำตามขั้นตอน — ติดตั้งเครื่องมือและเชื่อมโปรเจกต์ด้วย FlutterFire CLI
 
@@ -50,7 +51,8 @@ firebase login
 dart pub global activate flutterfire_cli
 ```
 
-**กรณีใช้  Macbook แล้วติดปัญหาเรื่อง  Permission ให้ใช้คำสั่งดังนี้**
+**กรณีใช้ Macbook แล้วติดปัญหาเรื่อง Permission ให้ใช้คำสั่งดังนี้**
+
 ```bash
 mkdir -p ~/.npm-global
 npm config set prefix '~/.npm-global'
@@ -66,15 +68,17 @@ dart pub global activate flutterfire_cli
 ```bash
 flutterfire configure
 ```
+
 **หากเกิดปัญหา ระบบไม่รู้จักคำสั่ง flutterfire configure ให้รันคำสั่งส่วนนี้ก่อน**
+
 ```bash
 echo 'export PATH="$PATH":"$HOME/.pub-cache/bin"' >> ~/.zshrc
 source ~/.zshrc
 ```
 
 คำสั่งนี้จะให้เลือก Firebase Project ให้นักศึกษาพิมพ์ชื่อ Project ที่ได้สร้างไปในขั้นตอน 1.1
-หลังจากนั้นเลือกแพลตฟอร์มที่ต้องการโดยกดลูกศรและ spacebar และเลือกเฉพาะ Android แพลตฟอร์ม (เพื่อไม่ให้เกิดปัญหา)   **แล้วกดปุ่ม Enter**
- เมื่อเสร็จแล้วจะได้ไฟล์ `lib/firebase_options.dart` ที่สร้างขึ้นอัตโนมัติ **ห้ามแก้ไขไฟล์นี้ด้วยมือ**
+หลังจากนั้นเลือกแพลตฟอร์มที่ต้องการโดยกดลูกศรและ spacebar และเลือกเฉพาะ Android แพลตฟอร์ม (เพื่อไม่ให้เกิดปัญหา) **แล้วกดปุ่ม Enter**
+เมื่อเสร็จแล้วจะได้ไฟล์ `lib/firebase_options.dart` ที่สร้างขึ้นอัตโนมัติ **ห้ามแก้ไขไฟล์นี้ด้วยมือ**
 
 ### ขั้นตอนที่ 1.3: 🔧 ทำตามขั้นตอน — เพิ่ม Dependencies และเริ่มต้น Firebase ในแอป
 
@@ -91,7 +95,7 @@ dependencies:
 
 รัน `flutter pub get` แล้วแก้ไขจุดเริ่มต้นของแอป **`lib/main.dart`** ตามโครงสร้างในเนื้อหาสัปดาห์นี้หัวข้อ 9.1 — เพิ่มการเริ่มต้น Firebase ก่อนเรียก `runApp()` เท่านั้น ส่วนโค้ดเดิมจากสัปดาห์ที่ 8 (การสร้าง `AppDatabase`, `ChangeNotifierProvider<CartModel>`, คลาส `MyApp`) ยังอยู่ที่เดิมทุกจุด ไม่ต้องย้ายหรือลบ
 
-ก่อนแก้ (`lib/main.dart`) 
+ก่อนแก้ (`lib/main.dart`)
 
 ```dart
 void main() {
@@ -105,7 +109,7 @@ void main() {
 }
 ```
 
-**หลังแก้ (เพิ่ม import 2 บรรทัดต่อท้าย import เดิม และ เปลี่ยน void main() เป็น 3 บรรทัดใหม่)**
+**หลังแก้ (เพิ่ม import 2 บรรทัดต่อท้าย import เดิม และเปลี่ยน void main() เป็น 3 บรรทัดใหม่)**
 
 ```dart
 import 'package:firebase_core/firebase_core.dart';
@@ -135,37 +139,62 @@ Future<void> main() async {
 
 ### ขั้นตอนที่ 2.1: 🔧 ทำตามขั้นตอน — เปิดใช้งาน Sign-in Method ใน Console
 
-(1) เข้าหน้าเว็บ Firebase Console ไปที่เมนู **Security ->Authentication**
-(2) ถ้าเข้ามาครั้งแรก ให้เลือก  Get started แล้วเลือก **Sign-in method** เปิดใช้งาน **Email/Password** 
-(3)เลือก add provider -> **Google** (จะใช้ Google ในส่วนที่ 3)
-กำหนดค่า Public-facing name for project  เป็น campus-marketplace และเลือก Support email for project
-
+1. เข้าหน้าเว็บ Firebase Console ไปที่เมนู **Security -> Authentication**
+2. ถ้าเข้ามาครั้งแรก ให้เลือก Get started แล้วเลือก **Sign-in method** เปิดใช้งาน **Email/Password**
+3. เลือก add provider -> **Google** (จะใช้ Google ในส่วนที่ 3) กำหนดค่า Public-facing name for project เป็น campus-marketplace และเลือก Support email for project
 
 ### ขั้นตอนที่ 2.2: **สร้างไฟล์เอง** — AuthService
 
 สร้างไฟล์ `lib/services/auth_service.dart` ตามโครงสร้างในเนื้อหาสัปดาห์นี้หัวข้อ 9.3
 
-**ข้อกำหนดที่ต้องมีครบ (ตรวจสอบตก่อนไปต่อในขั้นตอนถัดไป):**
+**ข้อกำหนดที่ต้องมีครบ (ตรวจสอบก่อนไปต่อในขั้นตอนถัดไป):**
 
 - มีเมธอด `Future<void> signUp({required String email, required String password})`
 - มีเมธอด `Future<void> signIn({required String email, required String password})`
 - มีเมธอด `Future<void> signOut()`
 - ทุกเมธอดที่เรียก Firebase ต้อง `try/catch` ดักจับ `FirebaseAuthException` แล้วแปลแต่ละค่า `code` (เช่น `email-already-in-use`, `weak-password`, `invalid-credential`) ให้เป็นข้อความภาษาไทยที่ผู้ใช้เข้าใจได้ **ห้ามปล่อยให้ Error ดิบจาก Firebase หลุดไปแสดงตรง ๆ**
 
-
 ### ขั้นตอนที่ 2.3: **นักศึกษาเขียน Code เอง** — หน้าจอ Login / Sign Up
 
 สร้างไฟล์ `lib/screens/login_page.dart` เป็นฟอร์มที่มีช่อง Email, Password และปุ่มสลับโหมด "เข้าสู่ระบบ" / "สมัครสมาชิก" เชื่อมกับ `AuthService` ที่สร้างไว้ แสดงสถานะ Loading ระหว่างรอ และแสดงข้อความ Error ที่แปลแล้วเมื่อล้มเหลว
 
-> 🔧 **เชื่อม LoginPage เข้ากับแอปชั่วคราวเพื่อทดสอบ:** `AuthGate` ที่จะสลับหน้าจอ Login/Home ให้อัตโนมัติยังไม่ถูกสร้างจนกว่าจะถึงส่วนที่ 4 ดังนั้นตอนนี้ `LoginPage` ที่เพิ่งสร้างยังไม่มีจุดไหนในแอปเรียกใช้เลย ให้แก้ `lib/main.dart` ในเมธอด `MyApp.build()` ชั่วคราวก่อน เปลี่ยนจาก `home: MainScaffold(...)` เป็น `home: const LoginPage()` 
-**comment code `home: MainScaffold(...)` และอย่าลืม import หน้า LoginPage ด้วย**
+> 🔧 **เชื่อม LoginPage เข้ากับแอปชั่วคราวเพื่อทดสอบ:** `AuthGate` ที่จะสลับหน้าจอ Login/Home ให้อัตโนมัติยังไม่ถูกสร้างจนกว่าจะถึงส่วนที่ 4 ดังนั้นตอนนี้ `LoginPage` ที่เพิ่งสร้างยังไม่มีจุดไหนในแอปเรียกใช้เลย ให้แก้ `lib/main.dart` ในเมธอด `MyApp.build()` ชั่วคราวก่อน เปลี่ยนจาก `home: MainScaffold(...)` เป็น `home: const LoginPage()`
+> **comment code `home: MainScaffold(...)` และอย่าลืม import หน้า LoginPage ด้วย**
 
 เพื่อให้รันแอปแล้วเห็นหน้า Login ทันทีและทดสอบ Checkpoint 2.1 กับ Checkpoint 3.1 (ส่วนที่ 3) เมื่อทดสอบทั้งสอง Checkpoint เสร็จแล้ว **ให้เปลี่ยน `home:` กลับเป็น `MainScaffold(...)` เหมือนเดิมก่อนเริ่มส่วนที่ 4** เพราะส่วนที่ 4 จะสร้าง `AuthGate` มาแทนที่บรรทัดนี้แบบถาวร ไม่ต้องสลับไปมาด้วยการแก้ไขโค้ดอีก
 
 > ✅ **Checkpoint 2.1** ทดสอบสมัครสมาชิกด้วย Email ใหม่สำเร็จ ถ่ายภาพหน้าจอ Firebase Console เมนู Authentication → Users ที่แสดงบัญชีที่เพิ่งสมัคร จากนั้นทดสอบกรณีผิดพลาด 2 กรณี คือ (ก) สมัครซ้ำด้วย Email เดิม และ (ข) ใส่รหัสผ่านสั้นเกินไป ถ่ายภาพหน้าจอข้อความ Error ทั้งสองกรณี พร้อมอธิบายว่าโค้ดส่วนใดใน `auth_service.dart` เป็นตัวจัดการแต่ละกรณี
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบายของแต่ละกรณี
+ทดสอบสมัครสมาชิกด้วย Email ใหม่สำเร็จ
+
+<img width="389" height="895" alt="image" src="https://github.com/user-attachments/assets/8d8bc960-923f-491f-8562-ccf147470f64" />
+
+ภาพหน้าจอ Firebase Console เมนู Authentication → Users ที่แสดงบัญชีที่เพิ่งสมัคร
+
+<img width="1919" height="987" alt="image" src="https://github.com/user-attachments/assets/484ff808-c5d1-4ca9-9260-e3c80a8bae40" />
+
+(ก) สมัครซ้ำด้วย Email เดิม
+
+<img width="391" height="897" alt="image" src="https://github.com/user-attachments/assets/72691237-8832-4fc7-a2fc-9bcbb1d55794" />
+
+(ข) ใส่รหัสผ่านสั้นเกินไป
+
+<img width="391" height="896" alt="image" src="https://github.com/user-attachments/assets/bdc6fd64-0171-42aa-98d8-1cbe9587dc5d" />
+
+**คำอธิบายการทำงานของโค้ดใน `auth_service.dart`:**
+
+ในเมธอด `signUp()` เมื่อมีการสมัครสมาชิกแล้วเกิดข้อผิดพลาดจากฝั่ง Firebase ระบบจะโยน `FirebaseAuthException` ออกมา ซึ่งเราได้ใช้บล็อก `try-catch` ดักจับไว้ และนำค่า `e.code` ที่ได้ไปตรวจสอบในเมธอด `_translateErrorCode()` ด้วยคำสั่ง `switch` เพื่อแปลเป็นข้อความภาษาไทย โดยโค้ดส่วนที่จัดการทั้ง 2 กรณีคือ:
+
+```dart
+switch (code) {
+  case 'email-already-in-use': // จัดการกรณี (ก) สมัครซ้ำด้วย Email เดิม
+    return 'อีเมลนี้ถูกใช้งานแล้ว กรุณาใช้อีเมลอื่นหรือเข้าสู่ระบบ';
+
+  case 'weak-password':        // จัดการกรณี (ข) ใส่รหัสผ่านสั้นเกินไป
+    return 'รหัสผ่านสั้นเกินไป กรุณาตั้งรหัสผ่านอย่างน้อย 6 ตัวอักษร';
+
+  // ... (case อื่นๆ)
+}
 ```
 
 ---
@@ -186,7 +215,7 @@ cd android && ./gradlew signingReport
 
 รอให้ Gradle ประมวลผล (ครั้งแรกอาจใช้เวลาสักครู่) จะได้ผลลัพธ์ออกมาหลายช่วงแยกตาม Variant ประมาณนี้
 
-```
+```text
 > Task :app:signingReport
 Variant: debug
 Config: debug
@@ -227,7 +256,6 @@ flutter run
 ```
 
 เพื่อให้แอป Build ใหม่ด้วยไฟล์ `google-services.json` เวอร์ชันล่าสุดที่เพิ่งทับไป ไม่เช่นนั้นแอปอาจยังใช้ค่าที่ Cache ไว้จากไฟล์เก่า
-
 
 ### ขั้นตอนที่ 3.2: 🔧 ทำตามขั้นตอน — เพิ่มเมธอด signInWithGoogle() ใน AuthService
 
@@ -271,7 +299,7 @@ Future<void> signInWithGoogle() async {
 
     await _auth.signInWithCredential(credential);
   } on FirebaseAuthException catch (e) {
-    throw Exception(_translateErrorCode(e.code)); // ตรวจสอบว่าชื่อ method คือ _translateErrorCode  หรือไม่ หากเป็นชื่ออื่น ให้แก้ไขให้ตรงกับชื่อ method
+    throw Exception(_translateErrorCode(e.code)); // ตรวจสอบว่าชื่อ method คือ _translateErrorCode หรือไม่ หากเป็นชื่ออื่น ให้แก้ไขให้ตรงกับชื่อ method
   }
 }
 ```
@@ -357,7 +385,6 @@ OutlinedButton.icon(
 
 เนื่องจาก `_signInWithGoogle()` เซ็ตค่าลง `_errorMessage` ตัวแปรเดียวกับที่ใช้แสดง Error ของ Email/Password ส่วนแสดงผล Error เดิมในหน้าจอ (`if (_errorMessage != null) Text(_errorMessage!, ...)`) จะแสดง Error จากทั้งสองช่องทางโดยไม่ต้องเขียนโค้ดแสดง Error เพิ่มอีกชุด
 
-
 **5) เตรียม Emulator ให้มีบัญชี Google ก่อนทดสอบ (สำคัญ ถ้าทดสอบบน Android Emulator)**
 
 ขั้นตอนนี้มี 2 เงื่อนไขที่ต้องครบทั้งคู่ ถ้าขาดอันใดอันหนึ่งจะเจอ Error `GoogleSignInException(code GoogleSignInExceptionCode.unknownError, No credential available...)` ทันทีตอนกดปุ่ม "เข้าสู่ระบบด้วย Google"
@@ -383,9 +410,22 @@ avdmanager list avd
 
 > ✅ **Checkpoint 3.1** ทดสอบกดปุ่มเข้าสู่ระบบด้วย Google ด้วยบัญชี Google จริงของคุณ ถ่ายภาพหน้าจอตอนเลือกบัญชี Google และภาพหน้าจอ Firebase Console ที่แสดงว่ามีผู้ใช้ใหม่ Provider เป็น Google เพิ่มเข้ามา อธิบายว่า `idToken` กับ `accessToken` ที่ได้จาก Google นำไปใช้ทำอะไรต่อในขั้นตอนการยืนยันตัวตนกับ Firebase (อ้างอิงหัวข้อ 9.4)
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
+ภาพหน้าจอตอนเลือกบัญชี Google
+
+<img width="387" height="846" alt="image" src="https://github.com/user-attachments/assets/0c36f7e7-544c-4607-9693-6c175a18fe05" />
+
+ภาพหน้าจอ Firebase Console ที่แสดงว่ามีผู้ใช้ใหม่ Provider เป็น Google เพิ่มเข้ามา
+
+<img width="1919" height="981" alt="image" src="https://github.com/user-attachments/assets/5285cb94-1846-4edd-9273-85db22584f01" />
+
+**คำอธิบายหน้าที่ของ idToken และ accessToken:**
+
+ในขั้นตอนการยืนยันตัวตนกับ Firebase ผ่าน Google Sign-In ข้อมูลทั้งสองส่วนมีหน้าที่ต่างกันดังนี้
+
+1. **`idToken`**: ได้รับมาทันทีแบบ synchronous หลังจากผู้ใช้ล็อกอินกับ Google สำเร็จ ทำหน้าที่เป็นตัวยืนยันตัวตน (Identity) ว่าผู้ใช้นี้คือใคร และผ่านการรับรองจาก Google มาแล้วจริง ๆ
+2. **`accessToken`**: ต้องขอสิทธิ์เพิ่มเติมผ่าน `authorizationClient` ทำหน้าที่เป็นใบเบิกทาง (Permission) เพื่อขอสิทธิ์เข้าถึงข้อมูลเบื้องต้นของผู้ใช้ เช่น อีเมล หรือข้อมูลโปรไฟล์
+
+เมื่อได้รับค่าทั้งสองมาแล้ว โค้ดจะนำไปสร้างเป็น `GoogleAuthProvider.credential` เพื่อส่งให้ Firebase Authentication ตรวจสอบและอนุญาตให้เข้าสู่ระบบของแอปพลิเคชันต่อไป
 
 ---
 
@@ -395,7 +435,7 @@ avdmanager list avd
 
 สร้างไฟล์ `lib/screens/auth_gate.dart` เป็น `StreamBuilder<User?>` ที่ฟัง `FirebaseAuth.instance.authStateChanges()` ตามโครงสร้างสมบูรณ์ในเนื้อหาสัปดาห์นี้หัวข้อ 9.4 คอยสลับ 3 สถานะ ตาม Pseudocode นี้:
 
-```
+```text
 class AuthGate extends StatelessWidget:
     รับพารามิเตอร์: itemRepositories (List<ItemRepository>), favoritesRepository, draftRepository
 
@@ -522,10 +562,23 @@ Widget build(BuildContext context) {
 
 > ✅ **Checkpoint 4.1** ถ่ายภาพหน้าจอ 3 ภาพเรียงกัน คือ (ก) แอปตอนเพิ่งเปิดขึ้นมาครั้งแรกแบบยังไม่ล็อกอิน แสดงหน้า Login (ข) หลังล็อกอินสำเร็จ แอปสลับไปแสดง `MainScaffold` อัตโนมัติโดยไม่ต้องกดอะไรเพิ่ม และ (ค) หลังกด "ออกจากระบบ" แอปสลับกลับไปหน้า Login เอง อธิบายว่าทำไมการใช้ `StreamBuilder` ฟัง `authStateChanges()` จึงทำให้ไม่ต้องเขียนโค้ดสั่ง Navigate ไปมาเอง
 
+(ก) แอปตอนเพิ่งเปิดขึ้นมาครั้งแรกแบบยังไม่ล็อกอิน แสดงหน้า Login
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ (3 ภาพ) และคำอธิบาย
-```
+<img width="380" height="845" alt="image" src="https://github.com/user-attachments/assets/43d452f7-19b8-4ffe-bfc5-98c117088c50" />
+
+(ข) หลังล็อกอินสำเร็จ แอปสลับไปแสดง `MainScaffold` อัตโนมัติโดยไม่ต้องกดอะไรเพิ่ม
+
+<img width="383" height="844" alt="image" src="https://github.com/user-attachments/assets/22e470aa-9f35-43b1-b32d-0fdafe9c1050" />
+
+(ค) หลังกด "ออกจากระบบ" แอปสลับกลับไปหน้า Login เอง
+
+<img width="386" height="845" alt="image" src="https://github.com/user-attachments/assets/8b8aa0b3-8fe7-4e81-a70f-5441d0f6a8d1" />
+
+**เหตุผลที่ไม่ต้องเขียนโค้ด Navigator เพื่อสลับหน้า:**
+
+การใช้ `StreamBuilder` ร่วมกับ `FirebaseAuth.instance.authStateChanges()` ทำให้แอปพลิเคชันทำงานแบบ Reactive หรือตอบสนองต่อการเปลี่ยนแปลงสถานะอัตโนมัติ โดย `authStateChanges()` จะคอยติดตามสถานะของผู้ใช้จาก Firebase ตลอดเวลา หากมีการเข้าสู่ระบบ (มีข้อมูล User) หรือออกจากระบบ (User เป็น null) ระบบจะส่งข้อมูลอัปเดต (Snapshot) ชุดใหม่ออกมาทันที เมื่อ `StreamBuilder` ได้รับ Snapshot ใหม่ จะทำการเรียกใช้ฟังก์ชัน `builder` เพื่อวาดหน้าจอ (Rebuild) ใหม่โดยอัตโนมัติ
+
+ภายใน `builder` จะมีการใช้เงื่อนไขตรวจสอบค่า `snapshot.data` หากพบว่าเป็น `null` ระบบจะรีเทิร์นหน้า `LoginPage()` เพื่อให้ผู้ใช้เข้าสู่ระบบ แต่หากมีข้อมูลผู้ใช้จริง ระบบจะรีเทิร์นหน้า `MainScaffold()` แทน ด้วยกลไกการทำงานตามเงื่อนไขนี้ (State-Driven UI) หน้าจอแอปพลิเคชันจึงสามารถสลับไปมาได้เองตามสถานะการล็อกอินปัจจุบันของผู้ใช้ โดยที่เราไม่จำเป็นต้องเขียนคำสั่งบังคับเปลี่ยนหน้าอย่าง `Navigator.push` หรือ `Navigator.pop` เลยแม้แต่บรรทัดเดียว
 
 ---
 
@@ -538,9 +591,14 @@ Widget build(BuildContext context) {
 1. ทำไมเราจึง "เพิ่ม Implementation ใหม่" (`ItemRepositoryFirestore`) แทนที่จะแก้ไข `ItemRepositoryApi` เดิม หรือเขียนโค้ดเรียก Firestore ตรงจาก `HomePage`?
 2. ถ้าในอนาคตอาจารย์สั่งให้เปลี่ยนจาก Fake Store API ไปใช้ API อื่น ต้องแก้ไฟล์กี่ไฟล์ ถ้าทุก Widget เรียกผ่าน Interface `ItemRepository` เท่านั้น?
 
-```text
-บันทึกคำตอบของคุณที่นี่
-```
+**คำตอบข้อ 1**
+
+- **เพื่อแยกหน้าที่กันให้ชัดเจน (Separation of Concerns):** หน้า `HomePage` ควรมีหน้าที่แค่ "วาดหน้าจอและแสดงผล" ให้ผู้ใช้ดูเท่านั้น ไม่ควรต้องมารับภาระเขียนโค้ดต่อฐานข้อมูลให้วุ่นวาย ซึ่งจะทำให้โค้ดรกและดูแลยากครับ
+- **ปลอดภัยกับโค้ดเก่า (Open/Closed Principle):** โค้ด API ตัวเก่า (`ItemRepositoryApi`) มันทำงานของมันได้ดีอยู่แล้ว การเข้าไปรื้อแก้ของเดิมเสี่ยงที่จะทำให้เกิดบั๊กพังทั้งแอปได้ การสร้างคลาสใหม่แยกออกมาเลยจึงปลอดภัยกว่า (เปิดรับการเพิ่มของใหม่ แต่ปิดการแก้ไขของเก่า)
+
+**คำตอบข้อ 2**
+
+- **แก้แค่ 1 ไฟล์!** คือไฟล์ต้นทางที่ทำหน้าที่ส่ง Repository เข้าไป (เช่น `main.dart`) เราแค่เปลี่ยนชื่อคลาสตอนส่งให้เป็นตัวใหม่ ส่วนไฟล์หน้าจอ (UI) ต่างๆ ไม่ต้องแตะเลยแม้แต่บรรทัดเดียว เพราะหน้าจอพวกนั้นเรียกใช้งานผ่านหน้ากากตัวกลางที่ชื่อว่า `ItemRepository` (Interface) อย่างเดียว มันเลยไม่แคร์ว่าเบื้องหลังจริงๆ เราจะดึงข้อมูลมาจากที่ไหนครับ
 
 ### ขั้นตอนที่ 5.2: **นักศึกษาเขียน Code เอง** — ItemRepositoryFirestore
 
@@ -611,9 +669,13 @@ final pages = [
 
 > ✅ **Checkpoint 5.1** ถ่ายภาพหน้าจอ Home ที่แสดงสินค้าจากทั้งสองแหล่งข้อมูลปนกันอยู่ในลิสต์เดียว พร้อม Badge ที่แยกแหล่งที่มาชัดเจน (ถ้ายังไม่เคยมีประกาศจริงใน Firestore เลย ให้ทำส่วนที่ 6 ให้เสร็จก่อนแล้วย้อนกลับมาถ่ายภาพ Checkpoint นี้) อธิบายว่าการออกแบบให้ `HomePage` ไม่รู้จัก `ItemRepositoryApi`/`ItemRepositoryFirestore` โดยตรง แต่รู้จักผ่าน Interface `ItemRepository` เท่านั้น ช่วยให้ทดสอบหรือเปลี่ยนแหล่งข้อมูลในอนาคตง่ายขึ้นอย่างไร
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
+<img width="388" height="845" alt="image" src="https://github.com/user-attachments/assets/3acdd7b3-91eb-4867-86b0-b9f0478f7fc1" />
+
+**ประโยชน์ของการใช้ Interface ItemRepository ต่อการออกแบบสถาปัตยกรรมแอปพลิเคชัน:**
+
+การออกแบบให้ `HomePage` รู้จักแค่ตัวแปรประเภท `ItemRepository` (Interface/Abstraction) เป็นการทำตามหลัก Dependency Inversion Principle ทำให้หน้าจอแสดงผลถูกตัดขาดออกจากกระบวนการทำงานเบื้องหลังอย่างสมบูรณ์ `HomePage` จะไม่รับรู้เลยว่าข้อมูลถูกดึงมาจากระบบไหน (API จำลอง, ฐานข้อมูล Firestore, หรือดึงจากแคชในเครื่อง) หน้าที่ของมันมีเพียงแค่รับค่า `List<Item>` มาแสดงผลเท่านั้น
+
+ส่งผลให้ในอนาคต หากต้องการเปลี่ยนไปใช้ฐานข้อมูลตัวใหม่ หรือสร้าง Mock Repository ขึ้นมาจำลองข้อมูลเพื่อทำ Unit Test เราก็เพียงแค่เขียนคลาสใหม่ที่ `implements ItemRepository` แล้วเปลี่ยนตอนส่งพารามิเตอร์เข้า `MainScaffold` ในหน้า `main.dart` ก็สามารถเปลี่ยนแหล่งข้อมูลได้ทันที โดยไม่กระทบโค้ดในส่วนของ UI เลยแม้แต่บรรทัดเดียว
 
 ---
 
@@ -633,7 +695,7 @@ final pages = [
 
 `ListingDraft` จากสัปดาห์ที่ 7 (`title`, `category`, `description`) และตาราง `ListingDrafts` จากสัปดาห์ที่ 8 (`title`, `category`, `description`, `imagePath`) **ไม่มี field ราคาเลย** ส่วนคลาส `Item` ก็ยังไม่มี `sellerId` ใช้ Pseudocode นี้เป็นโครงในการแก้ไข:
 
-```
+```text
 แก้ไข class Item (lib/models/item.dart):
     เพิ่ม field ใหม่: final String? sellerId   // nullable เพราะสินค้าจาก Fake Store API ไม่มี sellerId
 
@@ -663,15 +725,21 @@ final pages = [
 
 > ✅ **Checkpoint 6.1** โพสต์ขายจริงอย่างน้อย 2 รายการผ่านแอป ถ่ายภาพหน้าจอ Firebase Console เมนู Firestore Database ที่แสดง Collection `items` มีเอกสารที่โพสต์เข้ามาจริง พร้อม field `sellerId` ที่ตรงกับ `uid` ของบัญชีที่ใช้ทดสอบ และยืนยันว่าร่างทั้งสองรายการหายไปจาก `MyDraftsPage` แล้ว
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+<img width="387" height="846" alt="image" src="https://github.com/user-attachments/assets/c2870010-b476-4708-b294-c80924de584e" />
+
+<img width="390" height="850" alt="image" src="https://github.com/user-attachments/assets/59c68e01-3261-4301-bcec-272999812604" />
+
+<img width="382" height="844" alt="image" src="https://github.com/user-attachments/assets/b2c12cd3-0a48-487e-ba96-bb36a8c8b8ee" />
+
+<img width="1917" height="940" alt="image" src="https://github.com/user-attachments/assets/2d4c0304-4d35-45dc-8a25-32cac51f3e0e" />
+
+<img width="1919" height="951" alt="image" src="https://github.com/user-attachments/assets/725c22df-95d4-46cc-834d-e97bb01e12b0" />
 
 > ✅ **Checkpoint 6.2** ถ่ายภาพหน้าจอ Firebase Console เมนู Storage ที่แสดงไฟล์รูปภาพที่อัปโหลดสำเร็จ และภาพหน้าจอ Firestore ที่แสดงว่าเอกสารมี field `imageUrl` เป็น URL จริงที่เปิดดูได้ ถ่ายภาพหน้าจอแอปที่แสดงรูปสินค้านั้นบนหน้า Home ผ่าน `Image.network(imageUrl)` ด้วย (ย้อนกลับไปถ่ายภาพ Checkpoint 5.1 ให้ครบตอนนี้ ถ้ายังไม่ได้ทำ)
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+<img width="392" height="841" alt="image" src="https://github.com/user-attachments/assets/35257c2c-5ff2-47aa-8d70-30e32c0f0be4" />
+
+<img width="1919" height="977" alt="image" src="https://github.com/user-attachments/assets/18a11ca4-2cbc-464c-bd17-90b48d5ff62e" />
 
 ---
 
@@ -683,7 +751,7 @@ final pages = [
 
 ใน Firebase Console ไปที่ Firestore Database → Rules แก้ไข Rules ของ Collection `items` ให้เป็น
 
-```
+```text
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -702,9 +770,18 @@ service cloud.firestore {
 
 > ✅ **Checkpoint 7.1 (Self-Study)** ถ่ายภาพหน้าจอผลการทดลองทั้ง 2 กรณีใน Rules Playground เขียนอธิบายสั้น ๆ ว่าทำไม Client-side Validation (การไม่แสดงปุ่มแก้ไขให้เห็น) เพียงอย่างเดียวจึงไม่เพียงพอต่อความปลอดภัยของข้อมูลจริง
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
+<img width="1919" height="952" alt="image" src="https://github.com/user-attachments/assets/7023463c-3b9e-4215-ae49-4ebe1048fd91" />
+
+<img width="1919" height="938" alt="image" src="https://github.com/user-attachments/assets/78a878d9-9667-4c21-9614-86c1c185df03" />
+
+**ทำไม Client-side Validation จึงไม่เพียงพอต่อความปลอดภัย?**
+
+การทำ **Client-side Validation** (เช่น การตรวจสอบเงื่อนไขในแอป หรือการซ่อนปุ่ม 'แก้ไข/ลบ' ในหน้า UI ไม่ให้ผู้ใช้อื่นเห็น) เป็นเพียงการอำนวยความสะดวกและป้องกันความผิดพลาดเบื้องต้นเท่านั้น แต่ **ไม่เพียงพอต่อความปลอดภัยของข้อมูลจริง** ด้วยเหตุผลดังนี้
+
+1. **การข้ามหน้าจอ UI (Bypassable):** หน้าจอแอปพลิเคชันทำงานอยู่บนอุปกรณ์ของผู้ใช้ (Client) ผู้ไม่หวังดีที่มีความรู้ทางเทคนิคสามารถข้ามการใช้งานผ่านหน้าแอป แล้วใช้เครื่องมือภายนอก (เช่น Postman, cURL หรือการเขียนสคริปต์) เพื่อยิง API ส่งคำสั่งไปแก้ไขหรือลบข้อมูลที่ฐานข้อมูล (Firestore) ได้โดยตรง
+2. **ฐานข้อมูลไม่มีด่านป้องกัน:** หากเราไม่เขียน Rule ป้องกันไว้ที่ฐานข้อมูล เมื่อมีคำสั่งขอแก้ไขข้อมูลส่งตรงเข้ามา ฐานข้อมูลก็จะดำเนินการให้ทันทีโดยไม่ทราบเลยว่าผู้ส่งคำสั่งนั้นมีสิทธิ์จริงหรือไม่
+
+**สรุปการแก้ไข:** เราจึงจำเป็นต้องบังคับใช้ **Server-side Validation** ด้วยการเขียน **Firebase Security Rules** เสมอ เพื่อเป็นด่านสุดท้ายในการปกป้องข้อมูล กฎนี้จะทำงานที่ฝั่งเซิร์ฟเวอร์เพื่อตรวจสอบยืนยันตัวตน (เช่น บังคับว่า `request.auth.uid` ต้องตรงกับ `sellerId` ของข้อมูลนั้น) หากสิทธิ์ไม่ถูกต้อง ระบบจะปฏิเสธคำสั่ง (Permission Denied) ทันที ไม่ว่าจะยิงคำสั่งมาจากช่องทางใดก็ตาม
 
 ---
 
@@ -719,11 +796,23 @@ service cloud.firestore {
 3. ขณะยังปิดเครือข่ายอยู่ ลองกด "โพสต์ขายจริง" กับร่างสักชิ้น — ควรเกิด Error เพราะ Firestore/Storage ต้องการเครือข่ายเสมอ (ต่างจาก Local Database) ตรวจสอบว่าแอปแสดงข้อความ Error ที่เข้าใจได้ ไม่ Crash
 4. เปิดเครือข่ายกลับมา แล้วลองกด "โพสต์ขายจริง" รายการเดิมอีกครั้ง — ควรสำเร็จตามปกติ
 
-> ✅ **Checkpoint 8.1** ถ่ายภาพหน้าจอผลการทดสอบทั้ง 4 ข้อ 
+> ✅ **Checkpoint 8.1** ถ่ายภาพหน้าจอผลการทดสอบทั้ง 4 ข้อ
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ 
-```
+<img width="388" height="845" alt="image" src="https://github.com/user-attachments/assets/a41dde67-6dd1-4d39-9126-fad0965e2e9e" />
+
+<img width="388" height="832" alt="image" src="https://github.com/user-attachments/assets/ca774cd9-7c29-475b-b807-ad75e53980d2" />
+
+<img width="387" height="841" alt="image" src="https://github.com/user-attachments/assets/4f41f82d-2585-4486-8e5f-12e23057bb81" />
+
+<img width="388" height="845" alt="image" src="https://github.com/user-attachments/assets/fe45568b-850a-4cbf-beb1-22892e357f9c" />
+
+<img width="388" height="851" alt="image" src="https://github.com/user-attachments/assets/0018c67e-399c-4103-a6d5-d8e5bab58a17" />
+
+<img width="383" height="845" alt="image" src="https://github.com/user-attachments/assets/0eaeeffe-8e62-4a27-86c0-e5b97b2488c7" />
+
+<img width="391" height="849" alt="image" src="https://github.com/user-attachments/assets/90ce3d3b-fc90-4679-a7c2-72ddb4675da4" />
+
+<img width="390" height="842" alt="image" src="https://github.com/user-attachments/assets/6af1142c-1856-49f7-acc1-493bffc1fc5c" />
 
 ---
 
@@ -743,7 +832,7 @@ winget install Microsoft.OpenJDK.17
 
 จากนั้นเพิ่มบรรทัดนี้ต่อท้ายไฟล์ `android/gradle.properties` ให้ตรงกับ Path จริงในเครื่อง
 
-```
+```text
 org.gradle.java.home=/Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home
 ```
 
@@ -774,7 +863,6 @@ emulator -avd Pixel7_API34_PlayStore
 แล้วทำ Add account → Google ใหม่อีกครั้งบนเครื่องนี้ (ดูขั้นตอนที่ 3.3 ข้อ 5) — AVD ตัวนี้จะมีแอป Play Store ติดมาด้วย ล็อกอินผ่าน Play Store โดยตรงก็ได้เช่นกัน
 
 > 💡 ถ้าไม่อยากเสียเวลาสร้าง AVD ใหม่ ทดสอบ Checkpoint 3.1 บน**เครื่อง Android จริง**แทนได้เลย (เสียบสาย USB เปิด USB Debugging) เพราะเครื่องจริงมี Google Play Services เต็มรูปแบบอยู่แล้ว ไม่ต้องกังวลเรื่อง Image แบบไหนเลย
-
 
 **เข้าสู่ระบบด้วย Google สำเร็จ แต่ `FirebaseAuth.instance.signInWithCredential()` โยน Error `invalid-credential`** ตรวจสอบว่าเปิดใช้งาน Google เป็น Sign-in Method ใน Firebase Console แล้วจริง (ขั้นตอน 2.1) และตรวจสอบว่าดึง `idToken` มาจาก `googleUser.authentication.idToken` ไม่ใช่ดึงผิดตัวจาก `authorizationClient`
 
