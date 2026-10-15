@@ -36,9 +36,9 @@
 
 > ✅ **Checkpoint 1.1** ถ่ายภาพหน้าจอ Firebase Console ที่แสดงหน้า Project Overview ของโปรเจกต์ที่สร้างเสร็จแล้ว
 
-```text
 บันทึกรูปผลลัพธ์ที่นี่
-```
+<img width="1522" height="906" alt="image" src="https://github.com/user-attachments/assets/20823583-ecd5-4d86-9628-aa83efc3aa5f" />
+
 
 ### ขั้นตอนที่ 1.2: 🔧 ทำตามขั้นตอน — ติดตั้งเครื่องมือและเชื่อมโปรเจกต์ด้วย FlutterFire CLI
 
@@ -164,9 +164,16 @@ Future<void> main() async {
 
 > ✅ **Checkpoint 2.1** ทดสอบสมัครสมาชิกด้วย Email ใหม่สำเร็จ ถ่ายภาพหน้าจอ Firebase Console เมนู Authentication → Users ที่แสดงบัญชีที่เพิ่งสมัคร จากนั้นทดสอบกรณีผิดพลาด 2 กรณี คือ (ก) สมัครซ้ำด้วย Email เดิม และ (ข) ใส่รหัสผ่านสั้นเกินไป ถ่ายภาพหน้าจอข้อความ Error ทั้งสองกรณี พร้อมอธิบายว่าโค้ดส่วนใดใน `auth_service.dart` เป็นตัวจัดการแต่ละกรณี
 
-```text
 บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบายของแต่ละกรณี
-```
+- (ก) สมัครซ้ำด้วย Email เดิม 
+<img width="362" height="850" alt="image" src="https://github.com/user-attachments/assets/b1a77a54-60c4-479b-b6dc-ce258a015eec" />
+
+- (ข) ใส่รหัสผ่านสั้นเกินไป ถ่ายภาพหน้าจอข้อความ Error ทั้งสองกรณี พร้อมอธิบายว่าโค้ดส่วนใดใน `auth_service.dart` เป็นตัวจัดการแต่ละกรณี
+<img width="356" height="845" alt="image" src="https://github.com/user-attachments/assets/c00acf2d-ca5b-47f0-b706-06ed1b29bea3" />
+
+<img width="365" height="850" alt="image" src="https://github.com/user-attachments/assets/60a8ce62-0b32-4d51-a262-fb6fb9a78bd9" />
+
+เมื่อเกิดข้อผิดพลาดในการสมัครสมาชิก Firebase จะส่งข้อผิดพลาดประเภท FirebaseAuthException กลับมา โดยโค้ดในเมธอด signUp จะส่งต่ออ็อบเจกต์ Exception ดังกล่าวไปยังฟังก์ชัน _handleFirebaseAuthException(FirebaseAuthException e) เพื่อแปลงรหัส e.code ให้เป็นข้อความภาษาไทย:
 
 ---
 
@@ -383,10 +390,20 @@ avdmanager list avd
 
 > ✅ **Checkpoint 3.1** ทดสอบกดปุ่มเข้าสู่ระบบด้วย Google ด้วยบัญชี Google จริงของคุณ ถ่ายภาพหน้าจอตอนเลือกบัญชี Google และภาพหน้าจอ Firebase Console ที่แสดงว่ามีผู้ใช้ใหม่ Provider เป็น Google เพิ่มเข้ามา อธิบายว่า `idToken` กับ `accessToken` ที่ได้จาก Google นำไปใช้ทำอะไรต่อในขั้นตอนการยืนยันตัวตนกับ Firebase (อ้างอิงหัวข้อ 9.4)
 
-```text
 บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
+- เข้าสู่ระบบด้วย Google ด้วยบัญชี Google
+<img width="288" height="636" alt="image" src="https://github.com/user-attachments/assets/68a462d3-42e9-4e35-843c-6dd50785e0a6" />
 
+
+-ภาพหน้าจอ Firebase Console ที่แสดงว่ามีผู้ใช้ใหม่ Provider เป็น Google เพิ่มเข้ามา
+<img width="1402" height="620" alt="image" src="https://github.com/user-attachments/assets/1c850e73-31ba-4111-af55-7f15c34ad6db" />
+
+
+- อธิบายว่า `idToken` กับ `accessToken` ที่ได้จาก Google นำไปใช้ทำอะไรต่อในขั้นตอนการยืนยันตัวตนกับ Firebase
+idToken: ใช้ยืนยันตัวตนของผู้ใช้ (พิสูจน์ว่าเป็นเจ้าของบัญชี Google นั้นจริง)
+accessToken: ใช้ยืนยันสิทธิ์การเข้าถึงข้อมูลตามที่ขอ (เช่น อีเมล, โปรไฟล์)
+การนำไปใช้กับ Firebase:
+  นำทั้งสองตัวมาสร้างเป็น GoogleAuthProvider.credential(...) แล้วส่งให้ signInWithCredential() เพื่อให้ Firebase ตรวจสอบความถูกต้องและสร้างบัญชี/เข้าสู่ระบบให้สำเร็จ
 ---
 
 ## ส่วนที่ 4: AuthGate — สลับหน้าจอตามสถานะผู้ใช้
@@ -522,11 +539,20 @@ Widget build(BuildContext context) {
 
 > ✅ **Checkpoint 4.1** ถ่ายภาพหน้าจอ 3 ภาพเรียงกัน คือ (ก) แอปตอนเพิ่งเปิดขึ้นมาครั้งแรกแบบยังไม่ล็อกอิน แสดงหน้า Login (ข) หลังล็อกอินสำเร็จ แอปสลับไปแสดง `MainScaffold` อัตโนมัติโดยไม่ต้องกดอะไรเพิ่ม และ (ค) หลังกด "ออกจากระบบ" แอปสลับกลับไปหน้า Login เอง อธิบายว่าทำไมการใช้ `StreamBuilder` ฟัง `authStateChanges()` จึงทำให้ไม่ต้องเขียนโค้ดสั่ง Navigate ไปมาเอง
 
-
-```text
 บันทึกรูปผลลัพธ์ที่นี่ (3 ภาพ) และคำอธิบาย
-```
+- (ก) แอปตอนเพิ่งเปิดขึ้นมาครั้งแรกแบบยังไม่ล็อกอิน แสดงหน้า Login
+<img width="306" height="647" alt="image" src="https://github.com/user-attachments/assets/68ebd1bc-90c4-4c98-b523-b167cbfdb742" />
 
+- (ข) หลังล็อกอินสำเร็จ แอปสลับไปแสดง `MainScaffold` อัตโนมัติโดยไม่ต้องกดอะไรเพิ่ม
+<img width="295" height="646" alt="image" src="https://github.com/user-attachments/assets/3aaa6986-77c3-4e4a-9997-38c798443036" />
+
+- (ค) หลังกด "ออกจากระบบ" แอปสลับกลับไปหน้า Login เอง
+<img width="312" height="666" alt="image" src="https://github.com/user-attachments/assets/b0d5a0c8-42c2-466b-a353-4ed9352f6689" />
+
+- อธิบายว่าทำไมการใช้ `StreamBuilder` ฟัง `authStateChanges()` จึงทำให้ไม่ต้องเขียนโค้ดสั่ง Navigate ไปมาเอง
+   - authStateChanges() เป็น Stream ที่คอยส่งข้อมูลสถานะผู้ใช้ (User?) ออกมาแบบเรียลไทม์ ทุกครั้งที่มีการล็อกอินสำเร็จ Stream จะปล่อยออบเจกต์ User ออกมา และเมื่อกดออกจากระบบ Stream จะปล่อยค่า null ออกมา
+
+   - StreamBuilder ทำหน้าที่คอยดักฟัง (Listen) สตรีมนี้อย่างต่อเนื่อง เมื่อสถานะเปลี่ยน StreamBuilder จะสั่ง Rebuild ตัวเองทันที และสลับ Widget ระหว่าง LoginPage() (เมื่อเป็น null) กับ MainScaffold() (เมื่อมี User) ให้โดยอัตโนมัติ จึงไม่ต้องเขียนคำสั่ง Navigator.push หรือ Navigator.pop สลับหน้าด้วยตนเอง
 ---
 
 ## ส่วนที่ 5: ขยาย Repository Pattern ด้วย ItemRepositoryFirestore
@@ -538,9 +564,17 @@ Widget build(BuildContext context) {
 1. ทำไมเราจึง "เพิ่ม Implementation ใหม่" (`ItemRepositoryFirestore`) แทนที่จะแก้ไข `ItemRepositoryApi` เดิม หรือเขียนโค้ดเรียก Firestore ตรงจาก `HomePage`?
 2. ถ้าในอนาคตอาจารย์สั่งให้เปลี่ยนจาก Fake Store API ไปใช้ API อื่น ต้องแก้ไฟล์กี่ไฟล์ ถ้าทุก Widget เรียกผ่าน Interface `ItemRepository` เท่านั้น?
 
-```text
 บันทึกคำตอบของคุณที่นี่
-```
+
+1.ทำไมจึงเพิ่ม ItemRepositoryFirestore ใหม่ แทนที่จะแก้ของเดิมหรือเรียกตรงจาก HomePage?
+ไม่แก้ของเดิม: เพื่อปฏิบัติตามหลัก Open/Closed (ขยายได้แต่ไม่แก้ของเดิมที่ทำงานได้อยู่แล้ว) และ Single Responsibility (แยกความรับผิดชอบ Fake Store API กับ Firestore ออกจากกัน ไม่ให้โค้ดซับซ้อน)
+ไม่เรียกตรงจาก HomePage: ป้องกัน Tight Coupling เพื่อไม่ให้หน้าจอผูกติดกับ Firebase โดยตรง ทำให้สลับแหล่งข้อมูลได้ง่ายและเขียน Test สะดวก
+
+2. ถ้าอนาคตเปลี่ยนไปใช้ API อื่น ต้องแก้กี่ไฟล์?
+ตอบ: แก้/เพิ่มเพียง 2 ไฟล์ เท่านั้น
+สร้างไฟล์ใหม่: คลาส Repository ของ API ใหม่ที่ implements ItemRepository
+แก้จุด Inject (เช่น main.dart): เปลี่ยนจุดสร้าง Instance ไปใช้คลาสใหม่
+(ส่วนหน้าจอ UI เช่น HomePage แก้ 0 ไฟล์ เพราะเรียกผ่าน Interface เดิม)
 
 ### ขั้นตอนที่ 5.2: **นักศึกษาเขียน Code เอง** — ItemRepositoryFirestore
 
@@ -611,9 +645,23 @@ final pages = [
 
 > ✅ **Checkpoint 5.1** ถ่ายภาพหน้าจอ Home ที่แสดงสินค้าจากทั้งสองแหล่งข้อมูลปนกันอยู่ในลิสต์เดียว พร้อม Badge ที่แยกแหล่งที่มาชัดเจน (ถ้ายังไม่เคยมีประกาศจริงใน Firestore เลย ให้ทำส่วนที่ 6 ให้เสร็จก่อนแล้วย้อนกลับมาถ่ายภาพ Checkpoint นี้) อธิบายว่าการออกแบบให้ `HomePage` ไม่รู้จัก `ItemRepositoryApi`/`ItemRepositoryFirestore` โดยตรง แต่รู้จักผ่าน Interface `ItemRepository` เท่านั้น ช่วยให้ทดสอบหรือเปลี่ยนแหล่งข้อมูลในอนาคตง่ายขึ้นอย่างไร
 
-```text
 บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
+
+<img width="480" height="991" alt="image" src="https://github.com/user-attachments/assets/dc7ac163-76ad-4001-89bc-89b8d6174b07" />
+
+- อธิบายว่าการออกแบบให้ HomePage ไม่รู้จัก ItemRepositoryApi หรือ ItemRepositoryFirestore โดยตรง แต่รู้จักผ่าน Interface ItemRepository เท่านั้น ช่วยให้ทดสอบหรือเปลี่ยนแหล่งข้อมูลในอนาคตง่ายขึ้นอย่างไร?
+
+ลดการผูกมัดของโค้ด (Loose Coupling & Dependency Inversion Principle - DIP):
+HomePage สนใจเพียงแค่สัญญา (Contract) ว่าอะไรก็ตามที่เป็น ItemRepository จะต้องมีคำสั่ง getItems() ส่งข้อมูลกลับมาให้
+HomePage จึงไม่ต้องเขียน Logic ซับซ้อนว่าต้องต่อเน็ตเวิร์กผ่าน HTTP หรือต้องเรียก Firebase SDK ส่งผลให้โค้ดสะอาด แยกหน้าที่การทำงานชัดเจน (Separation of Concerns)
+
+เพิ่มความสะดวกและรวดเร็วในการทดสอบ (Testability & Mocking):
+เมื่อต้องการทำ Widget Test หรือ Unit Test ของ HomePage เราสามารถสร้าง MockItemRepository หรือ FakeItemRepository ที่ส่งข้อมูลคงที่จำลองออกมาทดสอบ UI ได้ทันที
+ไม่จำเป็นต้องเชื่อมต่ออินเทอร์เน็ต, ไม่ต้องเชื่อมต่อ Firebase Firestore จริง, ไม่ต้องกังวลเรื่อง Network Timeout และไม่ต้องเสียค่าโควตาการ Read ข้อมูลของ Firebase ในระหว่างรันเทสต์
+
+ง่ายต่อการขยายและปรับเปลี่ยนแหล่งข้อมูลในอนาคต (Extensibility & Open-Closed Principle):
+หากในอนาคตทีมต้องการเปลี่ยนฐานข้อมูล (เช่น ย้ายจาก Firestore ไปเป็น Supabase หรือ SQLite/Local Database) หรือเพิ่มแหล่งข้อมูลที่ 3 เราเพียงแค่สร้าง Class ใหม่ที่ implements ItemRepository แล้วส่งเข้ามาใน HomePage
+ไม่ต้องแก้ไขโค้ดภายใน HomePage แม้แต่บรรทัดเดียว ทำให้ลดความเสี่ยงต่อการเกิด Bug กับหน้า UI เดิม
 
 ---
 
@@ -663,9 +711,10 @@ final pages = [
 
 > ✅ **Checkpoint 6.1** โพสต์ขายจริงอย่างน้อย 2 รายการผ่านแอป ถ่ายภาพหน้าจอ Firebase Console เมนู Firestore Database ที่แสดง Collection `items` มีเอกสารที่โพสต์เข้ามาจริง พร้อม field `sellerId` ที่ตรงกับ `uid` ของบัญชีที่ใช้ทดสอบ และยืนยันว่าร่างทั้งสองรายการหายไปจาก `MyDraftsPage` แล้ว
 
-```text
 บันทึกรูปผลลัพธ์ที่นี่
-```
+
+<img width="466" height="1010" alt="image" src="https://github.com/user-attachments/assets/909e668f-9825-426b-b3e7-b68bd9cbb02d" />
+
 
 > ✅ **Checkpoint 6.2** ถ่ายภาพหน้าจอ Firebase Console เมนู Storage ที่แสดงไฟล์รูปภาพที่อัปโหลดสำเร็จ และภาพหน้าจอ Firestore ที่แสดงว่าเอกสารมี field `imageUrl` เป็น URL จริงที่เปิดดูได้ ถ่ายภาพหน้าจอแอปที่แสดงรูปสินค้านั้นบนหน้า Home ผ่าน `Image.network(imageUrl)` ด้วย (ย้อนกลับไปถ่ายภาพ Checkpoint 5.1 ให้ครบตอนนี้ ถ้ายังไม่ได้ทำ)
 
@@ -702,9 +751,13 @@ service cloud.firestore {
 
 > ✅ **Checkpoint 7.1 (Self-Study)** ถ่ายภาพหน้าจอผลการทดลองทั้ง 2 กรณีใน Rules Playground เขียนอธิบายสั้น ๆ ว่าทำไม Client-side Validation (การไม่แสดงปุ่มแก้ไขให้เห็น) เพียงอย่างเดียวจึงไม่เพียงพอต่อความปลอดภัยของข้อมูลจริง
 
-```text
 บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
+
+<img width="1627" height="852" alt="image" src="https://github.com/user-attachments/assets/5d6e7223-24a3-458a-b0be-5613ec3724ab" />
+
+ทำไม Client-side Validation อย่างเดียวถึงไม่พอ?
+เพราะการซ่อนปุ่มบนหน้าจอแอป ป้องกันได้แค่ผู้ใช้ทั่วไป แต่ผู้ไม่หวังดีสามารถใช้โค้ดหรือโปรแกรม (เช่น Postman, cURL) ยิงคำสั่งตรงไปที่ฐานข้อมูล Firebase ได้โดยไม่ต้องกดผ่านปุ่มในแอป จึงจำเป็นต้องมี Firebase Security Rules บน Server คอยตรวจสอบสิทธิ์ว่า UID ตรงกับเจ้าของข้อมูลจริงหรือไม่เสมอ
+
 
 ---
 
@@ -721,9 +774,19 @@ service cloud.firestore {
 
 > ✅ **Checkpoint 8.1** ถ่ายภาพหน้าจอผลการทดสอบทั้ง 4 ข้อ 
 
-```text
 บันทึกรูปผลลัพธ์ที่นี่ 
-```
+- (ก)
+ <img width="487" height="1011" alt="image" src="https://github.com/user-attachments/assets/98f38dd0-d7cc-4317-a004-c4b3138d22a4" />
+
+- (ข)
+ <img width="1257" height="1073" alt="image" src="https://github.com/user-attachments/assets/f1ef1fa4-9b44-40cf-9eb4-7631d0e10f6e" />
+
+- (ค)
+ <img width="480" height="1005" alt="image" src="https://github.com/user-attachments/assets/83e1f752-8d1d-46a8-87ed-ba9ed0b6f2bb" />
+
+- (ง)
+<img width="488" height="1002" alt="image" src="https://github.com/user-attachments/assets/cadcced7-dda0-48e0-b350-414a0c9fae59" />
+
 
 ---
 
