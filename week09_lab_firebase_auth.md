@@ -36,8 +36,8 @@
 
 > ✅ **Checkpoint 1.1** ถ่ายภาพหน้าจอ Firebase Console ที่แสดงหน้า Project Overview ของโปรเจกต์ที่สร้างเสร็จแล้ว
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
+<img width="1917" height="1020" alt="image" src="https://github.com/user-attachments/assets/24176909-2180-40d3-8aca-f0efad4e48f5" />
+
 ```
 
 ### ขั้นตอนที่ 1.2: 🔧 ทำตามขั้นตอน — ติดตั้งเครื่องมือและเชื่อมโปรเจกต์ด้วย FlutterFire CLI
@@ -164,8 +164,15 @@ Future<void> main() async {
 
 > ✅ **Checkpoint 2.1** ทดสอบสมัครสมาชิกด้วย Email ใหม่สำเร็จ ถ่ายภาพหน้าจอ Firebase Console เมนู Authentication → Users ที่แสดงบัญชีที่เพิ่งสมัคร จากนั้นทดสอบกรณีผิดพลาด 2 กรณี คือ (ก) สมัครซ้ำด้วย Email เดิม และ (ข) ใส่รหัสผ่านสั้นเกินไป ถ่ายภาพหน้าจอข้อความ Error ทั้งสองกรณี พร้อมอธิบายว่าโค้ดส่วนใดใน `auth_service.dart` เป็นตัวจัดการแต่ละกรณี
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบายของแต่ละกรณี
+<img width="1300" height="973" alt="image" src="https://github.com/user-attachments/assets/3b944e94-d0a3-4cdd-9bf2-4fc8702c3f65" />
+จากภาพเป็นการทดสอบสมัครสมาชิกด้วยอีเมลที่ยังไม่เคยลงทะเบียนในระบบ โดยกรอกอีเมลและรหัสผ่านตามเงื่อนไข จากนั้นกดปุ่มสมัครสมาชิก ระบบสามารถสร้างบัญชีผู้ใช้ผ่าน Firebase Authentication ได้สำเร็จ
+<img width="1467" height="806" alt="image" src="https://github.com/user-attachments/assets/d52ea4bb-fb8d-4614-8bed-1173ac6bbd12" />
+จากภาพเป็นการตรวจสอบบัญชีผู้ใช้ที่สมัครใหม่ผ่าน Firebase Console ในเมนู Authentication → Users พบว่าระบบบันทึกอีเมลของผู้ใช้ไว้ในฐานข้อมูลผู้ใช้ของ Firebase ได้สำเร็จ
+<img width="1122" height="870" alt="image" src="https://github.com/user-attachments/assets/ca8d9f8b-d9c9-4616-bbd2-a0b9ace28355" />
+จากภาพเป็นการทดสอบสมัครสมาชิกโดยใช้อีเมลที่ลงทะเบียนไว้แล้ว ระบบแจ้งข้อผิดพลาดว่าอีเมลนี้สมัครสมาชิกแล้ว โดยโค้ดในไฟล์ auth_service.dart ใช้ on FirebaseAuthException catch (e) เพื่อรับข้อผิดพลาด และตรวจสอบ e.code ในกรณี email-already-in-use เพื่อแสดงข้อความแจ้งเตือนแก่ผู้ใช้
+<img width="1112" height="841" alt="image" src="https://github.com/user-attachments/assets/c0a998ee-181f-4475-84fd-782d1388b58e" />
+จากภาพเป็นการทดสอบสมัครสมาชิกโดยใช้รหัสผ่านที่สั้นกว่าข้อกำหนดของ Firebase ระบบจะแจ้งข้อผิดพลาดเมื่อรหัสผ่านไม่ผ่านเงื่อนไข โดยโค้ดในไฟล์ auth_service.dart ตรวจสอบข้อผิดพลาด weak-password และแสดงข้อความแนะนำให้ใช้รหัสผ่านอย่างน้อย 6 ตัวอักษร
+
 ```
 
 ---
@@ -382,6 +389,8 @@ avdmanager list avd
 > 💡 ถ้าทำตามนี้ครบแล้วแต่ Emulator ยังมีอาการแปลก ๆ (ปุ่ม/ท่าทางบนหน้าจอไม่ตอบสนอง, ค้าง, ADB ค้าง) ให้ปิด Emulator แล้วเปิดใหม่ก่อน ถ้ายังไม่หาย ให้ข้ามไปทดสอบ Checkpoint 3.1 บน**เครื่อง Android จริง**แทนได้เลย (เสียบสาย USB เปิด USB Debugging แล้ว `flutter run` เลือกเครื่องจริง) จะข้ามปัญหาเรื่อง Emulator ทั้งหมดไปได้ทันที
 
 > ✅ **Checkpoint 3.1** ทดสอบกดปุ่มเข้าสู่ระบบด้วย Google ด้วยบัญชี Google จริงของคุณ ถ่ายภาพหน้าจอตอนเลือกบัญชี Google และภาพหน้าจอ Firebase Console ที่แสดงว่ามีผู้ใช้ใหม่ Provider เป็น Google เพิ่มเข้ามา อธิบายว่า `idToken` กับ `accessToken` ที่ได้จาก Google นำไปใช้ทำอะไรต่อในขั้นตอนการยืนยันตัวตนกับ Firebase (อ้างอิงหัวข้อ 9.4)
+<img width="286" height="433" alt="image" src="https://github.com/user-attachments/assets/93ba16b3-4200-4691-be7a-a0d783c52835" />
+<img width="1061" height="298" alt="image" src="https://github.com/user-attachments/assets/ed48abbd-79bb-40e0-8145-272887d30efe" />
 
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
@@ -522,6 +531,9 @@ Widget build(BuildContext context) {
 
 > ✅ **Checkpoint 4.1** ถ่ายภาพหน้าจอ 3 ภาพเรียงกัน คือ (ก) แอปตอนเพิ่งเปิดขึ้นมาครั้งแรกแบบยังไม่ล็อกอิน แสดงหน้า Login (ข) หลังล็อกอินสำเร็จ แอปสลับไปแสดง `MainScaffold` อัตโนมัติโดยไม่ต้องกดอะไรเพิ่ม และ (ค) หลังกด "ออกจากระบบ" แอปสลับกลับไปหน้า Login เอง อธิบายว่าทำไมการใช้ `StreamBuilder` ฟัง `authStateChanges()` จึงทำให้ไม่ต้องเขียนโค้ดสั่ง Navigate ไปมาเอง
 
+<img width="352" height="732" alt="image" src="https://github.com/user-attachments/assets/2c91c56f-b567-445d-a65d-7a5a14ebaa87" />
+<img width="348" height="734" alt="image" src="https://github.com/user-attachments/assets/ee96f3cc-4447-4e67-ac6b-635575515665" />
+<img width="290" height="529" alt="image" src="https://github.com/user-attachments/assets/f5f16c97-93b2-487b-8a1e-831637687344" />
 
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ (3 ภาพ) และคำอธิบาย
@@ -537,9 +549,13 @@ Widget build(BuildContext context) {
 
 1. ทำไมเราจึง "เพิ่ม Implementation ใหม่" (`ItemRepositoryFirestore`) แทนที่จะแก้ไข `ItemRepositoryApi` เดิม หรือเขียนโค้ดเรียก Firestore ตรงจาก `HomePage`?
 2. ถ้าในอนาคตอาจารย์สั่งให้เปลี่ยนจาก Fake Store API ไปใช้ API อื่น ต้องแก้ไฟล์กี่ไฟล์ ถ้าทุก Widget เรียกผ่าน Interface `ItemRepository` เท่านั้น?
+<img width="293" height="218" alt="image" src="https://github.com/user-attachments/assets/77dbbab9-3ba0-4eb5-8f18-bdb5960afc9b" />
 
 ```text
-บันทึกคำตอบของคุณที่นี่
+การเพิ่ม ItemRepositoryFirestore แยกวิธีอ่านข้อมูลจาก Firestore ออกจาก ItemRepositoryApi ทำให้แต่ละ Repository รับผิดชอบแหล่งข้อมูลของตัวเอง ส่วน HomePage เรียกใช้งานผ่าน Interface ItemRepository จึงไม่ต้องรู้ว่าข้อมูลมาจากที่ใด วิธีนี้ช่วยให้เปลี่ยนแหล่งข้อมูลและทดสอบได้ง่ายขึ้น โดยไม่ผูก UI เข้ากับ Firestore หรือ API รายใดรายหนึ่ง
+
+โดยทั่วไปแก้ 1 ไฟล์ คือไฟล์ที่ประกอบแอปและกำหนดว่าจะใช้ Repository ตัวไหน เช่น main.dart เพื่อเปลี่ยนจาก ItemRepositoryApi เป็น Implementation ใหม่ ส่วน Widget ที่เรียกผ่าน ItemRepository ไม่ต้องแก้ครับ.
+
 ```
 
 ### ขั้นตอนที่ 5.2: **นักศึกษาเขียน Code เอง** — ItemRepositoryFirestore
@@ -662,6 +678,9 @@ final pages = [
 - ระหว่างอัปโหลดให้แสดง Progress Indicator ตามที่อธิบายไว้ในหัวข้อ 9.7
 
 > ✅ **Checkpoint 6.1** โพสต์ขายจริงอย่างน้อย 2 รายการผ่านแอป ถ่ายภาพหน้าจอ Firebase Console เมนู Firestore Database ที่แสดง Collection `items` มีเอกสารที่โพสต์เข้ามาจริง พร้อม field `sellerId` ที่ตรงกับ `uid` ของบัญชีที่ใช้ทดสอบ และยืนยันว่าร่างทั้งสองรายการหายไปจาก `MyDraftsPage` แล้ว
+<img width="1665" height="634" alt="image" src="https://github.com/user-attachments/assets/3de289d7-0676-48a4-b1b8-9bb74f10e073" />
+<img width="322" height="658" alt="image" src="https://github.com/user-attachments/assets/b81f8301-b763-40ca-b0e4-2d35566b1dc8" />
+<img width="1746" height="934" alt="image" src="https://github.com/user-attachments/assets/ac98d9f8-35ca-4923-86f6-158dddb90a58" />
 
 ```text
 บันทึกรูปผลลัพธ์ที่นี่
@@ -669,8 +688,8 @@ final pages = [
 
 > ✅ **Checkpoint 6.2** ถ่ายภาพหน้าจอ Firebase Console เมนู Storage ที่แสดงไฟล์รูปภาพที่อัปโหลดสำเร็จ และภาพหน้าจอ Firestore ที่แสดงว่าเอกสารมี field `imageUrl` เป็น URL จริงที่เปิดดูได้ ถ่ายภาพหน้าจอแอปที่แสดงรูปสินค้านั้นบนหน้า Home ผ่าน `Image.network(imageUrl)` ด้วย (ย้อนกลับไปถ่ายภาพ Checkpoint 5.1 ให้ครบตอนนี้ ถ้ายังไม่ได้ทำ)
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
+<img width="1746" height="934" alt="image" src="https://github.com/user-attachments/assets/10881469-8c44-459b-bdd7-16d478a26517" />
+
 ```
 
 ---
@@ -705,6 +724,7 @@ service cloud.firestore {
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
 ```
+<img width="1369" height="862" alt="image" src="https://github.com/user-attachments/assets/25f94633-faa9-4d6e-a19d-966e1d5fe262" />
 
 ---
 
@@ -724,6 +744,9 @@ service cloud.firestore {
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ 
 ```
+<img width="335" height="715" alt="image" src="https://github.com/user-attachments/assets/a691e66d-606e-4711-b155-069d96a06d5d" />
+<img width="279" height="597" alt="image" src="https://github.com/user-attachments/assets/a9f3fe35-a283-4646-8ae8-165ddfe3e72c" />
+<img width="367" height="748" alt="image" src="https://github.com/user-attachments/assets/72bdec96-f27d-4cb1-858b-0f2bf23faacb" />
 
 ---
 
