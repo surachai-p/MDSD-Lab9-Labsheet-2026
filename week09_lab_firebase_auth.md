@@ -35,6 +35,7 @@
 
 
 > ✅ **Checkpoint 1.1** ถ่ายภาพหน้าจอ Firebase Console ที่แสดงหน้า Project Overview ของโปรเจกต์ที่สร้างเสร็จแล้ว
+<img width="1917" height="971" alt="image" src="https://github.com/user-attachments/assets/bb28bd08-c100-4ace-8962-be6d2e63b39a" />
 
 ```text
 บันทึกรูปผลลัพธ์ที่นี่
@@ -163,7 +164,12 @@ Future<void> main() async {
 เพื่อให้รันแอปแล้วเห็นหน้า Login ทันทีและทดสอบ Checkpoint 2.1 กับ Checkpoint 3.1 (ส่วนที่ 3) เมื่อทดสอบทั้งสอง Checkpoint เสร็จแล้ว **ให้เปลี่ยน `home:` กลับเป็น `MainScaffold(...)` เหมือนเดิมก่อนเริ่มส่วนที่ 4** เพราะส่วนที่ 4 จะสร้าง `AuthGate` มาแทนที่บรรทัดนี้แบบถาวร ไม่ต้องสลับไปมาด้วยการแก้ไขโค้ดอีก
 
 > ✅ **Checkpoint 2.1** ทดสอบสมัครสมาชิกด้วย Email ใหม่สำเร็จ ถ่ายภาพหน้าจอ Firebase Console เมนู Authentication → Users ที่แสดงบัญชีที่เพิ่งสมัคร จากนั้นทดสอบกรณีผิดพลาด 2 กรณี คือ (ก) สมัครซ้ำด้วย Email เดิม และ (ข) ใส่รหัสผ่านสั้นเกินไป ถ่ายภาพหน้าจอข้อความ Error ทั้งสองกรณี พร้อมอธิบายว่าโค้ดส่วนใดใน `auth_service.dart` เป็นตัวจัดการแต่ละกรณี
-
+<img width="363" height="802" alt="image" src="https://github.com/user-attachments/assets/b8481595-b0f6-4976-8e92-a08f0fbd2b56" />
+<img width="1917" height="973" alt="image" src="https://github.com/user-attachments/assets/9a95eb31-7d9c-4722-8929-a416ed3f0741" />
+<img width="361" height="802" alt="image" src="https://github.com/user-attachments/assets/c08508b2-1cd7-43de-a4aa-9b1028c94c5c" />
+ก) สมัครซ้ำด้วย Email เดิม
+<img width="367" height="802" alt="image" src="https://github.com/user-attachments/assets/825b686a-2bd5-47b7-a317-f574fc66ba67" />
+(ข) ใส่รหัสผ่านสั้นเกินไป
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบายของแต่ละกรณี
 ```
@@ -382,6 +388,8 @@ avdmanager list avd
 > 💡 ถ้าทำตามนี้ครบแล้วแต่ Emulator ยังมีอาการแปลก ๆ (ปุ่ม/ท่าทางบนหน้าจอไม่ตอบสนอง, ค้าง, ADB ค้าง) ให้ปิด Emulator แล้วเปิดใหม่ก่อน ถ้ายังไม่หาย ให้ข้ามไปทดสอบ Checkpoint 3.1 บน**เครื่อง Android จริง**แทนได้เลย (เสียบสาย USB เปิด USB Debugging แล้ว `flutter run` เลือกเครื่องจริง) จะข้ามปัญหาเรื่อง Emulator ทั้งหมดไปได้ทันที
 
 > ✅ **Checkpoint 3.1** ทดสอบกดปุ่มเข้าสู่ระบบด้วย Google ด้วยบัญชี Google จริงของคุณ ถ่ายภาพหน้าจอตอนเลือกบัญชี Google และภาพหน้าจอ Firebase Console ที่แสดงว่ามีผู้ใช้ใหม่ Provider เป็น Google เพิ่มเข้ามา อธิบายว่า `idToken` กับ `accessToken` ที่ได้จาก Google นำไปใช้ทำอะไรต่อในขั้นตอนการยืนยันตัวตนกับ Firebase (อ้างอิงหัวข้อ 9.4)
+<img width="361" height="796" alt="image" src="https://github.com/user-attachments/assets/16c6f8e9-f139-491c-8cba-9b9cafa55acf" />
+<img width="1917" height="968" alt="image" src="https://github.com/user-attachments/assets/4ecacd04-c6af-4cb9-a966-bcabc325366c" />
 
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
@@ -522,7 +530,15 @@ Widget build(BuildContext context) {
 
 > ✅ **Checkpoint 4.1** ถ่ายภาพหน้าจอ 3 ภาพเรียงกัน คือ (ก) แอปตอนเพิ่งเปิดขึ้นมาครั้งแรกแบบยังไม่ล็อกอิน แสดงหน้า Login (ข) หลังล็อกอินสำเร็จ แอปสลับไปแสดง `MainScaffold` อัตโนมัติโดยไม่ต้องกดอะไรเพิ่ม และ (ค) หลังกด "ออกจากระบบ" แอปสลับกลับไปหน้า Login เอง อธิบายว่าทำไมการใช้ `StreamBuilder` ฟัง `authStateChanges()` จึงทำให้ไม่ต้องเขียนโค้ดสั่ง Navigate ไปมาเอง
 
+<img width="360" height="800" alt="image" src="https://github.com/user-attachments/assets/e68a2051-86c5-4105-8287-af25de528d14" />
+ (ก) แอปตอนเพิ่งเปิดขึ้นมาครั้งแรกแบบยังไม่ล็อกอิน แสดงหน้า Login
+<img width="381" height="811" alt="image" src="https://github.com/user-attachments/assets/f6a78b73-d375-417e-a0ed-e534c364418a" />
+ (ข)หลังล็อกอินสำเร็จ แอปสลับไปแสดง `MainScaffold` อัตโนมัติโดยไม่ต้องกดอะไรเพิ่ม
+<img width="361" height="797" alt="image" src="https://github.com/user-attachments/assets/e55e05de-a775-4e3f-8eeb-9c8dd58a0371" />
+ (ค) หลังกด "ออกจากระบบ" แอปสลับกลับไปหน้า Login
 
+ authStateChanges() ส่งสถานะผู้ใช้ปัจจุบันและแจ้งทุกครั้งที่สถานะล็อกอินเปลี่ยน เช่น ล็อกอินสำเร็จหรือล็อกเอาต์ ส่วน StreamBuilder ฟัง Stream นี้และสร้างหน้าจอใหม่ตามค่าที่ได้รับโดยอัตโนมัติ: ถ้าเป็น null ก็แสดง LoginPage ถ้ามีผู้ใช้ก็แสดง MainScaffold
+ดังนั้นแอปสลับหน้าได้จากสถานะยืนยันตัวตนโดยตรง ไม่ต้องเรียก Navigator.push() หรือ Navigator.pop()
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ (3 ภาพ) และคำอธิบาย
 ```
@@ -610,7 +626,9 @@ final pages = [
 > 🔧 **อย่าลืมแก้ `auth_gate.dart` ด้วย** ตอนนี้ `MainScaffold` รับ `itemRepositories` (List) แล้ว ให้กลับไปเปลี่ยนบรรทัด `itemRepository: itemRepositories.first` ใน `AuthGate.build()` (ขั้นตอนที่ 4.1) เป็น `itemRepositories: itemRepositories` ตามเดิม ไม่เช่นนั้นจะเกิด Error ตรงกันข้ามกับก่อนหน้านี้ (ส่งพารามิเตอร์ชื่อ `itemRepository` ที่ `MainScaffold` ไม่รู้จักอีกต่อไป)
 
 > ✅ **Checkpoint 5.1** ถ่ายภาพหน้าจอ Home ที่แสดงสินค้าจากทั้งสองแหล่งข้อมูลปนกันอยู่ในลิสต์เดียว พร้อม Badge ที่แยกแหล่งที่มาชัดเจน (ถ้ายังไม่เคยมีประกาศจริงใน Firestore เลย ให้ทำส่วนที่ 6 ให้เสร็จก่อนแล้วย้อนกลับมาถ่ายภาพ Checkpoint นี้) อธิบายว่าการออกแบบให้ `HomePage` ไม่รู้จัก `ItemRepositoryApi`/`ItemRepositoryFirestore` โดยตรง แต่รู้จักผ่าน Interface `ItemRepository` เท่านั้น ช่วยให้ทดสอบหรือเปลี่ยนแหล่งข้อมูลในอนาคตง่ายขึ้นอย่างไร
-
+<img width="360" height="802" alt="image" src="https://github.com/user-attachments/assets/eae934f7-6963-41fa-8a79-111a349b4959" />
+HomePage เรียกใช้เฉพาะเมธอดที่กำหนดไว้ใน ItemRepository จึงไม่ผูกกับรายละเอียดของ API หรือ Firestore โดยตรง
+ทำให้สลับแหล่งข้อมูลได้โดยส่ง repository implementation ตัวอื่นเข้ามา โดยไม่ต้องแก้โค้ดหน้า HomePage และทดสอบได้ง่ายขึ้น เพราะสามารถส่ง repository จำลองที่คืนข้อมูลตัวอย่างหรือจำลอง error แทนการเชื่อมต่อเครือข่ายจริง
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
 ```
@@ -662,12 +680,16 @@ final pages = [
 - ระหว่างอัปโหลดให้แสดง Progress Indicator ตามที่อธิบายไว้ในหัวข้อ 9.7
 
 > ✅ **Checkpoint 6.1** โพสต์ขายจริงอย่างน้อย 2 รายการผ่านแอป ถ่ายภาพหน้าจอ Firebase Console เมนู Firestore Database ที่แสดง Collection `items` มีเอกสารที่โพสต์เข้ามาจริง พร้อม field `sellerId` ที่ตรงกับ `uid` ของบัญชีที่ใช้ทดสอบ และยืนยันว่าร่างทั้งสองรายการหายไปจาก `MyDraftsPage` แล้ว
+<img width="362" height="737" alt="image" src="https://github.com/user-attachments/assets/cf3d9e45-f6fe-403c-8286-9be317fe547d" />
+<img width="357" height="806" alt="image" src="https://github.com/user-attachments/assets/7886ba18-f05e-4095-b28e-f9a7a0aac5b6" />
+<img width="1917" height="1026" alt="image" src="https://github.com/user-attachments/assets/f606187f-afc3-4516-8dc5-9fcb4da11b5d" />
 
 ```text
 บันทึกรูปผลลัพธ์ที่นี่
 ```
 
 > ✅ **Checkpoint 6.2** ถ่ายภาพหน้าจอ Firebase Console เมนู Storage ที่แสดงไฟล์รูปภาพที่อัปโหลดสำเร็จ และภาพหน้าจอ Firestore ที่แสดงว่าเอกสารมี field `imageUrl` เป็น URL จริงที่เปิดดูได้ ถ่ายภาพหน้าจอแอปที่แสดงรูปสินค้านั้นบนหน้า Home ผ่าน `Image.network(imageUrl)` ด้วย (ย้อนกลับไปถ่ายภาพ Checkpoint 5.1 ให้ครบตอนนี้ ถ้ายังไม่ได้ทำ)
+<img width="1917" height="975" alt="image" src="https://github.com/user-attachments/assets/d0d42401-0b22-46ca-879d-8f94b8f557b3" />
 
 ```text
 บันทึกรูปผลลัพธ์ที่นี่
@@ -701,7 +723,8 @@ service cloud.firestore {
 > ⚠️ ถ้า Checkpoint 6.1 ยังไม่เคยโพสต์ผ่านมาก่อนเลย ให้ Publish Rules นี้ **หลังจาก** โพสต์ขายจริงสำเร็จไปแล้วอย่างน้อย 1 รายการ เพราะ Rules ชุดนี้บังคับว่าต้องมี `sellerId` ตรงกับผู้เขียนเสมอ ถ้าโค้ดในส่วนที่ 6 ยังไม่แนบ `sellerId` ให้ถูกต้อง การโพสต์ครั้งต่อไปจะล้มเหลวด้วย `permission-denied` ทันที
 
 > ✅ **Checkpoint 7.1 (Self-Study)** ถ่ายภาพหน้าจอผลการทดลองทั้ง 2 กรณีใน Rules Playground เขียนอธิบายสั้น ๆ ว่าทำไม Client-side Validation (การไม่แสดงปุ่มแก้ไขให้เห็น) เพียงอย่างเดียวจึงไม่เพียงพอต่อความปลอดภัยของข้อมูลจริง
-
+<img width="1917" height="977" alt="image" src="https://github.com/user-attachments/assets/26caa764-541a-41db-9bfe-2891d5e5dc16" />
+การซ่อนปุ่มแก้ไขเป็นเพียงการจำกัดสิ่งที่เห็นในแอป ผู้ใช้ยังเรียกฐานข้อมูลโดยตรงหรือแก้ไขแอปเพื่อส่งคำขอแก้ไขข้อมูลได้ จึงต้องใช้ Firebase Security Rules ตรวจสิทธิ์ที่ฝั่งเซิร์ฟเวอร์ เพื่อให้แน่ใจว่าผู้ใช้แก้ไขหรือลบได้เฉพาะข้อมูลของตนเองครับ.
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
 ```
@@ -720,6 +743,11 @@ service cloud.firestore {
 4. เปิดเครือข่ายกลับมา แล้วลองกด "โพสต์ขายจริง" รายการเดิมอีกครั้ง — ควรสำเร็จตามปกติ
 
 > ✅ **Checkpoint 8.1** ถ่ายภาพหน้าจอผลการทดสอบทั้ง 4 ข้อ 
+<img width="357" height="795" alt="image" src="https://github.com/user-attachments/assets/f7a9db0c-3ca4-4773-9989-e257c730d4eb" />
+<img width="357" height="806" alt="image" src="https://github.com/user-attachments/assets/5331a951-21ad-440e-91a0-f3529ce856eb" />
+<img width="355" height="665" alt="image" src="https://github.com/user-attachments/assets/24c70e72-261d-4a1a-b5a5-50855465634d" />
+<img width="355" height="387" alt="image" src="https://github.com/user-attachments/assets/d8a072c6-9ff1-4a91-b165-810b643787e9" />
+<img width="351" height="662" alt="image" src="https://github.com/user-attachments/assets/37eb586c-ebcc-43b5-9a2b-e72ed94ed7a8" />
 
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ 
