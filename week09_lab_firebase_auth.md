@@ -39,6 +39,8 @@
 ```text
 บันทึกรูปผลลัพธ์ที่นี่
 ```
+<img width="1917" height="1138" alt="image" src="https://github.com/user-attachments/assets/2b6eabf5-0534-4251-9d0b-1434d80c719f" />
+
 
 ### ขั้นตอนที่ 1.2: 🔧 ทำตามขั้นตอน — ติดตั้งเครื่องมือและเชื่อมโปรเจกต์ด้วย FlutterFire CLI
 
@@ -167,7 +169,22 @@ Future<void> main() async {
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบายของแต่ละกรณี
 ```
+**ทดสอบสมัครสมาชิกด้วย Email ใหม่ ภาพหน้าจอ Firebase Console เมนู Authentication → Users ที่แสดงบัญชีที่เพิ่งสมัคร**
 
+<img width="1515" height="682" alt="image" src="https://github.com/user-attachments/assets/655d4b1f-6351-4694-9964-82d8661ca59f" />
+
+**(ก) สมัครซ้ำด้วย Email เดิม**
+
+<img width="525" height="1126" alt="image" src="https://github.com/user-attachments/assets/9f69159e-7142-4ef6-8d3e-d791b08001bf" />
+
+**(ข) ใส่รหัสผ่านสั้นเกินไป**
+
+<img width="505" height="1133" alt="image" src="https://github.com/user-attachments/assets/fdf87b46-4f7d-46f6-8154-046ae1f15325" />
+
+- กรณีสมัครซ้ำจัดการโดย case 'email-already-in-use': ในเมธอด _translateAuthError()
+ของ lib/services/auth_service.dart ที่ดักจับ FirebaseAuthException แล้วแปลรหัส Error code เป็นภาษาไทย
+- กรณีรหัสผ่านสั้นจัดการโดย case 'weak-password': ในเมธอด _translateAuthError()
+ของ lib/services/auth_service.dart ที่ดักจับและแปลง Error code เป็นภาษาไทย
 ---
 
 ## ส่วนที่ 3: เข้าสู่ระบบด้วย Google Sign-In
@@ -386,7 +403,16 @@ avdmanager list avd
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
 ```
+**ทดสอบกดปุ่มเข้าสู่ระบบด้วย Google ด้วยบัญชี Google จริง**
 
+<img width="536" height="1133" alt="image" src="https://github.com/user-attachments/assets/ef7a2340-fd2e-4736-be98-34fd5a039565" />
+
+
+**ภาพหน้าจอ Firebase Console ที่แสดงว่ามีผู้ใช้ใหม่ Provider เป็น Google เพิ่มเข้ามา**
+
+<img width="1525" height="757" alt="image" src="https://github.com/user-attachments/assets/c2c3b99f-3f5c-4448-905a-fc77f3001687" />
+
+- idToken ใช้ยืนยันตัวตนว่าผู้ใช้คือใคร และ accessToken ใช้อนุมัติสิทธิ์เข้าถึงข้อมูล โดยทั้งสองตัวจะถูกนำไปรวมเป็น OAuthCredential เพื่อส่งให้ Firebase ออกสิทธิ์การล็อกอินเข้าใช้งานระบบอย่างสมบูรณ์
 ---
 
 ## ส่วนที่ 4: AuthGate — สลับหน้าจอตามสถานะผู้ใช้
@@ -526,7 +552,24 @@ Widget build(BuildContext context) {
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ (3 ภาพ) และคำอธิบาย
 ```
+**(ก) แอปตอนเพิ่งเปิดขึ้นมาครั้งแรกแบบยังไม่ล็อกอิน แสดงหน้า Login**
 
+<img width="550" height="1136" alt="image" src="https://github.com/user-attachments/assets/083c043c-f359-4df3-a5cb-5a2adac56cb6" />
+
+
+**(ข) หลังล็อกอินสำเร็จ แอปสลับไปแสดง `MainScaffold` อัตโนมัติโดยไม่ต้องกดอะไร**
+
+<img width="540" height="1141" alt="image" src="https://github.com/user-attachments/assets/22e6fcd8-ea32-4604-832a-128f86c496a4" />
+
+
+**(ค) หลังกด "ออกจากระบบ" แอปสลับกลับไปหน้า Login เอง**
+
+<img width="536" height="1136" alt="image" src="https://github.com/user-attachments/assets/5082ebf3-2a96-458a-aee3-bbf62cf4f350" />
+
+
+- authStateChanges() คอยส่งข้อมูลสถานะการยืนยันตัวตนออกมาตลอดเวลา เมื่อมีการล็อกอินหรือออกจากระบบ
+StreamBuilder จะตรวจจับค่าใหม่แล้ว Rebuild หน้าจอให้อัตโนมัติ โดยเปลี่ยนไปแสดง LoginPage เมื่อไม่มีผู้ใช้
+หรือแสดง MainScaffold เมื่อมีผู้ใช้ โดยไม่ต้องใช้ Navigator สลับหน้าเอง
 ---
 
 ## ส่วนที่ 5: ขยาย Repository Pattern ด้วย ItemRepositoryFirestore
@@ -540,6 +583,9 @@ Widget build(BuildContext context) {
 
 ```text
 บันทึกคำตอบของคุณที่นี่
+1. เพื่อแยก UI ออกจากแหล่งข้อมูล ตามหลัก Open/Closed Principle ช่วยให้เพิ่มแหล่งข้อมูลใหม่ได้โดยไม่ต้องแก้โค้ดเก่าที่ทำงานอยู่แล้ว และไม่ทำให้โค้ดใน Widget ซับซ้อน
+
+2. แก้เพียง 1 ไฟล์ (ไฟล์ main.dart ตรงจุดส่งคลาสให้ Interface) โดยไม่ต้องแก้หน้า Widget อื่นๆ เลย
 ```
 
 ### ขั้นตอนที่ 5.2: **นักศึกษาเขียน Code เอง** — ItemRepositoryFirestore
@@ -614,6 +660,9 @@ final pages = [
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
 ```
+**ภาพหน้าจอ Home ที่แสดงสินค้าจากทั้งสองแหล่งข้อมูลปนกันอยู่ในลิสต์เดียว พร้อม Badge ที่แยกแหล่งที่มาชัดเจน**
+
+<img width="565" height="1141" alt="image" src="https://github.com/user-attachments/assets/41a885ba-e2ee-4570-90ea-68b095e874ab" />
 
 ---
 
@@ -666,12 +715,24 @@ final pages = [
 ```text
 บันทึกรูปผลลัพธ์ที่นี่
 ```
+**โพสต์ขายจริง**
 
+<img width="565" height="1141" alt="image" src="https://github.com/user-attachments/assets/25d1f6bf-1bc2-4517-987d-94c9e7bb59ab" />
+
+
+**Firebase Console เมนู Firestore Database แสดงเอกสารที่โพสต์จริงใน Collection items:**
+
+<img width="1515" height="1027" alt="image" src="https://github.com/user-attachments/assets/6569f703-03ac-4850-a291-019c988ca63c" />
+
+---
 > ✅ **Checkpoint 6.2** ถ่ายภาพหน้าจอ Firebase Console เมนู Storage ที่แสดงไฟล์รูปภาพที่อัปโหลดสำเร็จ และภาพหน้าจอ Firestore ที่แสดงว่าเอกสารมี field `imageUrl` เป็น URL จริงที่เปิดดูได้ ถ่ายภาพหน้าจอแอปที่แสดงรูปสินค้านั้นบนหน้า Home ผ่าน `Image.network(imageUrl)` ด้วย (ย้อนกลับไปถ่ายภาพ Checkpoint 5.1 ให้ครบตอนนี้ ถ้ายังไม่ได้ทำ)
 
 ```text
 บันทึกรูปผลลัพธ์ที่นี่
 ```
+**หน้าจอแอปที่แสดงรูปสินค้านั้นบนหน้า Home ผ่าน `Image.network(imageUrl)`**
+
+<img width="536" height="1140" alt="image" src="https://github.com/user-attachments/assets/e510db40-f8ac-4331-8ca5-1dba9feca633" />
 
 ---
 
@@ -705,6 +766,7 @@ service cloud.firestore {
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
 ```
+<img width="1492" height="1018" alt="image" src="https://github.com/user-attachments/assets/259bf58d-87f1-4369-b625-0cd543ecfed6" />
 
 ---
 
@@ -724,6 +786,17 @@ service cloud.firestore {
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ 
 ```
+1. ล็อกอินค้างไว้ แล้วปิดแอปทิ้งไปทั้งหมด
+<img width="528" height="1141" alt="image" src="https://github.com/user-attachments/assets/7197c361-1a92-45a4-a286-a0e0ea89c524" />
+
+2. ปิด WiFi/Data ของเครื่องให้หมด แล้วลองเปิดแท็บ "รายการโปรด" และ "ร่างของฉัน"
+<img width="521" height="1140" alt="image" src="https://github.com/user-attachments/assets/01721d4a-f754-41fc-b745-911f980b2606" />
+
+3. ขณะยังปิดเครือข่ายอยู่ ลองกด "โพสต์ขายจริง" กับร่างสักชิ้น — ควรเกิด Error เพราะ Firestore/Storage ต้องการเครือข่ายเสมอ
+<img width="537" height="1137" alt="image" src="https://github.com/user-attachments/assets/ab2ba9a3-7295-4951-8041-ef1b1ced503c" />
+
+4. เปิดเครือข่ายกลับมา แล้วลองกด "โพสต์ขายจริง" รายการเดิมอีกครั้ง — ควรสำเร็จตามปกติ
+<img width="543" height="1130" alt="image" src="https://github.com/user-attachments/assets/358fbbfa-f652-4b0e-bfad-cb0248f13c66" />
 
 ---
 
