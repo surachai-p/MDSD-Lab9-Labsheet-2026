@@ -1,6 +1,6 @@
-# ใบงานปฏิบัติสัปดาห์ที่ 9 Cloud Database — Firebase & Authentication
+﻿# ใบงานปฏิบัติสัปดาห์ที่ 9 Cloud Database — Firebase & Authentication
 
-**เครื่องมือ** Flutter, Firebase Console, FlutterFire CLI, Firebase Authentication, Cloud Firestore, Firebase Storage, google_sign_in
+**เครื่องมือ** Flutter, Firebase Console, FlutterFire CLI, Firebase Authentication, Cloud Firestore, Cloudinary, google_sign_in
 
 ---
 
@@ -13,7 +13,7 @@
 3. ออกแบบหน้าจอที่สลับไปมาระหว่างสถานะ "ยังไม่ล็อกอิน" และ "ล็อกอินแล้ว" ด้วย `StreamBuilder` ฟัง Stream ของ Firebase Auth (`AuthGate`)
 4. ขยาย Repository Pattern เดิมด้วยการเพิ่ม Implementation ใหม่ (`ItemRepositoryFirestore`) และรวมผลลัพธ์จากหลาย `ItemRepository` เข้าด้วยกันบนหน้า Home โดยไม่แก้ไข Interface เดิม
 5. เขียน CRUD (Create, Read, Update, Delete) กับ Cloud Firestore ทั้งแบบอ่านครั้งเดียวและแบบฟังข้อมูล Real-time
-6. อัปโหลดไฟล์รูปภาพขึ้น Firebase Storage และเชื่อมโยง URL ที่ได้เข้ากับเอกสารใน Firestore
+6. อัปโหลดไฟล์รูปภาพไปยัง Cloudinary และเชื่อมโยง URL ที่ได้เข้ากับเอกสารใน Firestore
 7. อธิบายได้ว่าทำไม Client-side Validation อย่างเดียวไม่เพียงพอ และ Firebase Security Rules ทำหน้าที่อะไร
 
 ## สิ่งที่ต้องเตรียมก่อนเริ่ม
@@ -39,6 +39,7 @@
 ```text
 บันทึกรูปผลลัพธ์ที่นี่
 ```
+![alt text](image/image.png)
 
 ### ขั้นตอนที่ 1.2: 🔧 ทำตามขั้นตอน — ติดตั้งเครื่องมือและเชื่อมโปรเจกต์ด้วย FlutterFire CLI
 
@@ -164,9 +165,18 @@ Future<void> main() async {
 
 > ✅ **Checkpoint 2.1** ทดสอบสมัครสมาชิกด้วย Email ใหม่สำเร็จ ถ่ายภาพหน้าจอ Firebase Console เมนู Authentication → Users ที่แสดงบัญชีที่เพิ่งสมัคร จากนั้นทดสอบกรณีผิดพลาด 2 กรณี คือ (ก) สมัครซ้ำด้วย Email เดิม และ (ข) ใส่รหัสผ่านสั้นเกินไป ถ่ายภาพหน้าจอข้อความ Error ทั้งสองกรณี พร้อมอธิบายว่าโค้ดส่วนใดใน `auth_service.dart` เป็นตัวจัดการแต่ละกรณี
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบายของแต่ละกรณี
-```
+![alt text](image/image-1.png)
+![alt text](image/image-2.png)
+![alt text](image/image-3.png)
+![alt text](image/image-4.png)
+
+**คำอธิบาย**
+
+- สมัครสมาชิกสำเร็จ: `AuthService.signUp()` เรียก `createUserWithEmailAndPassword()` เพื่อสร้างบัญชีด้วยอีเมลและรหัสผ่าน เมื่อสำเร็จบัญชีใหม่จะแสดงใน Firebase Console → Authentication → Users
+- สมัครซ้ำด้วยอีเมลเดิม: Firebase ส่ง `FirebaseAuthException` ที่มี code `email-already-in-use` กลับมา จากนั้น `try/catch` ใน `signUp()` จับ exception และส่ง code ไปแปลใน `_messageFor()` ซึ่งแสดงข้อความ “อีเมลนี้ถูกใช้สมัครสมาชิกแล้ว”
+- รหัสผ่านสั้นเกินไป: Firebase ส่ง code `weak-password` และ `signUp()` จับ exception แบบเดียวกัน ก่อน `_messageFor()` แปลเป็นข้อความ “รหัสผ่านสั้นหรือคาดเดาง่ายเกินไป (ต้องมีอย่างน้อย 6 ตัวอักษร)”
+
+ใน `LoginPage._submit()` จะจับ `AuthServiceException` แล้วนำข้อความภาษาไทยที่แปลแล้วไปแสดงในฟอร์ม
 
 ---
 
@@ -178,7 +188,16 @@ Google Sign-In บน Android ต้องลงทะเบียน SHA-1 Fing
 
 **1) หา SHA-1 Fingerprint ของเครื่อง**
 
-เปิด Terminal ที่ root ของโปรเจกต์ (`campus_marketplace_w7`) แล้วรัน
+เปิด Terminal ที่ root ของโปรเจกต์ (`campus_marketplace_w7`) แล้วรันคำสั่งตามชนิด Terminal ที่ใช้
+
+**Windows PowerShell**
+
+```powershell
+cd android
+.\gradlew signingReport
+```
+
+**macOS / Linux หรือ Git Bash**
 
 ```bash
 cd android && ./gradlew signingReport
@@ -384,8 +403,26 @@ avdmanager list avd
 > ✅ **Checkpoint 3.1** ทดสอบกดปุ่มเข้าสู่ระบบด้วย Google ด้วยบัญชี Google จริงของคุณ ถ่ายภาพหน้าจอตอนเลือกบัญชี Google และภาพหน้าจอ Firebase Console ที่แสดงว่ามีผู้ใช้ใหม่ Provider เป็น Google เพิ่มเข้ามา อธิบายว่า `idToken` กับ `accessToken` ที่ได้จาก Google นำไปใช้ทำอะไรต่อในขั้นตอนการยืนยันตัวตนกับ Firebase (อ้างอิงหัวข้อ 9.4)
 
 ```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
+บันทึกรูปผลลัพธ์ที่นี่
 ```
+![alt text](image/image-5.png)
+![alt text](image/image-6.png)
+![alt text](image/image-7.png)
+
+**คำอธิบาย:**
+ในการยืนยันตัวตนผ่าน Google Sign-In ร่วมกับ Firebase:
+- **`idToken` (Identity Token):** เป็น JWT (JSON Web Token) ที่ Google ออกให้เพื่อยืนยันตัวตนของผู้ใช้ มีลายเซ็นดิจิทัลจาก Google ภายในบรรจุข้อมูลโปรไฟล์พื้นฐาน เช่น UID, อีเมล, ชื่อ และรูปภาพ โค้ดนำ `idToken` ส่งให้กับ `GoogleAuthProvider.credential()` เพื่อให้ Firebase นำไปตรวจสอบความถูกต้องกับ Google Server โดยตรงและสร้าง session/บัญชีผู้ใช้ใน Firebase Authentication
+- **`accessToken` (Access Token):** เป็น Token ตามมาตรฐาน OAuth 2.0 ที่ระบุสิทธิ์ (Scopes เช่น 'email') ใช้สำหรับให้ Client หรือแอปนำไปเข้าถึง Google APIs หรือดึงข้อมูลเพิ่มเติมของผู้ใช้ตามสิทธิ์ที่ขอไว้
+
+เมื่อนำทั้ง `idToken` และ `accessToken` มาห่อเป็น `AuthCredential` ด้วยคำสั่ง:
+```dart
+final credential = GoogleAuthProvider.credential(
+  idToken: idToken,
+  accessToken: authorization?.accessToken,
+);
+```
+จากนั้นเรียก `FirebaseAuth.instance.signInWithCredential(credential)` ฝั่ง Firebase Server จะทำการแกะและตรวจสอบ token เหล่านี้ เมื่อตรวจสอบผ่าน Firebase จะเชื่อมโยงข้อมูลผู้ใช้เข้าสู่ระบบของแอปและออก Firebase JWT เพื่อให้แอปสามารถเข้าถึงบริการอื่น ๆ เช่น Firestore และ Cloud Storage ต่อไปได้ตาม Security Rules
+
 
 ---
 
@@ -522,10 +559,22 @@ Widget build(BuildContext context) {
 
 > ✅ **Checkpoint 4.1** ถ่ายภาพหน้าจอ 3 ภาพเรียงกัน คือ (ก) แอปตอนเพิ่งเปิดขึ้นมาครั้งแรกแบบยังไม่ล็อกอิน แสดงหน้า Login (ข) หลังล็อกอินสำเร็จ แอปสลับไปแสดง `MainScaffold` อัตโนมัติโดยไม่ต้องกดอะไรเพิ่ม และ (ค) หลังกด "ออกจากระบบ" แอปสลับกลับไปหน้า Login เอง อธิบายว่าทำไมการใช้ `StreamBuilder` ฟัง `authStateChanges()` จึงทำให้ไม่ต้องเขียนโค้ดสั่ง Navigate ไปมาเอง
 
+#### (ก) แอปตอนเพิ่งเปิดขึ้นมาครั้งแรกแบบยังไม่ล็อกอิน แสดงหน้า Login
+![alt text](image/image-8.png)
+#### (ข) หลังล็อกอินสำเร็จ แอปสลับไปแสดง `MainScaffold` อัตโนมัติโดยไม่ต้องกดอะไรเพิ่ม
+![alt text](image/image-9.png)
+#### (ค) หลังกด "ออกจากระบบ" แอปสลับกลับไปหน้า Login
+![alt text](image/image-10.png)
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ (3 ภาพ) และคำอธิบาย
-```
+**คำอธิบาย:**
+การที่แอปสามารถสลับหน้าจอไปมาระหว่าง `LoginPage` และ `MainScaffold` ได้เองโดยไม่ต้องเขียนโค้ดสั่ง Navigate (`Navigator.push` / `Navigator.pop`) ด้วยตัวเอง เป็นเพราะแนวคิดการทำงานแบบ **Declarative UI** และ **Reactive Programming** ของ Flutter ร่วมกับ Firebase Auth:
+
+1. **`FirebaseAuth.instance.authStateChanges()` เป็น Stream:** สตรีมนี้จะคอยส่งข้อมูลอัปเดตแบบเรียลไทม์ทุกครั้งที่สถานะการยืนยันตัวตนเปลี่ยนแปลง เช่น เมื่อผู้ใช้ล็อกอินสำเร็จ (`User` object ถูกส่งออกมา) หรือเมื่อผู้ใช้กดออกจากระบบ (`null` ถูกส่งออกมา) รวมถึงการจดจำสถานะล็อกอินเดิมเมื่อเปิดแอปขึ้นมาใหม่
+2. **`StreamBuilder<User?>` ทำหน้าที่ดักฟังและ Rebuild UI:** เมื่อ `AuthGate` นำสตรีมนี้มาครอบเป็น Root Widget ของหน้าแอป ทุกครั้งที่มี Event หรือค่าใหม่ถูกยิงออกมาจาก `authStateChanges()` ฟังก์ชัน `builder` ของ `StreamBuilder` จะถูกเรียกทำงานใหม่ทันทีตามเงื่อนไข:
+   - หาก `snapshot.data == null` (ยังไม่ล็อกอินหรือกดออกจากระบบ) $\rightarrow$ ส่งคืน `LoginPage()`
+   - หาก `snapshot.data != null` (มี User ที่ล็อกอินแล้ว) $\rightarrow$ ส่งคืน `MainScaffold(...)`
+   - หากยังอยู่ในช่วงเริ่มต้นตรวจสอบสถานะ (`ConnectionState.waiting`) $\rightarrow$ แสดง `CircularProgressIndicator()`
+ทำให้หน้าจอที่แสดงผลอยู่ถูกปรับเปลี่ยนไปตาม "สถานะจริงของข้อมูล (State)" ณ ขณะนั้นโดยอัตโนมัติ ส่งผลให้โครงสร้างโค้ดแยกส่วนกันอย่างชัดเจน (Decoupling) ตัวหน้า `LoginPage` หรือปุ่ม Sign Out ใน `HomePage` มีหน้าที่เพียงแค่สั่งการกับ Auth Service เท่านั้น ไม่จำเป็นต้องรู้ว่าหน้าถัดไปคืออะไร และไม่ต้องจัดการ Navigation Stack ด้วยตนเอง
 
 ---
 
@@ -536,7 +585,16 @@ Widget build(BuildContext context) {
 ก่อนเขียนโค้ด ให้ตอบคำถามต่อไปนี้ (อ้างอิง `campus_marketplace_lab_roadmap.md` ข้อ 5.6 และเนื้อหาหัวข้อ 9.5):
 
 1. ทำไมเราจึง "เพิ่ม Implementation ใหม่" (`ItemRepositoryFirestore`) แทนที่จะแก้ไข `ItemRepositoryApi` เดิม หรือเขียนโค้ดเรียก Firestore ตรงจาก `HomePage`?
+คำตอบ:
+- ปฏิบัติตามหลัก Open/Closed Principle (OCP) ใน SOLID Principles: โค้ดควรเปิดให้ขยายได้ (Open for extension) แต่ปิดไม่ให้แก้ไขส่วนที่ใช้งานได้ดีอยู่แล้ว (Closed for modification) การสร้าง Implementation ใหม่ทำให้ `ItemRepositoryApi` ยังคงทำงานดึงข้อมูลสินค้าตัวอย่างจาก Fake Store API ได้ตามปกติโดยไม่กระทบกระเทือน และทำให้แอปสามารถทำงานร่วมกัน 2 แหล่งข้อมูลพร้อมกันได้ (Multi-repository)
+- การแยกความรับผิดชอบ (Separation of Concerns & Decoupling): หากเขียนเรียก Firestore ตรงใน `HomePage` จะทำให้ UI ผูกติดกับ Database โดยตรง (Tight Coupling) ทดสอบ (Unit Test/Mock) ได้ยาก และหากวันข้างหน้าเปลี่ยนวิธีเก็บข้อมูล จะต้องไล่รื้อโค้ดในหน้า UI ทั้งหมด การมี Repository ช่วยทำหน้าที่เป็นตัวกลางแปลงและส่งต่อข้อมูลให้ UI โดยที่ UI ไม่จำเป็นต้องรู้ว่าข้อมูลมาจากไหน
+
 2. ถ้าในอนาคตอาจารย์สั่งให้เปลี่ยนจาก Fake Store API ไปใช้ API อื่น ต้องแก้ไฟล์กี่ไฟล์ ถ้าทุก Widget เรียกผ่าน Interface `ItemRepository` เท่านั้น?
+คำตอบ:
+- แก้ไขเพียง 1-2 ไฟล์เท่านั้น คือ:
+  1. ไฟล์ Repository Implementation: สร้างคลาสใหม่ (เช่น `ItemRepositoryNewApi.dart`) หรือแก้โค้ดเฉพาะภายใน `ItemRepositoryApi.dart` ที่ทำหน้าที่ต่อกับ Network/API
+  2. จุดตั้งต้น Dependency Injection (ถ้าสร้างคลาสใหม่): แก้ไขเพียงบรรทัดที่ส่งต่อ Repository เช่น ใน `main.dart` หรือ `auth_gate.dart`
+- โดยไม่ต้องแก้ไขไฟล์ Widget หรือหน้า UI (`HomePage` `MainScaffold` `ProductCard` ฯลฯ) เลยแม้แต่ไฟล์เดียว เพราะทุก Widget เรียกผ่าน Interface `ItemRepository` เดียวกันอยู่แล้ว
 
 ```text
 บันทึกคำตอบของคุณที่นี่
@@ -612,22 +670,48 @@ final pages = [
 > ✅ **Checkpoint 5.1** ถ่ายภาพหน้าจอ Home ที่แสดงสินค้าจากทั้งสองแหล่งข้อมูลปนกันอยู่ในลิสต์เดียว พร้อม Badge ที่แยกแหล่งที่มาชัดเจน (ถ้ายังไม่เคยมีประกาศจริงใน Firestore เลย ให้ทำส่วนที่ 6 ให้เสร็จก่อนแล้วย้อนกลับมาถ่ายภาพ Checkpoint นี้) อธิบายว่าการออกแบบให้ `HomePage` ไม่รู้จัก `ItemRepositoryApi`/`ItemRepositoryFirestore` โดยตรง แต่รู้จักผ่าน Interface `ItemRepository` เท่านั้น ช่วยให้ทดสอบหรือเปลี่ยนแหล่งข้อมูลในอนาคตง่ายขึ้นอย่างไร
 
 ```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
+บันทึกรูปผลลัพธ์ที่นี่
 ```
+![alt text](image/image-11.png)
+
+**คำอธิบาย:**
+การออกแบบให้ `HomePage` ผูกติดอยู่กับ Interface (Abstract Class) `ItemRepository` เพียงอย่างเดียว โดยไม่รู้จัก Implementation อย่าง `ItemRepositoryApi` หรือ `ItemRepositoryFirestore` โดยตรง เป็นไปตามหลักการ **Repository Pattern** และ **Dependency Inversion Principle (DIP)** ซึ่งช่วยให้ระบบมีความยืดหยุ่นสูงในสองมิติสำคัญ:
+
+1. **ช่วยให้การทดสอบ (Testing) ง่ายขึ้นอย่างมาก:**
+   - เมื่อเขียน Unit Test หรือ Widget Test สำหรับ `HomePage` เราไม่จำเป็นต้องเชื่อมต่อเครือข่ายไปยัง REST API จริง หรือเชื่อมต่อกับ Cloud Firestore จริง (ซึ่งช้า, ต้องมีอินเทอร์เน็ต, และมีค่าใช้จ่าย/โควตา)
+   - เราสามารถสร้าง **Mock/Fake Repository** ขึ้นมา เช่น `class FakeItemRepository implements ItemRepository` ที่คืนค่าข้อมูลจำลองแบบ Instant แล้วส่งเข้าไปใน `HomePage(repositories: [FakeItemRepository()])` ได้ทันที ทำให้สามารถทดสอบกรณีต่าง ๆ ได้อย่างรวดเร็ว เช่น กรณีข้อมูลว่างเปล่า (Empty State), ข้อมูลโหลดไม่สำเร็จ (Error State), หรือมีรายการสินค้าจำนวนมาก
+2. **ช่วยให้การเปลี่ยนหรือขยายแหล่งข้อมูลในอนาคตทำได้ง่าย (Loose Coupling & Extensibility):**
+   - **Open/Closed Principle:** โค้ดเปิดให้ขยายการทำงาน (เพิ่มคลาสใหม่ได้) แต่ปิดการแก้ไขโค้ดเดิม หากในอนาคตต้องการเปลี่ยนแหล่งข้อมูล เช่น ย้ายจาก Fake Store API ไปใช้ GraphQL, SQLite (Drift), หรือ Backend API ตัวใหม่ เราแค่สร้าง Class ใหม่ที่ `implements ItemRepository` แล้วนำไปเสียบเข้าใน `main.dart`
+   - **ไม่ต้องแตะต้องโค้ดฝั่ง UI เลย:** โค้ดใน `HomePage`, `ItemCard` และหน้าจออื่น ๆ จะยังทำงานได้เหมือนเดิมทุกประการ 100% เพราะตราบใดที่คลาสใหม่ปฏิบัติตามสัญญา (Contract) ของเมธอด `getItems()` ที่คืนค่าเป็น `Future<List<Item>>` ฝั่ง UI จะไม่ได้รับผลกระทบใด ๆ จากการเปลี่ยนแปลงเบื้องหลัง
+
 
 ---
 
-## ส่วนที่ 6: "โพสต์ขายจริง" — เชื่อม MyDraftsPage เข้ากับ Storage และ Firestore
+## ส่วนที่ 6: "โพสต์ขายจริง" — เชื่อม MyDraftsPage เข้ากับ Cloudinary และ Firestore
 
-### ขั้นตอนที่ 6.1: **นักศึกษาเขียน Code เอง** — StorageService
+### ขั้นตอนที่ 6.1: **นักศึกษาเขียน Code เอง** — อัปโหลดรูปไป Cloudinary
 
-สร้างไฟล์ `lib/services/storage_service.dart` ตามโครงสร้างในหัวข้อ 9.7-9.8
+กรณีไม่ใช้ Firebase Storage สามารถใช้บริการฝากรูปภายนอก เช่น Cloudinary แล้วเก็บ URL ของรูปไว้ใน Firestore ได้:
 
-**ข้อกำหนดที่ต้องมีครบ (ตรวจสอบตัวเองก่อนไปต่อ):**
+1. สร้างบัญชี/เข้า Cloudinary Console แล้วคัดลอก **Cloud name** จากหน้า Dashboard
+2. ไปที่ **Settings → Upload → Upload presets** แล้วสร้าง preset ใหม่ ตั้ง **Signing Mode** เป็น **Unsigned** และกำหนดข้อจำกัดชนิด/ขนาดไฟล์ตามเหมาะสม
+3. คัดลอก **Upload preset name** ที่สร้างไว้
 
-- มีเมธอด `Future<String> uploadListingImage(File imageFile, String sellerId)` คืนค่าเป็น Download URL
-- ตั้งชื่อไฟล์บน Storage ให้ไม่ซ้ำกัน (เช่น ใช้ `sellerId` ผสมกับ `DateTime.now().millisecondsSinceEpoch`) ไม่ใช่ใช้ชื่อไฟล์เดิมจากเครื่องผู้ใช้ตรง ๆ
-- เรียก `getDownloadURL()` **หลังจาก** `putFile()` อัปโหลดเสร็จสมบูรณ์แล้วเท่านั้น (ต้อง `await` ให้ถูกจุด)
+ต้องแทนค่าตัวอย่างทั้งสองด้วยค่าจริงจากบัญชีตนเอง `your-cloud-name` และ `your-unsigned-preset` ใช้เป็นตัวอย่างเท่านั้น ถ้ารันตามตัวอักษร รูปจะอัปโหลดไม่ได้ **ห้ามนำ API secret ไปใส่ในแอป Flutter** (unsigned preset เป็นค่าที่ผู้ใช้แอปมองเห็นได้ จึงควรตั้งข้อจำกัดการอัปโหลดและติดตามโควตาใน Cloudinary)
+
+รันจากโฟลเดอร์ `campus_marketplace_w7` ใน PowerShell โดยแทนค่าตัวอย่างด้วย Cloud name และ Upload preset name ของตนเอง:
+
+```powershell
+$CLOUD_NAME = "ใส่ Cloud name จริง"
+$UPLOAD_PRESET = "ใส่ Unsigned upload preset name จริง"
+flutter run "--dart-define=CLOUDINARY_CLOUD_NAME=$CLOUD_NAME" "--dart-define=CLOUDINARY_UPLOAD_PRESET=$UPLOAD_PRESET"
+```
+
+หากแอปรันอยู่แล้ว ให้หยุดก่อนด้วย `q` ใน Terminal แล้วรันคำสั่งใหม่ เพราะ `--dart-define` จะถูกอ่านตอนเริ่มแอปเท่านั้น เมื่อโพสต์สำเร็จ `CloudinaryService.uploadListingImage()` จะคืนค่า `secure_url` สำหรับบันทึกใน Firestore เอกสารเก่าที่มี `imageUrl` ว่างจะไม่ถูกอัปเดตเอง ให้สร้างร่างและโพสต์ใหม่หลังตั้งค่าเสร็จ
+
+- ส่งไฟล์ไปยัง Cloudinary ด้วย `upload_preset` และใช้ค่า `secure_url` ที่ได้รับกลับมาเป็น URL รูป
+- ถ้าอัปโหลดไม่สำเร็จ ต้องหยุดการโพสต์และแสดง Error ไม่บันทึก URL ว่างหรือ URL placeholder แทน
+- ห้ามใส่ API secret ในแอป Flutter ใช้เฉพาะ Cloud name และ unsigned upload preset ที่จำกัดขนาด/ชนิดไฟล์
 
 ### ขั้นตอนที่ 6.2: 🧠 คิดเอง (มีโครงให้) — เพิ่ม sellerId ให้ Item และแปลงเป็น Firestore ได้
 
@@ -656,7 +740,8 @@ final pages = [
 **ข้อกำหนดที่ต้องมีครบ (ตรวจสอบตัวเองก่อนไปต่อ):**
 
 - แสดง Dialog ถามราคาสินค้าก่อนเสมอ (เพราะร่างไม่มีราคาติดมา) ตรวจสอบว่ากรอกเป็นตัวเลขและมากกว่า 0
-- อัปโหลดรูปจาก `draft.imagePath` ขึ้น Storage ผ่าน `StorageService().uploadListingImage(...)` **ก่อน** รอรับ Download URL แล้วค่อยเขียนเอกสารลง Firestore พร้อม URL นั้น (ห้ามสลับลำดับ เพราะ Firestore ต้องมี URL ที่ใช้งานได้จริงตั้งแต่ตอนสร้างเอกสาร)
+- หากใช้ Cloudinary ให้อัปโหลดรูปจาก `draft.imagePath` ผ่าน `CloudinaryService().uploadListingImage(...)` แล้วนำ `secure_url` ที่ได้ใส่ใน `imageUrl` ก่อนเขียนเอกสารลง Firestore
+- ต้องอัปโหลดรูปสำเร็จก่อนโพสต์ หากไม่ใช้ Cloudinary ให้แก้ขั้นตอนนี้โดยตั้งใจ: ข้ามการอัปโหลดและกำหนด `imageUrl: ''` โดยหน้าแอปจะแสดง placeholder แทนรูป
 - สร้าง `Item` จากข้อมูลร่าง + ราคาที่กรอก + `sellerId: FirebaseAuth.instance.currentUser!.uid` แล้วเรียก `ItemRepositoryFirestore().postItem(item)`
 - หลังโพสต์สำเร็จ เรียก `draftRepository.deleteDraft(draft.id)` ลบร่างออกจาก Local Database แล้ว Refresh รายการร่างบนหน้าจอ (ป้องกันไม่ให้กดโพสต์ซ้ำร่างเดิมสองครั้ง) และแสดง SnackBar ยืนยัน
 - ระหว่างอัปโหลดให้แสดง Progress Indicator ตามที่อธิบายไว้ในหัวข้อ 9.7
@@ -666,12 +751,15 @@ final pages = [
 ```text
 บันทึกรูปผลลัพธ์ที่นี่
 ```
-
-> ✅ **Checkpoint 6.2** ถ่ายภาพหน้าจอ Firebase Console เมนู Storage ที่แสดงไฟล์รูปภาพที่อัปโหลดสำเร็จ และภาพหน้าจอ Firestore ที่แสดงว่าเอกสารมี field `imageUrl` เป็น URL จริงที่เปิดดูได้ ถ่ายภาพหน้าจอแอปที่แสดงรูปสินค้านั้นบนหน้า Home ผ่าน `Image.network(imageUrl)` ด้วย (ย้อนกลับไปถ่ายภาพ Checkpoint 5.1 ให้ครบตอนนี้ ถ้ายังไม่ได้ทำ)
-
+![alt text](image/image-12.png)
+![alt text](image/image-13.png)
+![alt text](image/image-14.png)
+> ✅ Checkpoint 6.2 ถ่ายภาพหน้าจอ Firebase Console เมนู Storage ที่แสดงไฟล์รูปภาพที่อัปโหลดสำเร็จ และภาพหน้าจอ Firestore ที่แสดงว่าเอกสารมี field imageUrl เป็น URL จริงที่เปิดดูได้ ถ่ายภาพหน้าจอแอปที่แสดงรูปสินค้านั้นบนหน้า Home ผ่าน Image.network(imageUrl) ด้วย (ย้อนกลับไปถ่ายภาพ Checkpoint 5.1 ให้ครบตอนนี้ ถ้ายังไม่ได้ทำ)
 ```text
 บันทึกรูปผลลัพธ์ที่นี่
 ```
+![alt text](image/image-15.png)
+![alt text](image/image-16.png)
 
 ---
 
@@ -705,7 +793,10 @@ service cloud.firestore {
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
 ```
-
+#### (ก) ผู้ใช้ที่ล็อกอินพยายามแก้ไขเอกสารที่ตัวเอง
+![alt text](image/image-17.png)
+#### (ข) ผู้ใช้คนเดียวกันพยายามแก้ไขเอกสารของคนอื่น
+![alt text](image/image-18.png)
 ---
 
 ## ส่วนที่ 8: ทดสอบสถานการณ์ Offline และสถานะการล็อกอิน
@@ -725,6 +816,27 @@ service cloud.firestore {
 บันทึกรูปผลลัพธ์ที่นี่ 
 ```
 
+1. ล็อกอินค้างไว้ แล้วปิดแอปทิ้งไปทั้งหมด (ไม่ใช่แค่ย่อ) จากนั้นเปิดแอปใหม่อีกครั้ง — ควรเข้าหน้า `MainScaffold` ทันทีโดยไม่ต้องล็อกอินซ้ำ (Firebase Auth จำสถานะล็อกอินไว้ให้อัตโนมัติ)
+
+![alt text](image/image-19.png)
+![alt text](image/image-49.png)
+
+
+2. ปิด WiFi/Data ของเครื่องให้หมด แล้วลองเปิดแท็บ "รายการโปรด" และ "ร่างของฉัน" — ควรยังใช้งานได้ปกติเพราะเก็บอยู่ใน Local Database (Drift) ไม่ต้องพึ่งเครือข่าย
+
+![alt text](image/image-21.png)
+![alt text](image/image-22.png)
+
+
+3. ขณะยังปิดเครือข่ายอยู่ ลองกด "โพสต์ขายจริง" กับร่างสักชิ้น — ควรเกิด Error เพราะ Firestore/Storage ต้องการเครือข่ายเสมอ (ต่างจาก Local Database) ตรวจสอบว่าแอปแสดงข้อความ Error ที่เข้าใจได้ ไม่ Crash
+
+![alt text](image/image-23.png)
+
+
+4. เปิดเครือข่ายกลับมา แล้วลองกด "โพสต์ขายจริง" รายการเดิมอีกครั้ง — ควรสำเร็จตามปกติ
+
+![alt text](image/image-24.png)
+![alt text](image/image-25.png)
 ---
 
 ## ปัญหาที่พบบ่อยและวิธีแก้ไข (Troubleshooting)
@@ -778,11 +890,15 @@ emulator -avd Pixel7_API34_PlayStore
 
 **เข้าสู่ระบบด้วย Google สำเร็จ แต่ `FirebaseAuth.instance.signInWithCredential()` โยน Error `invalid-credential`** ตรวจสอบว่าเปิดใช้งาน Google เป็น Sign-in Method ใน Firebase Console แล้วจริง (ขั้นตอน 2.1) และตรวจสอบว่าดึง `idToken` มาจาก `googleUser.authentication.idToken` ไม่ใช่ดึงผิดตัวจาก `authorizationClient`
 
+**กดโพสต์แล้วขึ้นว่ายังไม่ได้ตั้งค่า Cloudinary** ตรวจว่ารันแอปจากโฟลเดอร์ `campus_marketplace_w7` พร้อม `--dart-define=CLOUDINARY_CLOUD_NAME=...` และ `--dart-define=CLOUDINARY_UPLOAD_PRESET=...` โดยใช้ Cloud name และ unsigned preset ที่ถูกต้องจากบัญชี Cloudinary
+
+**อัปโหลดรูปไป Cloudinary ไม่สำเร็จ** ตรวจ HTTP status และข้อความที่แอปแสดง ตรวจว่า preset เป็น unsigned, Cloud name และ preset สะกดถูกต้อง และ preset อนุญาตชนิด/ขนาดไฟล์รูปที่เลือกหรือไม่ โพสต์จะไม่ถูกบันทึกลง Firestore จนกว่าจะอัปโหลดรูปสำเร็จ หากตั้งใจไม่ใช้ Cloudinary ต้องแก้การโพสต์ให้กำหนด `imageUrl: ''` แล้วแอปจะแสดง placeholder
+
 **Error `permission-denied` ตอนกด "โพสต์ขายจริง"** ถ้ายังไม่ได้แก้ Rules ตามส่วนที่ 7 ค่าเริ่มต้นของ Firestore Project ใหม่มักตั้งเป็นโหมด Test Mode ที่หมดอายุใน 30 วัน หรือโหมด Locked ที่ปฏิเสธทุกคำขอ แต่ถ้าแก้ Rules ไปแล้วยัง Error อยู่ ให้ตรวจสอบว่าโค้ดในขั้นตอน 6.3 แนบ `sellerId: FirebaseAuth.instance.currentUser!.uid` ไปกับทุกเอกสารที่สร้างจริงหรือไม่
 
 **กด "โพสต์ขายจริง" ซ้ำสองครั้งแล้วได้สินค้าซ้ำกันสองชิ้นใน Firestore** มักเกิดจากลืมเรียก `draftRepository.deleteDraft(draft.id)` หลังโพสต์สำเร็จ หรือเรียกแล้วแต่ไม่ได้ Refresh รายการบนหน้าจอ ทำให้ผู้ใช้มองไม่เห็นว่าร่างหายไปแล้วและกดปุ่มซ้ำ
 
-**รูปภาพอัปโหลดขึ้น Storage สำเร็จ แต่ `Image.network(imageUrl)` ไม่แสดงผลในแอป** ตรวจสอบว่าโค้ดเรียก `getDownloadURL()` **หลังจาก** `putFile()` อัปโหลดเสร็จสมบูรณ์แล้วจริง (ต้อง `await` ให้ถูกจุด) ไม่ใช่เรียกคู่ขนานกันไป
+**รูปภาพอัปโหลดขึ้น Cloudinary สำเร็จ แต่ `Image.network(imageUrl)` ไม่แสดงผลในแอป** ตรวจในเอกสาร Firestore ว่า `imageUrl` มีค่าเป็น `https://res.cloudinary.com/...` ที่ไม่ว่าง และเปิด URL นั้นใน Browser ได้ หาก URL ว่างให้ตรวจโค้ดว่าบันทึก `secure_url` ที่ `CloudinaryService.uploadListingImage()` คืนค่ามาจริง
 
 **แอป Crash ตอนเปิดหน้า "ร่างของฉัน" หรือหน้าดูประกาศของตัวเอง ด้วย Error เกี่ยวกับ Index** Firestore ต้องการ Composite Index เมื่อ Query ที่ซับซ้อน (เช่น `where` ร่วมกับ `orderBy` มากกว่า 1 field) ข้อความ Error จาก Firestore มักแนบลิงก์ให้กดสร้าง Index อัตโนมัติมาด้วยเสมอ ให้กดลิงก์นั้นแล้วรอสักครู่ให้ Index สร้างเสร็จ
 
