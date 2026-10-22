@@ -748,6 +748,10 @@ service cloud.firestore {
 
 > ✅ **Checkpoint 7.1 (Self-Study)** ถ่ายภาพหน้าจอผลการทดลองทั้ง 2 กรณีใน Rules Playground เขียนอธิบายสั้น ๆ ว่าทำไม Client-side Validation (การไม่แสดงปุ่มแก้ไขให้เห็น) เพียงอย่างเดียวจึงไม่เพียงพอต่อความปลอดภัยของข้อมูลจริง
 
+Publish Rules ของ Collection `items` แล้ว
+
+![Rules ที่ Publish แล้ว](images/cp7_1_rules_published.jpg)
+
 **(ก) แก้ไขเอกสารของตัวเอง** จำลอง `update` ที่ `/items/HtKt7H67My2Ld0dC3JAM` โดยล็อกอินเป็น uid `Gj17zIGyS2QDObhvX50uIxBM53r2` ซึ่งตรงกับ `sellerId` ของเอกสาร ผลคือ **Allowed**
 
 ![Rules Playground แก้ไขเอกสารของตัวเอง](images/cp7_1_a_own_doc_allowed.jpg)
