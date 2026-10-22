@@ -36,9 +36,9 @@
 
 > ✅ **Checkpoint 1.1** ถ่ายภาพหน้าจอ Firebase Console ที่แสดงหน้า Project Overview ของโปรเจกต์ที่สร้างเสร็จแล้ว
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+![Project Overview ของ campus-marketplace-krittanai](images/cp1_1_project_overview.jpg)
+
+สร้างโปรเจกต์ชื่อ `campus-marketplace-krittanai` แล้วรัน `flutterfire configure` เลือกเฉพาะ Android ได้ไฟล์ `lib/firebase_options.dart` กับ `android/app/google-services.json` มา (ทั้งสองไฟล์ใส่ `.gitignore` ไว้ ไม่ขึ้น GitHub)
 
 ### ขั้นตอนที่ 1.2: 🔧 ทำตามขั้นตอน — ติดตั้งเครื่องมือและเชื่อมโปรเจกต์ด้วย FlutterFire CLI
 
@@ -164,9 +164,23 @@ Future<void> main() async {
 
 > ✅ **Checkpoint 2.1** ทดสอบสมัครสมาชิกด้วย Email ใหม่สำเร็จ ถ่ายภาพหน้าจอ Firebase Console เมนู Authentication → Users ที่แสดงบัญชีที่เพิ่งสมัคร จากนั้นทดสอบกรณีผิดพลาด 2 กรณี คือ (ก) สมัครซ้ำด้วย Email เดิม และ (ข) ใส่รหัสผ่านสั้นเกินไป ถ่ายภาพหน้าจอข้อความ Error ทั้งสองกรณี พร้อมอธิบายว่าโค้ดส่วนใดใน `auth_service.dart` เป็นตัวจัดการแต่ละกรณี
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบายของแต่ละกรณี
-```
+**สมัครสมาชิกสำเร็จ** บัญชี `k1234@test.com` ขึ้นในเมนู Authentication → Users พร้อม Provider เป็น Email
+
+![Authentication Users](images/cp2_1_auth_users.jpg)
+
+**(ก) สมัครซ้ำด้วย Email เดิม**
+
+![สมัครซ้ำด้วยอีเมลเดิม](images/cp2_1_a_email_in_use.jpg)
+
+Firebase โยน `FirebaseAuthException` ที่ `code` เป็น `email-already-in-use` ออกมาจาก `createUserWithEmailAndPassword()` ในเมธอด `signUp()` ซึ่งครอบด้วย `try/catch` แล้วส่ง `e.code` ไปให้ `_translateErrorCode()` เข้า `case 'email-already-in-use'` ได้ข้อความ "อีเมลนี้ถูกใช้สมัครสมาชิกไปแล้ว ลองเข้าสู่ระบบแทน" แล้ว `throw Exception(...)` ต่อให้ `LoginPage` ไปเก็บใน `_errorMessage` แสดงเป็นตัวหนังสือสีแดงใต้ช่องรหัสผ่าน
+
+**(ข) รหัสผ่านสั้นเกินไป**
+
+![รหัสผ่านสั้นเกินไป](images/cp2_1_b_weak_password.jpg)
+
+ใส่รหัสผ่าน 3 ตัวอักษร Firebase ตอบกลับเป็น `weak-password` (ต้องอย่างน้อย 6 ตัว) ผ่านเส้นทางเดียวกันคือ `signUp()` → `catch` → `_translateErrorCode()` เข้า `case 'weak-password'` ได้ข้อความ "รหัสผ่านสั้นเกินไป ต้องมีอย่างน้อย 6 ตัวอักษร" ในฟอร์มผมตั้งใจให้ validator เช็คแค่ว่าไม่ว่าง ไม่เช็คความยาวเอง เพื่อให้ Error นี้มาจาก Firebase จริง ๆ
+
+ทั้งสองกรณีไม่มี Error ดิบจาก Firebase (เช่น `[firebase_auth/weak-password] Password should be at least 6 characters`) หลุดไปถึงผู้ใช้ เพราะทุกเมธอดใน `AuthService` แปลงเป็นข้อความภาษาไทยก่อน throw และ `LoginPage` ตัดคำว่า `Exception: ` ออกก่อนแสดง
 
 ---
 
@@ -383,9 +397,16 @@ avdmanager list avd
 
 > ✅ **Checkpoint 3.1** ทดสอบกดปุ่มเข้าสู่ระบบด้วย Google ด้วยบัญชี Google จริงของคุณ ถ่ายภาพหน้าจอตอนเลือกบัญชี Google และภาพหน้าจอ Firebase Console ที่แสดงว่ามีผู้ใช้ใหม่ Provider เป็น Google เพิ่มเข้ามา อธิบายว่า `idToken` กับ `accessToken` ที่ได้จาก Google นำไปใช้ทำอะไรต่อในขั้นตอนการยืนยันตัวตนกับ Firebase (อ้างอิงหัวข้อ 9.4)
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
+![เลือกบัญชี Google](images/cp3_1_a_choose_account.jpg)
+
+![ผู้ใช้ใหม่ Provider Google ใน Firebase Console](images/cp3_1_b_google_user.jpg)
+
+`authenticate()` ของ `google_sign_in` ทำแค่ยืนยันกับ **Google** ว่าผู้ใช้เป็นเจ้าของบัญชีนี้ แต่ Firebase ยังไม่รู้จักผู้ใช้คนนี้ เลยต้องเอา token ที่ Google ออกให้ไปแลกเป็นบัญชีของ Firebase อีกที
+
+- `idToken` เป็น JWT ที่ Google เซ็นรับรองไว้ ข้างในมีข้อมูลตัวตน (อีเมล, ชื่อ, Google user id) Firebase ใช้ตัวนี้ตรวจลายเซ็นว่าออกโดย Google จริงและออกให้แอปของเรา (ตรงกับ OAuth Client ที่ผูกกับ SHA-1) แล้วสร้างหรือหาบัญชีผู้ใช้ที่ Provider เป็น `google.com` ให้ ตัวนี้คือหลักฐานหลักที่ใช้ยืนยันตัวตน
+- `accessToken` เป็นสิทธิ์เรียก Google API ตาม scope ที่ขอ (`email`) ใน `google_sign_in` 7.x ต้องขอแยกผ่าน `authorizationClient.authorizationForScopes()` Firebase ใช้ประกอบการยืนยันและดึงข้อมูลโปรไฟล์เพิ่มได้ แต่ถ้ามีแค่ `idToken` ก็ล็อกอินได้แล้ว
+
+ทั้งสองค่าถูกห่อเป็น `GoogleAuthProvider.credential(idToken:, accessToken:)` แล้วส่งให้ `FirebaseAuth.signInWithCredential()` พอสำเร็จ `authStateChanges()` จะยิง `User` ออกมา `AuthGate` ก็สลับไปหน้า `MainScaffold` เอง
 
 ---
 
@@ -523,9 +544,13 @@ Widget build(BuildContext context) {
 > ✅ **Checkpoint 4.1** ถ่ายภาพหน้าจอ 3 ภาพเรียงกัน คือ (ก) แอปตอนเพิ่งเปิดขึ้นมาครั้งแรกแบบยังไม่ล็อกอิน แสดงหน้า Login (ข) หลังล็อกอินสำเร็จ แอปสลับไปแสดง `MainScaffold` อัตโนมัติโดยไม่ต้องกดอะไรเพิ่ม และ (ค) หลังกด "ออกจากระบบ" แอปสลับกลับไปหน้า Login เอง อธิบายว่าทำไมการใช้ `StreamBuilder` ฟัง `authStateChanges()` จึงทำให้ไม่ต้องเขียนโค้ดสั่ง Navigate ไปมาเอง
 
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ (3 ภาพ) และคำอธิบาย
-```
+| (ก) เปิดแอปครั้งแรก ยังไม่ล็อกอิน | (ข) ล็อกอินสำเร็จ สลับเป็น MainScaffold เอง | (ค) กดออกจากระบบ กลับหน้า Login เอง |
+|---|---|---|
+| ![](images/cp4_1_a_login_first_open.jpg) | ![](images/cp4_1_b_after_login.jpg) | ![](images/cp4_1_c_after_logout.jpg) |
+
+`FirebaseAuth.instance.authStateChanges()` เป็น Stream ที่ส่งค่าออกมาใหม่ทุกครั้งที่สถานะล็อกอินเปลี่ยน (ตอนเปิดแอปจะส่งค่าปัจจุบันมาก่อนหนึ่งครั้ง, ล็อกอินสำเร็จส่ง `User`, ออกจากระบบส่ง `null`) `StreamBuilder` ใน `AuthGate` ฟัง Stream นี้อยู่ตลอด พอได้ค่าใหม่ก็เรียก `builder` ใหม่แล้วคืน Widget ตามสถานะ คือ `LoginPage` ถ้าเป็น `null` หรือ `MainScaffold` ถ้าเป็น `User`
+
+หน้าจอจึงเป็นผลลัพธ์ของสถานะ ไม่ใช่สิ่งที่เราต้องสั่งเปลี่ยนเอง `LoginPage` แค่เรียก `signIn()`/`signInWithGoogle()` ส่วนปุ่มออกจากระบบแค่เรียก `signOut()` ไม่มีใครต้องรู้ว่าต้องไปหน้าไหนต่อ ถ้าเขียน `Navigator.push` เองจะต้องจำไว้ทุกจุดที่ล็อกอิน/ออกจากระบบ และต้องคิดเรื่อง back stack (เช่น กด Back แล้วย้อนกลับไปหน้า Login ทั้งที่ล็อกอินแล้ว) รวมถึงกรณีที่สถานะเปลี่ยนเองโดยไม่ได้กดอะไร เช่น token หมดอายุ หรือเปิดแอปใหม่แล้วยังล็อกอินค้างอยู่ ซึ่ง `StreamBuilder` รองรับให้หมดแล้ว
 
 ---
 
@@ -538,9 +563,11 @@ Widget build(BuildContext context) {
 1. ทำไมเราจึง "เพิ่ม Implementation ใหม่" (`ItemRepositoryFirestore`) แทนที่จะแก้ไข `ItemRepositoryApi` เดิม หรือเขียนโค้ดเรียก Firestore ตรงจาก `HomePage`?
 2. ถ้าในอนาคตอาจารย์สั่งให้เปลี่ยนจาก Fake Store API ไปใช้ API อื่น ต้องแก้ไฟล์กี่ไฟล์ ถ้าทุก Widget เรียกผ่าน Interface `ItemRepository` เท่านั้น?
 
-```text
-บันทึกคำตอบของคุณที่นี่
-```
+**1.** `ItemRepositoryApi` ทำงานได้ดีอยู่แล้ว และมีหน้าที่เดียวคือดึงสินค้าจาก HTTP API ถ้าเอาโค้ด Firestore ไปยัดรวมในไฟล์นั้น คลาสเดียวจะต้องดูแลสองแหล่งข้อมูลที่ทำงานต่างกันมาก (HTTP + JSON กับ Firestore SDK + DocumentSnapshot) แก้ส่วนหนึ่งก็อาจพังอีกส่วน ส่วนการเรียก Firestore ตรงจาก `HomePage` จะทำให้หน้าจอผูกติดกับ Firestore เปลี่ยนแหล่งข้อมูลหรือเขียนเทสต์ก็ต้องรื้อ UI ด้วย
+
+การเพิ่ม `ItemRepositoryFirestore implements ItemRepository` เป็นคลาสใหม่จึงเป็นการ "เพิ่ม" โดยไม่ "แก้" ของเดิม (Open/Closed Principle) Interface `ItemRepository` ไม่ต้องเปลี่ยนแม้แต่บรรทัดเดียว `HomePage` ยังเรียก `getItems()` เหมือนเดิม แค่ตอนนี้วนเรียกจากหลาย Repository ใน List แล้วรวมผล ถ้าวันหนึ่ง Firestore มีปัญหาก็ถอดออกจาก List ใน `main.dart` ได้ทันทีโดยไม่กระทบส่วนอื่น
+
+**2.** แก้แค่ **1 ไฟล์** คือ `item_repository_api.dart` (เปลี่ยน URL และวิธีแปลง JSON) อาจมี `item.dart` เพิ่มอีกไฟล์ถ้ารูปแบบ JSON ต่างไปมากจน `fromJson` ใช้ไม่ได้ ส่วน Widget ทุกตัวไม่ต้องแตะเลย เพราะรู้จักแค่ `ItemRepository` และ `getItems()` ซึ่งเกิดขึ้นจริงแล้วในสัปดาห์ที่ 8 ตอนที่ fakestoreapi.com ล่ม ผมเปลี่ยนไปใช้ DummyJSON โดยแก้แค่ `_baseUrl` กับการอ่าน key `products` ใน `item_repository_api.dart` และเพิ่ม fallback `thumbnail` ใน `Item.fromJson` หน้าจอไม่ต้องแก้อะไรเลย
 
 ### ขั้นตอนที่ 5.2: **นักศึกษาเขียน Code เอง** — ItemRepositoryFirestore
 
@@ -611,13 +638,14 @@ final pages = [
 
 > ✅ **Checkpoint 5.1** ถ่ายภาพหน้าจอ Home ที่แสดงสินค้าจากทั้งสองแหล่งข้อมูลปนกันอยู่ในลิสต์เดียว พร้อม Badge ที่แยกแหล่งที่มาชัดเจน (ถ้ายังไม่เคยมีประกาศจริงใน Firestore เลย ให้ทำส่วนที่ 6 ให้เสร็จก่อนแล้วย้อนกลับมาถ่ายภาพ Checkpoint นี้) อธิบายว่าการออกแบบให้ `HomePage` ไม่รู้จัก `ItemRepositoryApi`/`ItemRepositoryFirestore` โดยตรง แต่รู้จักผ่าน Interface `ItemRepository` เท่านั้น ช่วยให้ทดสอบหรือเปลี่ยนแหล่งข้อมูลในอนาคตง่ายขึ้นอย่างไร
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
+![หน้า Home รวมสินค้าจาก API และ Firestore](images/cp5_1_home_mixed.jpg)
 
----
+สองรายการบนสุด (หูฟังครอบหู, เมาส์ไร้สาย) มาจาก `ItemRepositoryFirestore` มีป้ายสีเขียว "นักศึกษาโพสต์" ส่วนที่เหลือมาจาก `ItemRepositoryApi` (DummyJSON) มีป้ายสีเทา "ร้านค้า API" `HomePage` เรียก `getItems()` ของทุก Repository ใน List พร้อมกันด้วย `Future.wait` แล้วรวมเป็น List เดียว ป้ายดูจาก `item.isFromStudent` (มี `sellerId` หรือไม่) ไม่ได้ดูว่ามาจากคลาสไหน
 
-## ส่วนที่ 6: "โพสต์ขายจริง" — เชื่อม MyDraftsPage เข้ากับ Storage และ Firestore
+`HomePage` รู้จักแค่ `List<ItemRepository>` กับเมธอด `getItems()` เท่านั้น ข้อดีที่เห็นชัดคือ
+
+- **ทดสอบง่าย** ใน `test/widget_test.dart` ผมสร้าง `_ListItemRepository` ปลอมที่คืน List ตายตัวสองตัว (ตัวหนึ่งมี `sellerId`) ส่งเข้า `HomePage` แล้วเช็คว่าแสดงสินค้าครบพร้อมป้ายถูก ไม่ต้องต่อเน็ต ไม่ต้องตั้งค่า Firebase ในเทสต์เลย
+- **เปลี่ยน/เพิ่มแหล่งข้อมูลได้โดยไม่แตะ UI** สัปดาห์นี้เพิ่ม Firestore เข้ามาก็แค่เพิ่ม `ItemRepositoryFirestore()` เข้า List ใน `main.dart` ถ้าวันหน้าจะเพิ่มแหล่งที่สามหรือถอด API ออกก็แก้แค่ List นั้นที่เดียว: "โพสต์ขายจริง" — เชื่อม MyDraftsPage เข้ากับ Storage และ Firestore
 
 ### ขั้นตอนที่ 6.1: **นักศึกษาเขียน Code เอง** — StorageService
 
@@ -663,15 +691,33 @@ final pages = [
 
 > ✅ **Checkpoint 6.1** โพสต์ขายจริงอย่างน้อย 2 รายการผ่านแอป ถ่ายภาพหน้าจอ Firebase Console เมนู Firestore Database ที่แสดง Collection `items` มีเอกสารที่โพสต์เข้ามาจริง พร้อม field `sellerId` ที่ตรงกับ `uid` ของบัญชีที่ใช้ทดสอบ และยืนยันว่าร่างทั้งสองรายการหายไปจาก `MyDraftsPage` แล้ว
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+ขั้นตอนโพสต์ในแอป: มีร่าง 3 รายการ → กดไอคอนอัปโหลดของ "หูฟังครอบหู สีดำ" → Dialog ถามราคา (ใส่ 450) → อัปโหลดรูปขึ้น Storage พร้อมวงกลมแสดง % → โพสต์เสร็จร่างหายไป แล้วทำซ้ำกับ "เมาส์ไร้สาย" (250 บาท)
+
+| ร่างก่อนโพสต์ | Dialog ถามราคา | กำลังอัปโหลด | หลังโพสต์ 2 รายการ |
+|---|---|---|---|
+| ![](images/cp6_1_a_drafts_before.jpg) | ![](images/cp6_1_b_price_dialog.jpg) | ![](images/cp6_1_c_uploading.jpg) | ![](images/cp6_1_d_drafts_after.jpg) |
+
+Collection `items` ใน Firestore มีเอกสารที่โพสต์เข้ามา field `sellerId` เป็น `Gj17zIGyS2QDObhvX50uIxBM53r2` ตรงกับ User UID ของบัญชี `k1234@test.com` ในหน้า Authentication (Checkpoint 2.1) มี `createdAt` เป็น server timestamp ไว้เรียงลำดับด้วย
+
+![Firestore collection items](images/cp6_1_f_firestore_items.jpg)
+
+หน้า "ประกาศที่โพสต์แล้ว" (เปิดจาก AppBar ของหน้าลงประกาศขาย) ใช้ `watchMyListings(uid)` ที่ฟัง `.snapshots()` แบบ Real-time โพสต์เสร็จรายการก็โผล่ขึ้นมาเองโดยไม่ต้อง refresh
+
+![ประกาศที่โพสต์แล้ว](images/cp6_1_e_my_listings.jpg)
 
 > ✅ **Checkpoint 6.2** ถ่ายภาพหน้าจอ Firebase Console เมนู Storage ที่แสดงไฟล์รูปภาพที่อัปโหลดสำเร็จ และภาพหน้าจอ Firestore ที่แสดงว่าเอกสารมี field `imageUrl` เป็น URL จริงที่เปิดดูได้ ถ่ายภาพหน้าจอแอปที่แสดงรูปสินค้านั้นบนหน้า Home ผ่าน `Image.network(imageUrl)` ด้วย (ย้อนกลับไปถ่ายภาพ Checkpoint 5.1 ให้ครบตอนนี้ ถ้ายังไม่ได้ทำ)
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+ไฟล์รูปใน Storage อยู่ใต้ `listings/<uid>/` ตั้งชื่อเป็น `<uid>_<millisecondsSinceEpoch>.jpg` ตาม `StorageService.uploadListingImage()` ไม่ใช้ชื่อไฟล์เดิมจากเครื่อง
+
+![Storage listings](images/cp6_2_a_storage_files.jpg)
+
+field `imageUrl` ในเอกสาร (ภาพ Firestore ใน Checkpoint 6.1) เป็น Download URL ที่ได้จาก `getDownloadURL()` หลัง `await` การ `putFile()` เสร็จ เอา URL นั้นไปเปิดในเบราว์เซอร์ได้รูปหูฟังจริง
+
+![เปิด imageUrl ในเบราว์เซอร์](images/cp6_2_c_image_url_opened.jpg)
+
+บนหน้า Home รูปของประกาศที่นักศึกษาโพสต์โหลดผ่าน `Image.network(item.imageUrl)` จาก URL เดียวกันนี้
+
+![รูปสินค้าบนหน้า Home](images/cp5_1_home_mixed.jpg)
 
 ---
 
@@ -702,9 +748,15 @@ service cloud.firestore {
 
 > ✅ **Checkpoint 7.1 (Self-Study)** ถ่ายภาพหน้าจอผลการทดลองทั้ง 2 กรณีใน Rules Playground เขียนอธิบายสั้น ๆ ว่าทำไม Client-side Validation (การไม่แสดงปุ่มแก้ไขให้เห็น) เพียงอย่างเดียวจึงไม่เพียงพอต่อความปลอดภัยของข้อมูลจริง
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
+**(ก) แก้ไขเอกสารของตัวเอง** จำลอง `update` ที่ `/items/HtKt7H67My2Ld0dC3JAM` โดยล็อกอินเป็น uid `Gj17zIGyS2QDObhvX50uIxBM53r2` ซึ่งตรงกับ `sellerId` ของเอกสาร ผลคือ **Allowed**
+
+![Rules Playground แก้ไขเอกสารของตัวเอง](images/cp7_1_a_own_doc_allowed.jpg)
+
+**(ข) แก้ไขเอกสารของคนอื่น** จำลอง `update` ที่เอกสารเดียวกัน แต่ล็อกอินเป็น uid อื่น (`another-student-uid`) ผลคือ **Denied** เพราะ `request.auth.uid == resource.data.sellerId` เป็นเท็จ
+
+![Rules Playground แก้ไขเอกสารของคนอื่น](images/cp7_1_b_other_doc_denied.jpg)
+
+**ทำไม Client-side Validation อย่างเดียวไม่พอ** การที่แอปไม่มีปุ่มแก้ไข/ลบประกาศของคนอื่นเป็นแค่การซ่อนทางเข้าใน UI ของแอปเรา แต่ Firestore เป็นบริการบน Internet ที่ใครก็เรียกได้ ค่าใน `firebase_options.dart` (projectId, apiKey) ฝังอยู่ใน APK แกะออกมาได้ คนที่มีบัญชีในระบบสามารถเขียนโค้ดเรียก `FirebaseFirestore.instance.collection('items').doc('...').delete()` เอง หรือยิง REST API ตรง ๆ โดยไม่ผ่าน UI ของเราเลย ฝั่ง Client จึงเชื่อไม่ได้ ต้องให้ฝั่ง Server เป็นคนตัดสินทุก request ซึ่ง Security Rules ทำงานบนเซิร์ฟเวอร์ของ Firebase เช็ค `request.auth.uid` ที่ Firebase ยืนยันเองจาก token เทียบกับ `sellerId` ในเอกสาร ใครปลอมค่ามาก็ผ่านไม่ได้ ส่วน Validation ฝั่งแอป (เช่นเช็คราคามากกว่า 0) มีไว้ให้ผู้ใช้ใช้งานสะดวกและเห็น Error เร็ว ไม่ใช่ไว้กันข้อมูล
 
 ---
 
@@ -721,9 +773,27 @@ service cloud.firestore {
 
 > ✅ **Checkpoint 8.1** ถ่ายภาพหน้าจอผลการทดสอบทั้ง 4 ข้อ 
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ 
-```
+**1) ปิดแอปทิ้งแล้วเปิดใหม่** (force stop แล้วเปิดใหม่) เข้าหน้า `MainScaffold` ทันทีไม่ต้องล็อกอินซ้ำ เพราะ Firebase Auth เก็บ session ไว้ในเครื่อง `authStateChanges()` ส่ง `User` เดิมออกมาตั้งแต่ครั้งแรก
+
+![เปิดแอปใหม่ยังล็อกอินอยู่](images/cp8_1_1_reopen_still_logged_in.jpg)
+
+**2) ปิด WiFi และ Data** (สังเกตไอคอนเครือข่ายที่แถบสถานะ) แท็บรายการโปรดและหน้าร่างของฉันยังเปิดได้ปกติ เพราะอ่านจาก Drift ในเครื่อง
+
+| รายการโปรด (Offline) | ร่างของฉัน (Offline) |
+|---|---|
+| ![](images/cp8_1_2_a_favorites_offline.jpg) | ![](images/cp8_1_2_b_drafts_offline.jpg) |
+
+**3) กดโพสต์ขายจริงตอน Offline** ใส่ราคาแล้วแอปพยายามอัปโหลดรูป พอเกินเวลา retry ที่ตั้งไว้ 20 วินาที (`setMaxUploadRetryTime`) Storage โยน `retry-limit-exceeded` แอปแปลเป็นข้อความ "อัปโหลดรูปไม่สำเร็จ ตรวจสอบการเชื่อมต่ออินเทอร์เน็ตแล้วลองใหม่" แสดงเป็น SnackBar ไม่ Crash และร่างยังอยู่ ไม่ถูกลบ (ลบร่างเฉพาะตอนโพสต์สำเร็จ)
+
+| กำลังพยายามอัปโหลด | Error ที่เข้าใจได้ ร่างยังอยู่ |
+|---|---|
+| ![](images/cp8_1_3_a_posting_offline.jpg) | ![](images/cp8_1_3_b_offline_error.jpg) |
+
+**4) เปิดเครือข่ายกลับมาแล้วโพสต์ร่างเดิมอีกครั้ง** สำเร็จตามปกติ ร่าง "คีย์บอร์ดมือสอง" หายจากหน้าร่าง และขึ้นในหน้าประกาศที่โพสต์แล้ว (300 บาท)
+
+| ร่างหายหลังโพสต์สำเร็จ | ประกาศที่โพสต์แล้ว |
+|---|---|
+| ![](images/cp8_1_4_online_post_ok.jpg) | ![](images/cp8_1_4_b_my_listings_after.jpg) |
 
 ---
 
