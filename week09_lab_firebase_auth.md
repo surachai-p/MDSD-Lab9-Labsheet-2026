@@ -35,10 +35,8 @@
 
 
 > ✅ **Checkpoint 1.1** ถ่ายภาพหน้าจอ Firebase Console ที่แสดงหน้า Project Overview ของโปรเจกต์ที่สร้างเสร็จแล้ว
+<img width="1470" height="956" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 13 57 08" src="https://github.com/user-attachments/assets/4c15a1c2-83e3-40c2-b061-545689994219" />
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
 
 ### ขั้นตอนที่ 1.2: 🔧 ทำตามขั้นตอน — ติดตั้งเครื่องมือและเชื่อมโปรเจกต์ด้วย FlutterFire CLI
 
@@ -164,9 +162,26 @@ Future<void> main() async {
 
 > ✅ **Checkpoint 2.1** ทดสอบสมัครสมาชิกด้วย Email ใหม่สำเร็จ ถ่ายภาพหน้าจอ Firebase Console เมนู Authentication → Users ที่แสดงบัญชีที่เพิ่งสมัคร จากนั้นทดสอบกรณีผิดพลาด 2 กรณี คือ (ก) สมัครซ้ำด้วย Email เดิม และ (ข) ใส่รหัสผ่านสั้นเกินไป ถ่ายภาพหน้าจอข้อความ Error ทั้งสองกรณี พร้อมอธิบายว่าโค้ดส่วนใดใน `auth_service.dart` เป็นตัวจัดการแต่ละกรณี
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบายของแต่ละกรณี
-```
+<img width="1470" height="956" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 14 35 49" src="https://github.com/user-attachments/assets/2439073d-fee8-4b2c-a406-7c3904f207ea" />
+<img width="347" height="794" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 14 36 10" src="https://github.com/user-attachments/assets/f5502deb-691f-47a5-a237-0f71e91d8f40" />
+<img width="350" height="793" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 14 37 06" src="https://github.com/user-attachments/assets/e78b8e46-4c95-482f-9ef0-e5d635ea24b3" />
+
+ในไฟล์ `auth_service.dart` มีการจัดการ Error ผ่านเมธอด `signUp()` โดยใช้ `try/catch` ดักจับ `FirebaseAuthException` แล้วส่งรหัสข้อผิดพลาด (`e.code`) ไปแปลงเป็นภาษาไทยในเมธอด `_translateErrorCode()`
+1. **กรณี (ก) สมัครซ้ำด้วย Email เดิม**
+   - จัดการด้วยโค้ดใน `_translateErrorCode()` ส่วน
+     ```dart
+     case 'email-already-in-use'
+       return 'อีเมลนี้ถูกใช้งานแล้ว กรุณาใช้อีเมลอื่น';
+     ```
+   - ตัว Firebase จะส่งโค้ด `email-already-in-use` กลับมาเมื่อพบว่าอีเมลนั้นมีผู้ใช้งานในระบบแล้ว ตัวฟังก์ชันจะดักจับและส่งข้อความเตือนเป็นภาษาไทยไปแสดงที่หน้าจอ
+
+2. **กรณี (ข) ใส่รหัสผ่านสั้นเกินไป**
+   - จัดการด้วยโค้ดใน `_translateErrorCode()` ส่วน
+     ```dart
+     case 'weak-password':
+       return 'รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร';
+     ```
+   - ตัว Firebase กำหนดความยาวรหัสผ่านขั้นต่ำไว้ที่ 6 ตัวอักษร หากสั้นกว่านั้นจะส่งโค้ด `weak-password` กลับมา ตัวฟังก์ชันจะแปลงเป็นข้อความเตือนให้ผู้ใช้ทราบเงื่อนไขความยาวรหัสผ่าน
 
 ---
 
@@ -383,8 +398,14 @@ avdmanager list avd
 
 > ✅ **Checkpoint 3.1** ทดสอบกดปุ่มเข้าสู่ระบบด้วย Google ด้วยบัญชี Google จริงของคุณ ถ่ายภาพหน้าจอตอนเลือกบัญชี Google และภาพหน้าจอ Firebase Console ที่แสดงว่ามีผู้ใช้ใหม่ Provider เป็น Google เพิ่มเข้ามา อธิบายว่า `idToken` กับ `accessToken` ที่ได้จาก Google นำไปใช้ทำอะไรต่อในขั้นตอนการยืนยันตัวตนกับ Firebase (อ้างอิงหัวข้อ 9.4)
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
+<img width="347" height="796" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 15 34 35" src="https://github.com/user-attachments/assets/6cd14537-0e59-48d7-afd6-cb5ce3c4aa66" />
+<img width="1470" height="956" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 15 35 17" src="https://github.com/user-attachments/assets/38352cbd-5328-439c-87cb-86a77f71b7a5" />
+
+```
+ในการเข้าสู่ระบบด้วย Google เราจะได้โทเคนมา 2 ตัว เพื่อนำไปใช้ยืนยันตัวตนกับ Firebase
+1. idToken ใช้เป็นหลักฐานยืนยันตัวตนของผู้ใช้ (Identity) ที่ออกโดย Google มีข้อมูล เช่น อีเมล, ชื่อ และ User ID
+2. accessToken ใช้เป็นโทเคนสิทธิ์การเข้าถึงข้อมูลของผู้ใช้ตามขอบเขต (Scope) ที่ขอไว้ เช่น สิทธิ์การเข้าถึงอีเมล
+การนำไปใช้งานต่อ: ระบบจะนำทั้ง idToken และ accessToken มารวมกันผ่านคำสั่ง GoogleAuthProvider.credential() เพื่อสร้างเป็นออบเจกต์ AuthCredential ของ Firebase จากนั้นส่งต่อให้ FirebaseAuth.instance.signInWithCredential(credential) เพื่อให้ Firebase ตรวจสอบความถูกต้องและออกสิทธิ์การเข้าสู่ระบบในฐานข้อมูล Firebase ต่อไป
 ```
 
 ---
@@ -522,9 +543,17 @@ Widget build(BuildContext context) {
 
 > ✅ **Checkpoint 4.1** ถ่ายภาพหน้าจอ 3 ภาพเรียงกัน คือ (ก) แอปตอนเพิ่งเปิดขึ้นมาครั้งแรกแบบยังไม่ล็อกอิน แสดงหน้า Login (ข) หลังล็อกอินสำเร็จ แอปสลับไปแสดง `MainScaffold` อัตโนมัติโดยไม่ต้องกดอะไรเพิ่ม และ (ค) หลังกด "ออกจากระบบ" แอปสลับกลับไปหน้า Login เอง อธิบายว่าทำไมการใช้ `StreamBuilder` ฟัง `authStateChanges()` จึงทำให้ไม่ต้องเขียนโค้ดสั่ง Navigate ไปมาเอง
 
+<img width="343" height="774" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 15 55 31" src="https://github.com/user-attachments/assets/3c90c452-5188-4ea6-bea9-e4d6087abe5b" />
+<img width="338" height="780" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 15 55 40" src="https://github.com/user-attachments/assets/3a21a896-0e6b-484e-92ee-09df3235d74f" />
+<img width="337" height="779" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 15 56 23" src="https://github.com/user-attachments/assets/da01f9a8-136a-4a8a-be30-1842f71bfbef" />
+<img width="343" height="781" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 15 57 28" src="https://github.com/user-attachments/assets/6764f7ea-4f68-40ab-abdc-96ccf634c894" />
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ (3 ภาพ) และคำอธิบาย
+```
+เพราะ FirebaseAuth.instance.authStateChanges() ทำงานเป็น Stream ที่คอยส่งสถานะผู้ใช้ (User?) ออกมาแบบ Real-time ตลอดเวลาเมื่อสถานะการล็อกอินมีการเปลี่ยนแปลง
+เมื่อนำ StreamBuilder มาครอบไว้ ตัว Widget จะคอยดักฟังค่าจาก Stream แล้ว Rebuild หน้าจอใหม่ให้อัตโนมัติ
+- ตอนล็อกอินสำเร็จ Stream ส่งข้อมูล User เข้ามา StreamBuilder จึงสลับไปแสดงหน้า MainScaffold
+- ตอนกดออกจากระบบ Stream ส่งค่า null เข้ามา StreamBuilder จึงสลับกลับมาแสดงหน้า LoginPage
+การเปลี่ยนหน้าจอจึงเกิดขึ้นตามสถานะของ Stream โดยอัตโนมัติ ทำให้ไม่ต้องเขียนโค้ดสั่ง Navigator.push หรือ Navigator.pop เพื่อสลับหน้าด้วยตัวเอง
 ```
 
 ---
@@ -538,8 +567,14 @@ Widget build(BuildContext context) {
 1. ทำไมเราจึง "เพิ่ม Implementation ใหม่" (`ItemRepositoryFirestore`) แทนที่จะแก้ไข `ItemRepositoryApi` เดิม หรือเขียนโค้ดเรียก Firestore ตรงจาก `HomePage`?
 2. ถ้าในอนาคตอาจารย์สั่งให้เปลี่ยนจาก Fake Store API ไปใช้ API อื่น ต้องแก้ไฟล์กี่ไฟล์ ถ้าทุก Widget เรียกผ่าน Interface `ItemRepository` เท่านั้น?
 
-```text
-บันทึกคำตอบของคุณที่นี่
+```
+1. เพื่อแยกหน้าที่การทำงานให้ชัดเจนและไม่กระทบโค้ดเดิม โดยให้ ItemRepositoryApi ทำหน้าที่ดึงข้อมูลจาก API ตามเดิม
+และสร้าง ItemRepositoryFirestore มารับผิดชอบส่วน Firestore แยกกัน
+อีกทั้งการไม่เขียนเรียก Firestore จาก HomePage โดยตรง ช่วยป้องกันไม่ให้ UI ผูกติดกับฐานข้อมูล ทำให้โค้ดเป็นระเบียบและทดสอบง่ายขึ้น
+
+2. แก้เพียง 1-2 ไฟล์เท่านั้น คือแก้ไฟล์ Implementation ของ API ตัวใหม่ที่ทำตาม ItemRepository
+และแก้จุดที่ส่งคลาสไปใช้งานที่ main.dart ส่วนหน้าจอ UI ทั้งหมดอย่าง HomePage ไม่ต้องแก้เลย
+เพราะเรียกใช้งานผ่าน Interface ItemRepository เหมือนเดิมทุกอย่าง
 ```
 
 ### ขั้นตอนที่ 5.2: **นักศึกษาเขียน Code เอง** — ItemRepositoryFirestore
@@ -611,10 +646,13 @@ final pages = [
 
 > ✅ **Checkpoint 5.1** ถ่ายภาพหน้าจอ Home ที่แสดงสินค้าจากทั้งสองแหล่งข้อมูลปนกันอยู่ในลิสต์เดียว พร้อม Badge ที่แยกแหล่งที่มาชัดเจน (ถ้ายังไม่เคยมีประกาศจริงใน Firestore เลย ให้ทำส่วนที่ 6 ให้เสร็จก่อนแล้วย้อนกลับมาถ่ายภาพ Checkpoint นี้) อธิบายว่าการออกแบบให้ `HomePage` ไม่รู้จัก `ItemRepositoryApi`/`ItemRepositoryFirestore` โดยตรง แต่รู้จักผ่าน Interface `ItemRepository` เท่านั้น ช่วยให้ทดสอบหรือเปลี่ยนแหล่งข้อมูลในอนาคตง่ายขึ้นอย่างไร
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
+<img width="337" height="782" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 16 47 16" src="https://github.com/user-attachments/assets/bd2c967c-7943-4a0e-bdfc-3ab14cd05346" />
 
+```
+การเขียนให้ HomePage รู้จักแค่ Interface ItemRepository ช่วยเรื่องพวกนี้
+1. เปลี่ยนหรือเพิ่มแหล่งข้อมูลง่าย ถ้าอนาคตจะเปลี่ยนไปใช้ฐานข้อมูลอื่น หรือดึงข้อมูลจาก API ตัวใหม่ ก็แค่สร้างคลาสใหม่ที่ implements ItemRepository แล้วส่งเข้ามาใน HomePage ได้เลย โดยไม่ต้องแก้โค้ดภายในหน้า HomePage แม้แต่บรรทัดเดียว
+2. ทดสอบง่าย (Testing) ตอนเขียนเทส สามารถสร้าง Mock/Fake Repository ที่จำลองข้อมูลขึ้นมาส่งให้ HomePage ได้ทันที โดยไม่ต้องยิง API หรือต่อ Firebase จริง ทำให้รันเทสได้เร็ว และเทสไม่พังเวลาไม่มีเน็ต
+```
 ---
 
 ## ส่วนที่ 6: "โพสต์ขายจริง" — เชื่อม MyDraftsPage เข้ากับ Storage และ Firestore
@@ -660,18 +698,22 @@ final pages = [
 - สร้าง `Item` จากข้อมูลร่าง + ราคาที่กรอก + `sellerId: FirebaseAuth.instance.currentUser!.uid` แล้วเรียก `ItemRepositoryFirestore().postItem(item)`
 - หลังโพสต์สำเร็จ เรียก `draftRepository.deleteDraft(draft.id)` ลบร่างออกจาก Local Database แล้ว Refresh รายการร่างบนหน้าจอ (ป้องกันไม่ให้กดโพสต์ซ้ำร่างเดิมสองครั้ง) และแสดง SnackBar ยืนยัน
 - ระหว่างอัปโหลดให้แสดง Progress Indicator ตามที่อธิบายไว้ในหัวข้อ 9.7
+<img width="419" height="782" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 17 09 51" src="https://github.com/user-attachments/assets/e8ee4318-ccfc-48a3-b4fc-0790fe70133d" />
+<img width="408" height="799" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 17 10 54" src="https://github.com/user-attachments/assets/e108803e-5123-4230-b597-a4aabeaa85e7" />
+<img width="401" height="799" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 17 11 40" src="https://github.com/user-attachments/assets/b97102f7-a7cc-4247-bc46-db31451f1b5b" />
+<img width="402" height="787" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 17 11 45" src="https://github.com/user-attachments/assets/9073d62f-a5e2-4f1d-bc13-ab0f154bb90b" />
+<img width="408" height="803" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 17 11 50" src="https://github.com/user-attachments/assets/e0813613-2587-4b2d-a8fb-1280b82bc9a2" />
+<img width="377" height="803" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 17 12 09" src="https://github.com/user-attachments/assets/ddc3e0b4-cdc2-4a07-965f-a30aa74264c4" />
 
 > ✅ **Checkpoint 6.1** โพสต์ขายจริงอย่างน้อย 2 รายการผ่านแอป ถ่ายภาพหน้าจอ Firebase Console เมนู Firestore Database ที่แสดง Collection `items` มีเอกสารที่โพสต์เข้ามาจริง พร้อม field `sellerId` ที่ตรงกับ `uid` ของบัญชีที่ใช้ทดสอบ และยืนยันว่าร่างทั้งสองรายการหายไปจาก `MyDraftsPage` แล้ว
-
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+<img width="1470" height="956" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 17 15 13" src="https://github.com/user-attachments/assets/f2196467-7c3f-4eda-b120-7588acfcdd2d" />
+<img width="1470" height="956" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 17 15 17" src="https://github.com/user-attachments/assets/80f004ef-7d60-4a0f-b8b2-b907fbfc2fc6" />
+<img width="377" height="803" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 17 12 09" src="https://github.com/user-attachments/assets/45b5db4f-b609-4a68-b2fb-d22dca2b5b0d" />
 
 > ✅ **Checkpoint 6.2** ถ่ายภาพหน้าจอ Firebase Console เมนู Storage ที่แสดงไฟล์รูปภาพที่อัปโหลดสำเร็จ และภาพหน้าจอ Firestore ที่แสดงว่าเอกสารมี field `imageUrl` เป็น URL จริงที่เปิดดูได้ ถ่ายภาพหน้าจอแอปที่แสดงรูปสินค้านั้นบนหน้า Home ผ่าน `Image.network(imageUrl)` ด้วย (ย้อนกลับไปถ่ายภาพ Checkpoint 5.1 ให้ครบตอนนี้ ถ้ายังไม่ได้ทำ)
-
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+<img width="1470" height="956" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 17 29 16" src="https://github.com/user-attachments/assets/f2b784c2-5755-4209-9c35-7b519de5aee5" />
+<img width="1470" height="956" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 17 29 21" src="https://github.com/user-attachments/assets/18f60eb0-f1d3-4494-90c3-02352d6a07ca" />
+<img width="342" height="780" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 17 29 05 1" src="https://github.com/user-attachments/assets/fc1bbab8-8136-4836-a899-5a8f7a3b8afa" />
 
 ---
 
@@ -701,9 +743,12 @@ service cloud.firestore {
 > ⚠️ ถ้า Checkpoint 6.1 ยังไม่เคยโพสต์ผ่านมาก่อนเลย ให้ Publish Rules นี้ **หลังจาก** โพสต์ขายจริงสำเร็จไปแล้วอย่างน้อย 1 รายการ เพราะ Rules ชุดนี้บังคับว่าต้องมี `sellerId` ตรงกับผู้เขียนเสมอ ถ้าโค้ดในส่วนที่ 6 ยังไม่แนบ `sellerId` ให้ถูกต้อง การโพสต์ครั้งต่อไปจะล้มเหลวด้วย `permission-denied` ทันที
 
 > ✅ **Checkpoint 7.1 (Self-Study)** ถ่ายภาพหน้าจอผลการทดลองทั้ง 2 กรณีใน Rules Playground เขียนอธิบายสั้น ๆ ว่าทำไม Client-side Validation (การไม่แสดงปุ่มแก้ไขให้เห็น) เพียงอย่างเดียวจึงไม่เพียงพอต่อความปลอดภัยของข้อมูลจริง
+<img width="1470" height="956" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 17 37 12" src="https://github.com/user-attachments/assets/9968ae94-6cca-4d55-9899-e08ad9c45d0b" />
+<img width="1470" height="956" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 17 52 30" src="https://github.com/user-attachments/assets/db4b8c54-05fd-4d23-8bea-8cba6fe16f7a" />
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
+
+```
+เพราะการซ่อนปุ่มบนหน้าจอแอป ป้องกันได้แค่ผู้ใช้ทั่วไป แต่คนร้ายสามารถเขียนโค้ดยิง request เข้าฐานข้อมูล Firestore ตรงๆ ได้โดยไม่ต้องผ่านปุ่มบนหน้าแอปเลย ถ้าฝั่ง Server ไม่มี Security Rules คอยตรวจสิทธิ์ ใครก็สามารถสั่งแก้ไขหรือลบข้อมูลของคนอื่นได้
 ```
 
 ---
@@ -720,10 +765,10 @@ service cloud.firestore {
 4. เปิดเครือข่ายกลับมา แล้วลองกด "โพสต์ขายจริง" รายการเดิมอีกครั้ง — ควรสำเร็จตามปกติ
 
 > ✅ **Checkpoint 8.1** ถ่ายภาพหน้าจอผลการทดสอบทั้ง 4 ข้อ 
-
-```text
-บันทึกรูปผลลัพธ์ที่นี่ 
-```
+<img width="347" height="783" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 17 41 31" src="https://github.com/user-attachments/assets/b50e6632-6880-4338-948d-c5ba15c73ff8" />
+<img width="341" height="771" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 17 43 09" src="https://github.com/user-attachments/assets/268b82de-79db-450d-bd3f-ab1e7053ef69" />
+<img width="356" height="790" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 17 47 25" src="https://github.com/user-attachments/assets/1a81ea1c-54ae-4bbd-aeff-300d98068169" />
+<img width="353" height="799" alt="ภาพถ่ายหน้าจอ 2569-10-25 เวลา 17 47 57" src="https://github.com/user-attachments/assets/6c92b32c-5f6e-4e7c-8cdc-eaf5ef993f08" />
 
 ---
 
