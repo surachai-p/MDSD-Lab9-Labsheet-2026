@@ -36,9 +36,7 @@
 
 > ✅ **Checkpoint 1.1** ถ่ายภาพหน้าจอ Firebase Console ที่แสดงหน้า Project Overview ของโปรเจกต์ที่สร้างเสร็จแล้ว
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+![Project Overview](screenshots/cp1.1_project_overview.png)
 
 ### ขั้นตอนที่ 1.2: 🔧 ทำตามขั้นตอน — ติดตั้งเครื่องมือและเชื่อมโปรเจกต์ด้วย FlutterFire CLI
 
@@ -164,9 +162,15 @@ Future<void> main() async {
 
 > ✅ **Checkpoint 2.1** ทดสอบสมัครสมาชิกด้วย Email ใหม่สำเร็จ ถ่ายภาพหน้าจอ Firebase Console เมนู Authentication → Users ที่แสดงบัญชีที่เพิ่งสมัคร จากนั้นทดสอบกรณีผิดพลาด 2 กรณี คือ (ก) สมัครซ้ำด้วย Email เดิม และ (ข) ใส่รหัสผ่านสั้นเกินไป ถ่ายภาพหน้าจอข้อความ Error ทั้งสองกรณี พร้อมอธิบายว่าโค้ดส่วนใดใน `auth_service.dart` เป็นตัวจัดการแต่ละกรณี
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบายของแต่ละกรณี
-```
+![Authentication → Users แสดงบัญชีที่สมัคร](screenshots/cp2.1_console_users.png)
+
+![(ก) สมัครซ้ำด้วย Email เดิม](screenshots/cp2.1a_error_email_in_use.png)
+
+![(ข) รหัสผ่านสั้นเกินไป](screenshots/cp2.1b_error_weak_password.png)
+
+(ก) สมัครซ้ำด้วย Email เดิม: `createUserWithEmailAndPassword()` ใน `signUp()` โยน `FirebaseAuthException` ที่มี `code` เป็น `email-already-in-use` ส่วน `try/catch` ใน `signUp()` จับไว้แล้วส่ง `e.code` ให้ `_translateErrorCode()` ซึ่ง `case 'email-already-in-use'` แปลเป็นข้อความ "อีเมลนี้ถูกใช้สมัครสมาชิกไปแล้ว..." แล้ว `throw Exception(...)` ต่อไปให้ `LoginPage` แสดงผล
+
+(ข) รหัสผ่านสั้นเกินไป: Firebase โยน `FirebaseAuthException` ที่มี `code` เป็น `weak-password` (รหัสผ่านน้อยกว่า 6 ตัว) ถูกจับใน `try/catch` ของ `signUp()` เช่นกัน แล้ว `case 'weak-password'` ใน `_translateErrorCode()` แปลเป็น "รหัสผ่านสั้นหรือง่ายเกินไป ต้องมีอย่างน้อย 6 ตัวอักษร"
 
 ---
 
@@ -383,9 +387,11 @@ avdmanager list avd
 
 > ✅ **Checkpoint 3.1** ทดสอบกดปุ่มเข้าสู่ระบบด้วย Google ด้วยบัญชี Google จริงของคุณ ถ่ายภาพหน้าจอตอนเลือกบัญชี Google และภาพหน้าจอ Firebase Console ที่แสดงว่ามีผู้ใช้ใหม่ Provider เป็น Google เพิ่มเข้ามา อธิบายว่า `idToken` กับ `accessToken` ที่ได้จาก Google นำไปใช้ทำอะไรต่อในขั้นตอนการยืนยันตัวตนกับ Firebase (อ้างอิงหัวข้อ 9.4)
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
+![หน้าเลือกบัญชี Google](screenshots/cp3.1a_google_account_chooser.png)
+
+![Firebase Console มีผู้ใช้ใหม่ Provider เป็น Google](screenshots/cp3.1b_console_google_user.png)
+
+`idToken` เป็นโทเค็นที่ Google ออกให้เพื่อยืนยันว่าผู้ใช้คือใคร (มีข้อมูลตัวตน เช่น อีเมล) ส่วน `accessToken` เป็นสิทธิ์ที่ได้รับอนุญาตให้เข้าถึงข้อมูลตาม scope ที่ขอ (`email`) ทั้งสองค่าถูกนำไปสร้าง Credential ด้วย `GoogleAuthProvider.credential(idToken: ..., accessToken: ...)` แล้วส่งให้ `FirebaseAuth.signInWithCredential()` Firebase จะตรวจสอบโทเค็นเหล่านี้กับ Google แล้วสร้างหรือล็อกอินบัญชีผู้ใช้ใน Firebase ให้ แอปจึงไม่ต้องจัดการรหัสผ่านของผู้ใช้เอง
 
 ---
 
@@ -523,9 +529,13 @@ Widget build(BuildContext context) {
 > ✅ **Checkpoint 4.1** ถ่ายภาพหน้าจอ 3 ภาพเรียงกัน คือ (ก) แอปตอนเพิ่งเปิดขึ้นมาครั้งแรกแบบยังไม่ล็อกอิน แสดงหน้า Login (ข) หลังล็อกอินสำเร็จ แอปสลับไปแสดง `MainScaffold` อัตโนมัติโดยไม่ต้องกดอะไรเพิ่ม และ (ค) หลังกด "ออกจากระบบ" แอปสลับกลับไปหน้า Login เอง อธิบายว่าทำไมการใช้ `StreamBuilder` ฟัง `authStateChanges()` จึงทำให้ไม่ต้องเขียนโค้ดสั่ง Navigate ไปมาเอง
 
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ (3 ภาพ) และคำอธิบาย
-```
+![(ก) เปิดแอปครั้งแรกแบบยังไม่ล็อกอิน แสดงหน้า Login](screenshots/cp4.1a_login_on_start.png)
+
+![(ข) หลังล็อกอินสำเร็จ สลับไป MainScaffold อัตโนมัติ](screenshots/cp4.1b_after_login_main_scaffold.png)
+
+![(ค) หลังกดออกจากระบบ กลับไปหน้า Login เอง](screenshots/cp4.1c_after_logout_login.png)
+
+`authStateChanges()` เป็น Stream ที่ Firebase ส่งค่าใหม่ออกมาทุกครั้งที่สถานะล็อกอินเปลี่ยน (ล็อกอินสำเร็จได้ `User`, ออกจากระบบได้ `null`) `StreamBuilder` ฟัง Stream นี้อยู่และเรียก `builder` ใหม่ทุกครั้งที่มีค่าใหม่ จึงเลือกแสดง `LoginPage` หรือ `MainScaffold` ตามค่าล่าสุดได้เอง หน้าจอจึงเป็นผลลัพธ์ของสถานะ ไม่ต้องเขียน `Navigator.push`/`pop` สั่งสลับหน้าด้วยมือ และไม่ว่าจะล็อกอินด้วยวิธีไหน (Email หรือ Google) ก็สลับหน้าได้เหมือนกันจากจุดเดียว
 
 ---
 
@@ -538,9 +548,9 @@ Widget build(BuildContext context) {
 1. ทำไมเราจึง "เพิ่ม Implementation ใหม่" (`ItemRepositoryFirestore`) แทนที่จะแก้ไข `ItemRepositoryApi` เดิม หรือเขียนโค้ดเรียก Firestore ตรงจาก `HomePage`?
 2. ถ้าในอนาคตอาจารย์สั่งให้เปลี่ยนจาก Fake Store API ไปใช้ API อื่น ต้องแก้ไฟล์กี่ไฟล์ ถ้าทุก Widget เรียกผ่าน Interface `ItemRepository` เท่านั้น?
 
-```text
-บันทึกคำตอบของคุณที่นี่
-```
+1. เพราะ `HomePage` รู้จักแค่ Interface `ItemRepository` ถ้าแก้ `ItemRepositoryApi` เดิมให้ไปเรียก Firestore ด้วย คลาสนั้นจะมีหน้าที่สองอย่างปนกันและอาจทำส่วนที่ใช้งานได้อยู่แล้วพัง ส่วนการเรียก Firestore ตรงจาก `HomePage` ทำให้ UI ผูกติดกับแหล่งข้อมูล เปลี่ยนหรือทดสอบยาก การเพิ่ม `ItemRepositoryFirestore` ที่ implements Interface เดิมจึงขยายระบบได้โดยไม่ต้องแก้โค้ดเดิม (Open/Closed Principle) และสลับหรือรวมหลายแหล่งได้ง่าย
+
+2. แก้เพียงไฟล์เดียวคือ Implementation ของ API (เช่น `item_repository_api.dart` หรือสร้างคลาสใหม่แล้วเปลี่ยนจุดที่สร้างใน `main.dart`) Widget ทุกตัวไม่ต้องแก้เลย เพราะเรียกผ่าน Interface `ItemRepository` เท่านั้น
 
 ### ขั้นตอนที่ 5.2: **นักศึกษาเขียน Code เอง** — ItemRepositoryFirestore
 
@@ -611,9 +621,9 @@ final pages = [
 
 > ✅ **Checkpoint 5.1** ถ่ายภาพหน้าจอ Home ที่แสดงสินค้าจากทั้งสองแหล่งข้อมูลปนกันอยู่ในลิสต์เดียว พร้อม Badge ที่แยกแหล่งที่มาชัดเจน (ถ้ายังไม่เคยมีประกาศจริงใน Firestore เลย ให้ทำส่วนที่ 6 ให้เสร็จก่อนแล้วย้อนกลับมาถ่ายภาพ Checkpoint นี้) อธิบายว่าการออกแบบให้ `HomePage` ไม่รู้จัก `ItemRepositoryApi`/`ItemRepositoryFirestore` โดยตรง แต่รู้จักผ่าน Interface `ItemRepository` เท่านั้น ช่วยให้ทดสอบหรือเปลี่ยนแหล่งข้อมูลในอนาคตง่ายขึ้นอย่างไร
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
+![หน้า Home แสดงสินค้าจาก API (🏪) และโพสต์จริงจาก Firestore (🎓) ในลิสต์เดียว](screenshots/cp5.1_home_both_sources.png)
+
+`HomePage` รับเป็น `List<ItemRepository>` และเรียกแค่ `getItems()` ผ่าน Interface จึงไม่รู้ว่าเบื้องหลังเป็น REST API หรือ Firestore เวลาทดสอบสามารถส่ง Repository ปลอมที่คืนข้อมูลตายตัวเข้าไปแทนได้ทันทีโดยไม่ต้องต่อเครือข่าย (เหมือน `_FakeItemRepository` ใน `widget_test.dart`) และถ้าจะเปลี่ยนหรือเพิ่มแหล่งข้อมูลในอนาคต ก็แค่เขียน Implementation ใหม่แล้วใส่ในลิสต์ที่ `main.dart` โดยไม่ต้องแก้โค้ดของ `HomePage` เลย
 
 ---
 
@@ -663,15 +673,17 @@ final pages = [
 
 > ✅ **Checkpoint 6.1** โพสต์ขายจริงอย่างน้อย 2 รายการผ่านแอป ถ่ายภาพหน้าจอ Firebase Console เมนู Firestore Database ที่แสดง Collection `items` มีเอกสารที่โพสต์เข้ามาจริง พร้อม field `sellerId` ที่ตรงกับ `uid` ของบัญชีที่ใช้ทดสอบ และยืนยันว่าร่างทั้งสองรายการหายไปจาก `MyDraftsPage` แล้ว
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+![Firestore Collection items มีเอกสารที่โพสต์จริง พร้อม sellerId](screenshots/cp6.1_firestore_items.png)
+
+![ร่างทั้งสองรายการหายไปจาก MyDraftsPage](screenshots/cp6.1_drafts_gone.png)
 
 > ✅ **Checkpoint 6.2** ถ่ายภาพหน้าจอ Firebase Console เมนู Storage ที่แสดงไฟล์รูปภาพที่อัปโหลดสำเร็จ และภาพหน้าจอ Firestore ที่แสดงว่าเอกสารมี field `imageUrl` เป็น URL จริงที่เปิดดูได้ ถ่ายภาพหน้าจอแอปที่แสดงรูปสินค้านั้นบนหน้า Home ผ่าน `Image.network(imageUrl)` ด้วย (ย้อนกลับไปถ่ายภาพ Checkpoint 5.1 ให้ครบตอนนี้ ถ้ายังไม่ได้ทำ)
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+![Firebase Storage แสดงไฟล์รูปที่อัปโหลดสำเร็จ](screenshots/cp6.2_storage_files.png)
+
+![Firestore เอกสารมี field imageUrl เป็น URL จริง](screenshots/cp6.2_firestore_imageurl.png)
+
+![แอปแสดงรูปสินค้าบนหน้า Home ผ่าน Image.network(imageUrl)](screenshots/cp6.2_home_image_network.png)
 
 ---
 
@@ -702,9 +714,11 @@ service cloud.firestore {
 
 > ✅ **Checkpoint 7.1 (Self-Study)** ถ่ายภาพหน้าจอผลการทดลองทั้ง 2 กรณีใน Rules Playground เขียนอธิบายสั้น ๆ ว่าทำไม Client-side Validation (การไม่แสดงปุ่มแก้ไขให้เห็น) เพียงอย่างเดียวจึงไม่เพียงพอต่อความปลอดภัยของข้อมูลจริง
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
+![(ก) แก้ไขเอกสารที่ sellerId ตรงกับผู้ใช้ — ผ่าน](screenshots/cp7.1a_rules_allowed.png)
+
+![(ข) แก้ไขเอกสารของคนอื่น — ถูกปฏิเสธ](screenshots/cp7.1b_rules_denied.png)
+
+การไม่แสดงปุ่มแก้ไขใน UI ป้องกันได้แค่ผู้ใช้ที่ใช้งานผ่านแอปตามปกติ แต่ข้อมูลเชื่อมต่อ Firebase (`firebase_options.dart`, `google-services.json`) ฝังอยู่ในตัวแอปที่ใครก็ดาวน์โหลดได้ ผู้ไม่หวังดีสามารถเขียนโค้ดหรือใช้เครื่องมืออื่นเรียก Firestore ตรง ๆ เพื่อแก้หรือลบประกาศของคนอื่นได้โดยไม่ผ่าน UI เลย Security Rules ทำงานที่ฝั่งเซิร์ฟเวอร์ของ Firebase ตรวจทุกคำขอก่อนอ่านหรือเขียนข้อมูลจริง จึงบังคับได้ว่าเฉพาะเจ้าของ (`request.auth.uid == resource.data.sellerId`) เท่านั้นที่แก้ไขหรือลบได้ ไม่ว่าคำขอจะมาจากไหน
 
 ---
 
@@ -721,9 +735,15 @@ service cloud.firestore {
 
 > ✅ **Checkpoint 8.1** ถ่ายภาพหน้าจอผลการทดสอบทั้ง 4 ข้อ 
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ 
-```
+![1. ปิดแอปแล้วเปิดใหม่ เข้า MainScaffold ทันทีโดยไม่ต้องล็อกอินซ้ำ](screenshots/cp8.1_1_reopen_still_logged_in.png)
+
+![2. ปิดเครือข่าย Tab รายการโปรดยังใช้งานได้](screenshots/cp8.1_2a_offline_favorites.png)
+
+![2. ปิดเครือข่าย หน้าร่างของฉันยังใช้งานได้](screenshots/cp8.1_2b_offline_my_drafts.png)
+
+![3. กดโพสต์ขายจริงขณะปิดเครือข่าย แสดงข้อความ Error ไม่ Crash](screenshots/cp8.1_3_offline_post_error.png)
+
+![4. เปิดเครือข่ายแล้วกดโพสต์ขายจริงรายการเดิมอีกครั้ง สำเร็จตามปกติ](screenshots/cp8.1_4_online_post_success.png)
 
 ---
 
