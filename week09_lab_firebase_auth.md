@@ -37,8 +37,11 @@
 > ✅ **Checkpoint 1.1** ถ่ายภาพหน้าจอ Firebase Console ที่แสดงหน้า Project Overview ของโปรเจกต์ที่สร้างเสร็จแล้ว
 
 ```text
-บันทึกรูปผลลัพธ์ที่นี่
+
+
 ```
+<img width="1366" height="649" alt="image" src="https://github.com/user-attachments/assets/4183af7e-5a00-4db6-a275-ba86a244304d" />
+
 
 ### ขั้นตอนที่ 1.2: 🔧 ทำตามขั้นตอน — ติดตั้งเครื่องมือและเชื่อมโปรเจกต์ด้วย FlutterFire CLI
 
@@ -167,6 +170,9 @@ Future<void> main() async {
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบายของแต่ละกรณี
 ```
+<img width="1366" height="646" alt="image" src="https://github.com/user-attachments/assets/06e2107a-ea79-4da0-9141-750c9a9c4501" />
+<img width="1080" height="2160" alt="image" src="https://github.com/user-attachments/assets/35b86b72-08b7-48ac-b7fe-121f97af363c" />
+<img width="1080" height="2160" alt="image" src="https://github.com/user-attachments/assets/f6621334-4934-46ee-b9e3-b3003668a48e" />
 
 ---
 
@@ -386,6 +392,12 @@ avdmanager list avd
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
 ```
+<img width="400" height="800" alt="image" src="https://github.com/user-attachments/assets/0012b8e3-61c0-4bfe-9cc6-90fbc181c49c" />
+<img width="1364" height="651" alt="image" src="https://github.com/user-attachments/assets/de80fa07-162e-47d8-bd87-8d69efeb81d8" />
+
+-idToken (Identity Token): ทำหน้าที่เป็นบัตรยืนยันตัวตนของผู้ใช้ (Authentication) ภายในจะบรรจุข้อมูลพื้นฐานของบัญชีที่ถูกเข้ารหัสไว้ (เช่น อีเมล) Firebase จะใช้ค่านี้ไปตรวจสอบความถูกต้องกับเซิร์ฟเวอร์ของ Google ว่าผู้ใช้ผ่านการล็อกอินมาจริงและ Token ยังไม่หมดอายุ
+
+-accessToken: ทำหน้าที่เป็นกุญแจสำหรับขอสิทธิ์เข้าถึง (Authorization) บริการต่างๆ ของ Google (Google APIs) ในนามของบัญชีผู้ใช้
 
 ---
 
@@ -526,6 +538,15 @@ Widget build(BuildContext context) {
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ (3 ภาพ) และคำอธิบาย
 ```
+<img width="1080" height="2160" alt="image" src="https://github.com/user-attachments/assets/88e256bb-ba05-441c-84c3-9b5040b9a05a" />
+<img width="1080" height="2160" alt="image" src="https://github.com/user-attachments/assets/8877d71b-3d88-4e03-a531-72c66390c5b3" />
+<img width="1080" height="2160" alt="image" src="https://github.com/user-attachments/assets/80786417-d94c-4491-8d57-7dbdcd790b52" />
+
+เราไม่ต้องใช้ Navigator.push หรือ Navigator.pop สลับหน้าจอไปมาให้วุ่นวาย เพราะ StreamBuilder จะทำหน้าที่คอยเฝ้าสังเกตการณ์สถานะล็อกอินผ่าน FirebaseAuth.instance.authStateChanges() อยู่ตลอดเวลา
+
+หลักการทำงานคือ เมื่อผู้ใช้กดล็อกอินสำเร็จ (หรือกดออกจากระบบ) สถานะใน Firebase จะเปลี่ยนไป ทำให้ authStateChanges() ส่งสัญญาณใหม่ (มีข้อมูล User หรือเป็น null) ออกมาทันที พอ StreamBuilder ได้รับสัญญาณใหม่ มันจะทำการสร้าง UI หน้าจอ (build) ขึ้นมาใหม่โดยอัตโนมัติ
+
+ถ้ามีข้อมูล User ก็จะโชว์หน้า MainScaffold แต่ถ้าข้อมูลเป็น null ก็จะโชว์หน้า LoginPage ทำให้การสลับหน้าจอเกิดขึ้นเองตามสถานะปัจจุบันของผู้ใช้ โดยที่เราไม่ต้องเขียนโค้ดสั่งเปลี่ยนหน้าเองเลย
 
 ---
 
@@ -541,6 +562,18 @@ Widget build(BuildContext context) {
 ```text
 บันทึกคำตอบของคุณที่นี่
 ```
+1.
+-เพื่อแยกหน้าที่การทำงาน (Separation of Concerns): หน้า HomePage ควรจัดการแค่เรื่อง UI และการแสดงผล ไม่ควรมีโค้ดเชื่อมต่อฐานข้อมูลโดยตรง เพื่อให้โค้ดอ่านง่ายและดูแลรักษาง่าย
+
+-ทำตามหลัก Open/Closed Principle: การขยายระบบควรใช้วิธีสร้างคลาสใหม่เพิ่มเข้าไป แทนการไปแก้ไขคลาส ItemRepositoryApi เดิมที่ทำงานได้ดีอยู่แล้ว เพื่อป้องกันไม่ให้โค้ดเก่าพัง
+
+-เพิ่มความยืดหยุ่น: การเรียกผ่าน Interface ทำให้ HomePage สามารถรับข้อมูลจากหลายแหล่ง (ทั้ง API และ Firestore) มาแสดงผลร่วมกันได้โดยไม่ต้องเปลี่ยนโค้ดฝั่ง UI
+
+2.แก้เพียง 1-2 ไฟล์เท่านั้น (ไม่ต้องแก้ไฟล์ UI หรือ Widget เลยแม้แต่ไฟล์เดียว) ได้แก่
+
+-สร้างไฟล์คลาสใหม่สำหรับ API นั้น (ที่ implements ItemRepository)
+
+-แก้ไฟล์ที่เป็นจุดเริ่มต้นกำหนดค่า (เช่น main.dart หรือ auth_gate.dart) เพื่อเปลี่ยนคลาสที่ส่งเข้าไปให้แอป
 
 ### ขั้นตอนที่ 5.2: **นักศึกษาเขียน Code เอง** — ItemRepositoryFirestore
 
@@ -614,6 +647,10 @@ final pages = [
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
 ```
+<img width="1366" height="639" alt="image" src="https://github.com/user-attachments/assets/f9fd2658-fc5d-4e56-8d5b-aeb0a3419158" />
+เนื่องจากผมไม่สามารถรับ storage ของ firebase ได้เนื่องจากมันต้องตัดบัตรเครดิตครับ
+<img width="400" height="800" alt="image" src="https://github.com/user-attachments/assets/9ab6c98b-820b-458a-aa33-2df8632ceadc" />
+ทำได้ถึงตอนนี้ครับโพสขายไม่ได้ รูปไม่สามารถดึงเข้า storage ได้ครับ
 
 ---
 
