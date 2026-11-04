@@ -404,7 +404,10 @@ avdmanager list avd
 
 
 
-<img width="310" height="692" alt="image" src="https://github.com/user-attachments/assets/32f7df38-411a-4a93-af0a-08e0aa22fa3e" />
+<img width="282" height="617" alt="image" src="https://github.com/user-attachments/assets/8343a311-1152-48e5-9b4f-f0a19e448761" />
+
+<img width="282" height="617" alt="image" src="https://github.com/user-attachments/assets/0cd12a55-5b2a-4a4e-bd38-eeb33cbcc211" />
+
 
 
 ---
