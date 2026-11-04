@@ -409,7 +409,11 @@ avdmanager list avd
 <img width="1897" height="836" alt="image" src="https://github.com/user-attachments/assets/3657643b-ac41-4255-b589-8c8d844afa79" />
 
 
+```
+idToken ใช้ส่งให้ Firebase ตรวจสอบยืนยันตัวตน เพื่อออกสิทธิ์เข้าใช้งานระบบให้ผู้ใช้ล็อกอินสำเร็จ
+accessToken ใช้สำหรับขอสิทธิ์เข้าถึง API ต่าง ๆ ของ Google ในนามของผู้ใช้ ถ้าแอปต้องการเรียกใช้งานข้อมูลเชิงลึกเพิ่ม
 
+```
 
 ---
 
