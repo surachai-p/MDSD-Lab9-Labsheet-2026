@@ -730,15 +730,14 @@ final pages = [
 <img width="331" height="717" alt="image" src="https://github.com/user-attachments/assets/e5b875b5-6808-449d-8078-c9a59b2aed05" />
 
 
-<img width="1637" height="652" alt="image" src="https://github.com/user-attachments/assets/ae26e03b-166c-4253-b75b-6321ca7b0301" />
+
 
 
 
 > ✅ **Checkpoint 6.2** ถ่ายภาพหน้าจอ Firebase Console เมนู Storage ที่แสดงไฟล์รูปภาพที่อัปโหลดสำเร็จ และภาพหน้าจอ Firestore ที่แสดงว่าเอกสารมี field `imageUrl` เป็น URL จริงที่เปิดดูได้ ถ่ายภาพหน้าจอแอปที่แสดงรูปสินค้านั้นบนหน้า Home ผ่าน `Image.network(imageUrl)` ด้วย (ย้อนกลับไปถ่ายภาพ Checkpoint 5.1 ให้ครบตอนนี้ ถ้ายังไม่ได้ทำ)
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+
+<img width="1637" height="652" alt="image" src="https://github.com/user-attachments/assets/ae26e03b-166c-4253-b75b-6321ca7b0301" />
 
 ---
 
