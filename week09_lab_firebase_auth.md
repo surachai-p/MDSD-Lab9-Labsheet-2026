@@ -539,7 +539,9 @@ Widget build(BuildContext context) {
 2. ถ้าในอนาคตอาจารย์สั่งให้เปลี่ยนจาก Fake Store API ไปใช้ API อื่น ต้องแก้ไฟล์กี่ไฟล์ ถ้าทุก Widget เรียกผ่าน Interface `ItemRepository` เท่านั้น?
 
 ```text
-บันทึกคำตอบของคุณที่นี่
+1. การเพิ่ม ItemRepositoryFirestore เป็นการแยกหน้าที่ในการจัดการแหล่งข้อมูลออกจากกัน โดยให้ ItemRepositoryApi รับผิดชอบการดึงข้อมูลจาก Fake Store API และ ItemRepositoryFirestore รับผิดชอบการดึงข้อมูลจาก Cloud Firestore ทั้งสองคลาสใช้ Interface ItemRepository ร่วมกัน ทำให้ HomePage สามารถเรียกใช้งานข้อมูลผ่าน Interface เดียวกันได้โดยไม่ต้องรู้ว่าข้อมูลมาจากแหล่งใด นอกจากนี้ยังช่วยลดการแก้ไขโค้ดส่วนอื่นเมื่อมีการเปลี่ยนแปลงแหล่งข้อมูล และทำให้ดูแลรักษาและทดสอบระบบได้ง่ายขึ้น
+
+2. โดยทั่วไปแก้ไขเพียง 1 ไฟล์หลัก คือไฟล์ Implementation ของ Repository ที่เชื่อมต่อกับ API เช่น item_repository_api.dart โดยปรับวิธีดึงข้อมูลให้เชื่อมต่อกับ API ใหม่ แต่ยังคงใช้ Interface ItemRepository และรูปแบบการส่งข้อมูลเดิม ทำให้ Widget ต่าง ๆ ไม่จำเป็นต้องแก้ไขตามไปด้วย ทั้งนี้อาจต้องแก้ไขไฟล์ตั้งค่าหรือ Dependency Injection เพิ่มเติม หากมีการกำหนดแหล่งข้อมูลไว้ในจุดอื่นของโปรเจกต์
 ```
 
 ### ขั้นตอนที่ 5.2: **นักศึกษาเขียน Code เอง** — ItemRepositoryFirestore
