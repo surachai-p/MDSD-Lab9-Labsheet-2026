@@ -39,6 +39,7 @@
 ```text
 บันทึกรูปผลลัพธ์ที่นี่
 ```
+<img width="1792" height="1120" alt="Screenshot 2569-11-08 at 16 36 55" src="https://github.com/user-attachments/assets/12d1e6dc-0fdc-46d0-a5d6-04b128d561a7" />
 
 ### ขั้นตอนที่ 1.2: 🔧 ทำตามขั้นตอน — ติดตั้งเครื่องมือและเชื่อมโปรเจกต์ด้วย FlutterFire CLI
 
@@ -167,6 +168,9 @@ Future<void> main() async {
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบายของแต่ละกรณี
 ```
+<img width="1792" height="1120" alt="Screenshot 2569-11-08 at 17 57 37" src="https://github.com/user-attachments/assets/b3a36be7-624f-4fc8-9114-e8d4f273867c" />
+<img width="1792" height="1120" alt="Screenshot 2569-11-08 at 18 05 09 1" src="https://github.com/user-attachments/assets/e07b5083-aa72-4335-b21d-8b3825f8437c" />
+<img width="1792" height="1120" alt="Screenshot 2569-11-08 at 18 00 41" src="https://github.com/user-attachments/assets/0425f20a-756a-44b5-b9a6-a18b02ce4ffc" />
 
 ---
 
@@ -386,6 +390,7 @@ avdmanager list avd
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
 ```
+<img width="3584" height="2240" alt="image" src="https://github.com/user-attachments/assets/723db95a-7fdc-45c1-bcb2-886ed26253b8" />
 
 ---
 
@@ -526,6 +531,9 @@ Widget build(BuildContext context) {
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ (3 ภาพ) และคำอธิบาย
 ```
+<img width="1792" height="1120" alt="Screenshot 2569-11-08 at 17 57 37" src="https://github.com/user-attachments/assets/78208e60-d694-4976-842d-adddf77c4792" />
+<img width="1436" height="900" alt="Screenshot 2569-11-08 at 19 21 56" src="https://github.com/user-attachments/assets/dfefbebc-474f-4a12-a7bd-5e902c1e32df" />
+<img width="1792" height="1120" alt="Screenshot 2569-11-08 at 17 57 37" src="https://github.com/user-attachments/assets/a7be76cb-9485-47e3-9104-ff9f4bdedafd" />
 
 ---
 
@@ -538,9 +546,8 @@ Widget build(BuildContext context) {
 1. ทำไมเราจึง "เพิ่ม Implementation ใหม่" (`ItemRepositoryFirestore`) แทนที่จะแก้ไข `ItemRepositoryApi` เดิม หรือเขียนโค้ดเรียก Firestore ตรงจาก `HomePage`?
 2. ถ้าในอนาคตอาจารย์สั่งให้เปลี่ยนจาก Fake Store API ไปใช้ API อื่น ต้องแก้ไฟล์กี่ไฟล์ ถ้าทุก Widget เรียกผ่าน Interface `ItemRepository` เท่านั้น?
 
-```text
-บันทึกคำตอบของคุณที่นี่
-```
+1.ตอบ: เพื่อแยกการทำงานของแหล่งข้อมูลให้ชัดเจน โดย ItemRepositoryApi ใช้ดึงข้อมูลจาก API ส่วน ItemRepositoryFirestore ใช้จัดการข้อมูลจาก Firestore ทำให้โค้ดเป็นระเบียบ แก้ไขและดูแลได้ง่ายขึ้น และไม่ทำให้ HomePage ต้องรู้รายละเอียดการดึงข้อมูลของแต่ละแหล่ง
+2.ตอบ: แก้ไขเพียงจุดที่สร้างหรือกำหนด Repository ให้เปลี่ยนไปใช้ API ตัวใหม่ โดยไม่ต้องแก้ไข Widget เพราะยังเรียกใช้งานผ่าน Interface ItemRepository เหมือนเดิม
 
 ### ขั้นตอนที่ 5.2: **นักศึกษาเขียน Code เอง** — ItemRepositoryFirestore
 
@@ -614,6 +621,7 @@ final pages = [
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
 ```
+<img width="1436" height="900" alt="Screenshot 2569-11-08 at 19 21 56" src="https://github.com/user-attachments/assets/4c1b073b-139b-4358-9258-5c6f956a71ae" />
 
 ---
 
@@ -666,12 +674,15 @@ final pages = [
 ```text
 บันทึกรูปผลลัพธ์ที่นี่
 ```
+<img width="1792" height="1120" alt="Screenshot 2569-11-08 at 19 13 16" src="https://github.com/user-attachments/assets/52a6de45-a0d4-406f-9821-01cbc0d8c96a" />
+<img width="1792" height="1120" alt="Screenshot 2569-11-08 at 19 13 10" src="https://github.com/user-attachments/assets/84e770db-4602-486a-a4d9-74a258680016" />
 
 > ✅ **Checkpoint 6.2** ถ่ายภาพหน้าจอ Firebase Console เมนู Storage ที่แสดงไฟล์รูปภาพที่อัปโหลดสำเร็จ และภาพหน้าจอ Firestore ที่แสดงว่าเอกสารมี field `imageUrl` เป็น URL จริงที่เปิดดูได้ ถ่ายภาพหน้าจอแอปที่แสดงรูปสินค้านั้นบนหน้า Home ผ่าน `Image.network(imageUrl)` ด้วย (ย้อนกลับไปถ่ายภาพ Checkpoint 5.1 ให้ครบตอนนี้ ถ้ายังไม่ได้ทำ)
 
 ```text
 บันทึกรูปผลลัพธ์ที่นี่
 ```
+<img width="1792" height="1120" alt="Screenshot 2569-11-08 at 19 16 46" src="https://github.com/user-attachments/assets/5261cd7a-bb60-4fbd-b42b-51c1312d492f" />
 
 ---
 
@@ -705,6 +716,7 @@ service cloud.firestore {
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
 ```
+<img width="1792" height="1120" alt="Screenshot 2569-11-08 at 19 00 43" src="https://github.com/user-attachments/assets/e4d9b091-8ee9-4306-a761-3ff461a57ad0" />
 
 ---
 
