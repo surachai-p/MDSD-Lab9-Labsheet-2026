@@ -768,8 +768,19 @@ service cloud.firestore {
 
 > ✅ **Checkpoint 7.1 (Self-Study)** ถ่ายภาพหน้าจอผลการทดลองทั้ง 2 กรณีใน Rules Playground เขียนอธิบายสั้น ๆ ว่าทำไม Client-side Validation (การไม่แสดงปุ่มแก้ไขให้เห็น) เพียงอย่างเดียวจึงไม่เพียงพอต่อความปลอดภัยของข้อมูลจริง
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
+**กรณีที่ 1**
+
+<img width="1642" height="585" alt="image" src="https://github.com/user-attachments/assets/af553f55-03a3-41a0-bedf-98a641f8c0d1" />
+
+
+**กรณีที่ 2**
+
+<img width="1606" height="592" alt="image" src="https://github.com/user-attachments/assets/eb965550-97b0-4b73-a1df-8c2ec201aa0e" />
+
+
+
+```
+ด
 ```
 
 ---
