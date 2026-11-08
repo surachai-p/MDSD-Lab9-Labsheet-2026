@@ -36,9 +36,8 @@
 
 > ✅ **Checkpoint 1.1** ถ่ายภาพหน้าจอ Firebase Console ที่แสดงหน้า Project Overview ของโปรเจกต์ที่สร้างเสร็จแล้ว
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+<img width="1897" height="857" alt="image" src="https://github.com/user-attachments/assets/21999b5c-93cc-4117-95ec-45f6eff27e1d" />
+
 
 ### ขั้นตอนที่ 1.2: 🔧 ทำตามขั้นตอน — ติดตั้งเครื่องมือและเชื่อมโปรเจกต์ด้วย FlutterFire CLI
 
@@ -164,8 +163,28 @@ Future<void> main() async {
 
 > ✅ **Checkpoint 2.1** ทดสอบสมัครสมาชิกด้วย Email ใหม่สำเร็จ ถ่ายภาพหน้าจอ Firebase Console เมนู Authentication → Users ที่แสดงบัญชีที่เพิ่งสมัคร จากนั้นทดสอบกรณีผิดพลาด 2 กรณี คือ (ก) สมัครซ้ำด้วย Email เดิม และ (ข) ใส่รหัสผ่านสั้นเกินไป ถ่ายภาพหน้าจอข้อความ Error ทั้งสองกรณี พร้อมอธิบายว่าโค้ดส่วนใดใน `auth_service.dart` เป็นตัวจัดการแต่ละกรณี
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบายของแต่ละกรณี
+
+
+<img width="376" height="722" alt="image" src="https://github.com/user-attachments/assets/67004a08-923f-4b21-a13e-7ec06bed2e6e" />
+
+
+<img width="377" height="717" alt="image" src="https://github.com/user-attachments/assets/ab46dee9-5897-48e7-8fbc-8595fa611f29" />
+
+
+<img width="395" height="722" alt="image" src="https://github.com/user-attachments/assets/9d825629-027a-4a9f-865e-4a13d7037d3c" />
+
+
+```อธิบายโค้ด
+
+กรณีสมัครซ้ำด้วย Email เดิม
+- โค้ดส่วนที่จัดการใช้เงื่อนไข if (e.code == 'email-already-in-use')
+- เมื่อ Firebase ส่งรหัสข้อผิดพลาดกลับมาว่า 'email-already-in-use' หมายถึงอีเมลนี้ถูกลงทะเบียนในระบบไปแล้ว 
+
+กรณีใส่รหัสผ่านสั้นเกินไป
+- โค้ดส่วนที่จัดการใช้เงื่อนไข else if (e.code == 'weak-password')
+- เมื่อ Firebase ส่งรหัสข้อผิดพลาดกลับมาว่า 'weak-password' เนื่องจากรหัสผ่านมีความปลอดภัยต่ำหรือน้อยกว่า 6 ตัวอักษร โค้ดส่วนนี้จะทำการแปลงข้อความ
+'รหัสผ่านง่ายเกินไป กรุณาใช้อย่างน้อย 6 ตัวอักษรขึ้นไป'
+
 ```
 
 ---
@@ -383,8 +402,17 @@ avdmanager list avd
 
 > ✅ **Checkpoint 3.1** ทดสอบกดปุ่มเข้าสู่ระบบด้วย Google ด้วยบัญชี Google จริงของคุณ ถ่ายภาพหน้าจอตอนเลือกบัญชี Google และภาพหน้าจอ Firebase Console ที่แสดงว่ามีผู้ใช้ใหม่ Provider เป็น Google เพิ่มเข้ามา อธิบายว่า `idToken` กับ `accessToken` ที่ได้จาก Google นำไปใช้ทำอะไรต่อในขั้นตอนการยืนยันตัวตนกับ Firebase (อ้างอิงหัวข้อ 9.4)
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
+
+
+<img width="282" height="617" alt="image" src="https://github.com/user-attachments/assets/8343a311-1152-48e5-9b4f-f0a19e448761" />
+
+<img width="1897" height="836" alt="image" src="https://github.com/user-attachments/assets/3657643b-ac41-4255-b589-8c8d844afa79" />
+
+
+```
+idToken ใช้ส่งให้ Firebase ตรวจสอบยืนยันตัวตน เพื่อออกสิทธิ์เข้าใช้งานระบบให้ผู้ใช้ล็อกอินสำเร็จ
+accessToken ใช้สำหรับขอสิทธิ์เข้าถึง API ต่าง ๆ ของ Google ในนามของผู้ใช้ ถ้าแอปต้องการเรียกใช้งานข้อมูลเชิงลึกเพิ่ม
+
 ```
 
 ---
@@ -523,9 +551,28 @@ Widget build(BuildContext context) {
 > ✅ **Checkpoint 4.1** ถ่ายภาพหน้าจอ 3 ภาพเรียงกัน คือ (ก) แอปตอนเพิ่งเปิดขึ้นมาครั้งแรกแบบยังไม่ล็อกอิน แสดงหน้า Login (ข) หลังล็อกอินสำเร็จ แอปสลับไปแสดง `MainScaffold` อัตโนมัติโดยไม่ต้องกดอะไรเพิ่ม และ (ค) หลังกด "ออกจากระบบ" แอปสลับกลับไปหน้า Login เอง อธิบายว่าทำไมการใช้ `StreamBuilder` ฟัง `authStateChanges()` จึงทำให้ไม่ต้องเขียนโค้ดสั่ง Navigate ไปมาเอง
 
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ (3 ภาพ) และคำอธิบาย
+**(ก) แอปตอนเพิ่งเปิดขึ้นมาครั้งแรกแบบยังไม่ล็อกอิน แสดงหน้า Login**
+
+
+<img width="290" height="626" alt="image" src="https://github.com/user-attachments/assets/87c579ca-3dd2-4cd1-a523-0621e96f19a9" />
+
+
+**(ข) หลังล็อกอินสำเร็จ แอปสลับไปแสดง `MainScaffold` อัตโนมัติโดยไม่ต้องกดอะไรเพิ่ม**
+
+
+<img width="302" height="652" alt="image" src="https://github.com/user-attachments/assets/85f9828f-90c2-4587-a777-dab62ef0ec81" />
+
+
+**(ค) หลังกด "ออกจากระบบ" แอปสลับกลับไปหน้า Login เอง**
+
+<img width="285" height="601" alt="image" src="https://github.com/user-attachments/assets/133ce19b-881c-4f62-a5b4-c362c334d946" />
+
 ```
+เพราะ StreamBuilder คอยฟังสถานะจาก Firebase แบบเรียลไทม์ พอสถานะเปลี่ยน (ล็อกอินหรือล็อกเอาต์)
+ระบบจะสลับหน้าจอ (ระหว่าง Login กับ MainScaffold) ให้เองอัตโนมัติทันทีโดยไม่ต้องเขียนโค้ดสั่งเปลี่ยนหน้า
+```
+
+
 
 ---
 
@@ -539,7 +586,16 @@ Widget build(BuildContext context) {
 2. ถ้าในอนาคตอาจารย์สั่งให้เปลี่ยนจาก Fake Store API ไปใช้ API อื่น ต้องแก้ไฟล์กี่ไฟล์ ถ้าทุก Widget เรียกผ่าน Interface `ItemRepository` เท่านั้น?
 
 ```text
-บันทึกคำตอบของคุณที่นี่
+1) หลักการ Open/Closed Principle การเพิ่มคลาสใหม่ช่วยให้เราขยายความสามารถของระบบได้โดยไม่ต้องไปแก้ไขโค้ดเดิมที่ทำงานได้ดีอยู่แล้ว
+ช่วยป้องกันไม่ให้เกิด Bug หรือกระทบกับฟีเจอร์เดิมที่ใช้ API อยู่
+
+- การแยกความรับผิดชอบ หากเขียนโค้ดเรียก Firestore หรือ API ตรงใน HomePage จะทำให้ UI ต้องผูกติดกับแหล่งข้อมูล สปาเก็ตตี้โค้ดดูแลรักษายากและเขียน
+Unit Test ยาก การใช้ Repository แยกออกไปช่วยให้ UI ทำหน้าที่แค่แสดงผลเท่านั้น
+
+2) แก้เพียง 1 ไฟล์ใหม่ เนื่องจาก Widget ทุกตัวเรียกใช้งานผ่าน Interface กลาง (ItemRepository)
+โดยไม่สนใจว่าเบื้องหลังจะเป็น API หรือ Firestore ทำให้เราไม่ต้องแก้ไขโค้ดในหน้า UI หรือไฟล์อื่น ๆ เลยแม้แต่ไฟล์เดียว
+เราเพียงแค่สร้างคลาส Implementation ใหม่ แล้วสลับตัวเลือกตอน Dependency Injection เท่านั้น
+
 ```
 
 ### ขั้นตอนที่ 5.2: **นักศึกษาเขียน Code เอง** — ItemRepositoryFirestore
@@ -611,8 +667,14 @@ final pages = [
 
 > ✅ **Checkpoint 5.1** ถ่ายภาพหน้าจอ Home ที่แสดงสินค้าจากทั้งสองแหล่งข้อมูลปนกันอยู่ในลิสต์เดียว พร้อม Badge ที่แยกแหล่งที่มาชัดเจน (ถ้ายังไม่เคยมีประกาศจริงใน Firestore เลย ให้ทำส่วนที่ 6 ให้เสร็จก่อนแล้วย้อนกลับมาถ่ายภาพ Checkpoint นี้) อธิบายว่าการออกแบบให้ `HomePage` ไม่รู้จัก `ItemRepositoryApi`/`ItemRepositoryFirestore` โดยตรง แต่รู้จักผ่าน Interface `ItemRepository` เท่านั้น ช่วยให้ทดสอบหรือเปลี่ยนแหล่งข้อมูลในอนาคตง่ายขึ้นอย่างไร
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
+
+<img width="302" height="682" alt="image" src="https://github.com/user-attachments/assets/fe5276b9-22c8-449a-b232-c28eb7b22868" />
+
+
+```
+1.เปลี่ยนแหล่งข้อมูลง่าย ถ้าวันหลังจะเปลี่ยนจาก API ไปใช้ฐานข้อมูลอื่น แค่เขียนคลาสใหม่มาต่อโดย ไม่ต้องแก้โค้ดหน้าจอ HomePage เลย
+
+2.เทสต์ระบบง่าย สามารถสร้างข้อมูลจำลอง Mock มาทดสอบหน้าจอได้ทันทีโดยไม่ต้องต่อเน็ตหรือฐานข้อมูลจริง
 ```
 
 ---
@@ -663,15 +725,19 @@ final pages = [
 
 > ✅ **Checkpoint 6.1** โพสต์ขายจริงอย่างน้อย 2 รายการผ่านแอป ถ่ายภาพหน้าจอ Firebase Console เมนู Firestore Database ที่แสดง Collection `items` มีเอกสารที่โพสต์เข้ามาจริง พร้อม field `sellerId` ที่ตรงกับ `uid` ของบัญชีที่ใช้ทดสอบ และยืนยันว่าร่างทั้งสองรายการหายไปจาก `MyDraftsPage` แล้ว
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+
+
+<img width="331" height="717" alt="image" src="https://github.com/user-attachments/assets/e5b875b5-6808-449d-8078-c9a59b2aed05" />
+
+
+
+
+
 
 > ✅ **Checkpoint 6.2** ถ่ายภาพหน้าจอ Firebase Console เมนู Storage ที่แสดงไฟล์รูปภาพที่อัปโหลดสำเร็จ และภาพหน้าจอ Firestore ที่แสดงว่าเอกสารมี field `imageUrl` เป็น URL จริงที่เปิดดูได้ ถ่ายภาพหน้าจอแอปที่แสดงรูปสินค้านั้นบนหน้า Home ผ่าน `Image.network(imageUrl)` ด้วย (ย้อนกลับไปถ่ายภาพ Checkpoint 5.1 ให้ครบตอนนี้ ถ้ายังไม่ได้ทำ)
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+
+<img width="1637" height="652" alt="image" src="https://github.com/user-attachments/assets/ae26e03b-166c-4253-b75b-6321ca7b0301" />
 
 ---
 
@@ -702,8 +768,24 @@ service cloud.firestore {
 
 > ✅ **Checkpoint 7.1 (Self-Study)** ถ่ายภาพหน้าจอผลการทดลองทั้ง 2 กรณีใน Rules Playground เขียนอธิบายสั้น ๆ ว่าทำไม Client-side Validation (การไม่แสดงปุ่มแก้ไขให้เห็น) เพียงอย่างเดียวจึงไม่เพียงพอต่อความปลอดภัยของข้อมูลจริง
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
+**กรณีที่ 1**
+
+<img width="1642" height="585" alt="image" src="https://github.com/user-attachments/assets/af553f55-03a3-41a0-bedf-98a641f8c0d1" />
+
+
+**กรณีที่ 2**
+
+<img width="1606" height="592" alt="image" src="https://github.com/user-attachments/assets/eb965550-97b0-4b73-a1df-8c2ec201aa0e" />
+
+
+
+```
+การซ่อนปุ่มที่หน้าจอแอปพลิเคชันไม่เพียงพอต่อความปลอดภัยของข้อมูลจริง
+
+1.ข้ามหน้าจอได้ ผู้ไม่หวังดีสามารถใช้เครื่องมือภายนอก เช่น Postman, cURL หรือสคริปต์ ส่งคำสั่งตรงเข้าสู่ฐานข้อมูล Cloud Firestore ได้โดยตรงโดยไม่ต้องผ่านหน้าจอแอปพลิเคชัน
+
+2.ความปลอดภัยต้องอยู่ที่ Server การตรวจสอบสิทธิ์ที่แท้จริงต้องทำที่ฝั่ง Server เช่น Firebase Security Rules เพื่อคอยคัดกรองและป้องกันการแก้ไขข้อมูลที่ไม่ได้รับอนุญาตเสมอ
+
 ```
 
 ---
@@ -721,9 +803,39 @@ service cloud.firestore {
 
 > ✅ **Checkpoint 8.1** ถ่ายภาพหน้าจอผลการทดสอบทั้ง 4 ข้อ 
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ 
-```
+
+**ข้อที่ 1**
+
+<img width="357" height="830" alt="image" src="https://github.com/user-attachments/assets/b5c6638a-6d13-496f-9e81-88d808642378" />
+
+
+<img width="1107" height="285" alt="image" src="https://github.com/user-attachments/assets/684fd827-1ef9-44bc-97fe-0d7a127abdb1" />
+
+
+**ข้อที่ 2**
+
+<img width="361" height="786" alt="image" src="https://github.com/user-attachments/assets/0e715305-2a06-45f1-8f0e-cd892061773a" />
+
+<img width="367" height="772" alt="image" src="https://github.com/user-attachments/assets/00448f47-0139-4d1b-9fad-4ff21da04522" />
+
+
+
+**ข้อที่ 3**
+
+<img width="375" height="792" alt="image" src="https://github.com/user-attachments/assets/5d0a4e48-9f41-4d55-9f0b-b47e95694105" />
+
+
+<img width="1097" height="492" alt="image" src="https://github.com/user-attachments/assets/3d72c603-daf3-4a90-9c5c-db42380b106c" />
+
+
+
+**ข้อที่ 4**
+
+
+
+<img width="355" height="787" alt="image" src="https://github.com/user-attachments/assets/5edb6751-1f7e-4b02-b742-913f7c5f28e6" />
+
+
 
 ---
 
