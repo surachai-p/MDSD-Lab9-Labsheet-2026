@@ -1,0 +1,4 @@
+campus_marketplace_w7/
+*.sqlite
+firebase-debug.log
+.DS_Store
