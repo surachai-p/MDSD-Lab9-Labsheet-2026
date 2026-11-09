@@ -36,9 +36,7 @@
 
 > ✅ **Checkpoint 1.1** ถ่ายภาพหน้าจอ Firebase Console ที่แสดงหน้า Project Overview ของโปรเจกต์ที่สร้างเสร็จแล้ว
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+<img width="1366" height="768" alt="Screenshot (1720)" src="https://github.com/user-attachments/assets/276c31f4-d915-4b42-a256-a8141d2c14f1" />
 
 ### ขั้นตอนที่ 1.2: 🔧 ทำตามขั้นตอน — ติดตั้งเครื่องมือและเชื่อมโปรเจกต์ด้วย FlutterFire CLI
 
@@ -164,10 +162,16 @@ Future<void> main() async {
 
 > ✅ **Checkpoint 2.1** ทดสอบสมัครสมาชิกด้วย Email ใหม่สำเร็จ ถ่ายภาพหน้าจอ Firebase Console เมนู Authentication → Users ที่แสดงบัญชีที่เพิ่งสมัคร จากนั้นทดสอบกรณีผิดพลาด 2 กรณี คือ (ก) สมัครซ้ำด้วย Email เดิม และ (ข) ใส่รหัสผ่านสั้นเกินไป ถ่ายภาพหน้าจอข้อความ Error ทั้งสองกรณี พร้อมอธิบายว่าโค้ดส่วนใดใน `auth_service.dart` เป็นตัวจัดการแต่ละกรณี
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบายของแต่ละกรณี
-```
+<img width="337" height="657" alt="image" src="https://github.com/user-attachments/assets/be35f4e8-5022-4d27-ab87-b98449ae556c" />
 
+<img width="343" height="659" alt="image" src="https://github.com/user-attachments/assets/44540131-462f-4b58-80f7-daf064e5d50f" />
+
+<img width="343" height="659" alt="image" src="https://github.com/user-attachments/assets/3f444270-924d-49dd-ada3-3beb0e152f6b" />
+
+```text
+- auth_service.dart เป็นตัวจัดการแต่ละ error code จาก Firebase แล้วแปลงเป็นข้อความที่เหมาะกับผู้ใช้งาน
+- login_page.dart เป็นตัวแสดงข้อความเหล่านั้นให้ผู้ใช้เห็น
+```
 ---
 
 ## ส่วนที่ 3: เข้าสู่ระบบด้วย Google Sign-In
@@ -383,6 +387,8 @@ avdmanager list avd
 
 > ✅ **Checkpoint 3.1** ทดสอบกดปุ่มเข้าสู่ระบบด้วย Google ด้วยบัญชี Google จริงของคุณ ถ่ายภาพหน้าจอตอนเลือกบัญชี Google และภาพหน้าจอ Firebase Console ที่แสดงว่ามีผู้ใช้ใหม่ Provider เป็น Google เพิ่มเข้ามา อธิบายว่า `idToken` กับ `accessToken` ที่ได้จาก Google นำไปใช้ทำอะไรต่อในขั้นตอนการยืนยันตัวตนกับ Firebase (อ้างอิงหัวข้อ 9.4)
 
+<img width="346" height="656" alt="image" src="https://github.com/user-attachments/assets/ef5c46d5-e0a6-475f-b74d-05aae9848965" />
+
 ```text
 บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
 ```
@@ -522,9 +528,16 @@ Widget build(BuildContext context) {
 
 > ✅ **Checkpoint 4.1** ถ่ายภาพหน้าจอ 3 ภาพเรียงกัน คือ (ก) แอปตอนเพิ่งเปิดขึ้นมาครั้งแรกแบบยังไม่ล็อกอิน แสดงหน้า Login (ข) หลังล็อกอินสำเร็จ แอปสลับไปแสดง `MainScaffold` อัตโนมัติโดยไม่ต้องกดอะไรเพิ่ม และ (ค) หลังกด "ออกจากระบบ" แอปสลับกลับไปหน้า Login เอง อธิบายว่าทำไมการใช้ `StreamBuilder` ฟัง `authStateChanges()` จึงทำให้ไม่ต้องเขียนโค้ดสั่ง Navigate ไปมาเอง
 
+<img width="343" height="660" alt="Screenshot 2026-11-08 185338" src="https://github.com/user-attachments/assets/6e2b5d7c-60fb-4290-85f1-112a24db19e4" />
+
+<img width="342" height="652" alt="Screenshot 2026-11-08 184530" src="https://github.com/user-attachments/assets/3967e577-a1b6-4d29-8335-db2090d0bfae" />
+
+<img width="343" height="660" alt="Screenshot 2026-11-08 185338" src="https://github.com/user-attachments/assets/4c6a59b5-fd92-4580-b3c0-587a2f851679" />
 
 ```text
-บันทึกรูปผลลัพธ์ที่นี่ (3 ภาพ) และคำอธิบาย
+การใช้ StreamBuilder ร่วมกับ FirebaseAuth.instance.authStateChanges() ช่วยให้ไม่ต้องเขียนโค้ดสั่ง Navigate เอง เพราะ authStateChanges() เป็น Stream ที่คอยตรวจจับและส่งสัญญาณสถานะการยืนยันตัวตนออกมาแบบ Real-time เมื่อเกิด event ต่างๆเมื่อสถานะเปลี่ยน StreamBuilder จะ Rebuild (วาด UI ใหม่) โดยอัตโนมัติทันที ตามเงื่อนไขในโค้ด:
+- ถ้าผู้ใช้ล็อกอินสำเร็จ (snapshot.hasData เป็น true) ระบบจะสลับไปแสดงหน้า MainScaffold
+- ถ้าผู้ใช้ออกจากระบบ (snapshot.hasData เป็น null) ระบบจะสลับกลับมาแสดงหน้า LoginPage
 ```
 
 ---
@@ -539,7 +552,9 @@ Widget build(BuildContext context) {
 2. ถ้าในอนาคตอาจารย์สั่งให้เปลี่ยนจาก Fake Store API ไปใช้ API อื่น ต้องแก้ไฟล์กี่ไฟล์ ถ้าทุก Widget เรียกผ่าน Interface `ItemRepository` เท่านั้น?
 
 ```text
-บันทึกคำตอบของคุณที่นี่
+1. การสร้าง Implementation ใหม่ช่วยแยกความรับผิดชอบของโค้ดตามหลัก Dependency Inversion ทำให้หน้า UI ไม่ยึดติดกับแหล่งข้อมูลเดิม สามารถสลับหรือเพิ่มระบบเก็บข้อมูลใหม่ได้โดยไม่ต้องแก้ไขโค้ดที่ทำงานอยู่แล้ว
+
+2. แก้ไขเพียงไฟล์เดียวคือสร้างไฟล์ Repository ใหม่สำหรับ API นั้นแล้วนำไปเปลี่ยนการเรียกใช้งานที่ main.dart โดยส่วนของ Widget อื่นๆ ไม่ต้องแก้ไขเลยเพราะเชื่อมต่อผ่าน Interface กลางเหมือนเดิม
 ```
 
 ### ขั้นตอนที่ 5.2: **นักศึกษาเขียน Code เอง** — ItemRepositoryFirestore
@@ -611,8 +626,10 @@ final pages = [
 
 > ✅ **Checkpoint 5.1** ถ่ายภาพหน้าจอ Home ที่แสดงสินค้าจากทั้งสองแหล่งข้อมูลปนกันอยู่ในลิสต์เดียว พร้อม Badge ที่แยกแหล่งที่มาชัดเจน (ถ้ายังไม่เคยมีประกาศจริงใน Firestore เลย ให้ทำส่วนที่ 6 ให้เสร็จก่อนแล้วย้อนกลับมาถ่ายภาพ Checkpoint นี้) อธิบายว่าการออกแบบให้ `HomePage` ไม่รู้จัก `ItemRepositoryApi`/`ItemRepositoryFirestore` โดยตรง แต่รู้จักผ่าน Interface `ItemRepository` เท่านั้น ช่วยให้ทดสอบหรือเปลี่ยนแหล่งข้อมูลในอนาคตง่ายขึ้นอย่างไร
 
+<img width="340" height="657" alt="image" src="https://github.com/user-attachments/assets/0f5e2a2e-d426-4b6b-a5b4-0eb2147fc056" />
+
 ```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
+การใช้ Interface `ItemRepository` ช่วยแยกส่วน UI ออกจาก logic การดึงข้อมูล ตามหลัก Dependency Inversion ทำให้ `HomePage` ทำหน้าที่เพียงรับ `List<Item>` ไปแสดงผลโดยไม่ยึดติดกับแหล่งข้อมูลส่งผลให้สลับเปลี่ยน data source, เขียน Mock data สำหรับ testing และบำรุงรักษาแต่ละส่วนได้ง่าย
 ```
 
 ---
@@ -663,16 +680,20 @@ final pages = [
 
 > ✅ **Checkpoint 6.1** โพสต์ขายจริงอย่างน้อย 2 รายการผ่านแอป ถ่ายภาพหน้าจอ Firebase Console เมนู Firestore Database ที่แสดง Collection `items` มีเอกสารที่โพสต์เข้ามาจริง พร้อม field `sellerId` ที่ตรงกับ `uid` ของบัญชีที่ใช้ทดสอบ และยืนยันว่าร่างทั้งสองรายการหายไปจาก `MyDraftsPage` แล้ว
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/61a65ca4-56e7-4789-945d-94a9ba0cf1b0" />
+
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/cea0e727-85df-4c36-8ccd-8f893a684093" />
+
+<img width="344" height="660" alt="image" src="https://github.com/user-attachments/assets/283bcc85-8811-43a6-b23c-042e5eee464a" />
+
 
 > ✅ **Checkpoint 6.2** ถ่ายภาพหน้าจอ Firebase Console เมนู Storage ที่แสดงไฟล์รูปภาพที่อัปโหลดสำเร็จ และภาพหน้าจอ Firestore ที่แสดงว่าเอกสารมี field `imageUrl` เป็น URL จริงที่เปิดดูได้ ถ่ายภาพหน้าจอแอปที่แสดงรูปสินค้านั้นบนหน้า Home ผ่าน `Image.network(imageUrl)` ด้วย (ย้อนกลับไปถ่ายภาพ Checkpoint 5.1 ให้ครบตอนนี้ ถ้ายังไม่ได้ทำ)
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/fc5bd3b7-54a9-469b-8f65-131422ed5763" />
 
+```text
+ยังไม่สามารถอัปโหลดรูปไปยัง Firebase Storage ได้ เนื่องจากโปรเจกต์แสดงข้อความว่าต้องอัปเกรดเป็นแพ็กเกจ Blaze และเปิดใช้บัญชีเรียกเก็บเงินก่อน จึงยังไม่มีไฟล์ใน Storage และไม่มี Download URL จาก Storage ให้บันทึกใน Firestore อย่างไรก็ตาม การแสดงรูปด้วย URL ภายนอกไม่ถือว่าเป็นการอัปโหลดไฟล์เข้า Firebase Storage จึงยังทำ Checkpoint 6.2 ได้ไม่ครบ
+```
 ---
 
 ## ส่วนที่ 7 (Self-Study): สำรวจ Firebase Security Rules
@@ -702,8 +723,10 @@ service cloud.firestore {
 
 > ✅ **Checkpoint 7.1 (Self-Study)** ถ่ายภาพหน้าจอผลการทดลองทั้ง 2 กรณีใน Rules Playground เขียนอธิบายสั้น ๆ ว่าทำไม Client-side Validation (การไม่แสดงปุ่มแก้ไขให้เห็น) เพียงอย่างเดียวจึงไม่เพียงพอต่อความปลอดภัยของข้อมูลจริง
 
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/3055a61d-749d-4d5c-ae18-96a5a8d99f99" />
+
 ```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
+ กฎ Firestore อนุญาตให้ทุกคนอ่านสินค้าได้แต่การเพิ่มสินค้าต้องล็อกอินและใช้ `sellerId` ที่ตรงกับ UID ของผู้ใช้ส่วนการแก้ไขหรือลบทำได้เฉพาะเจ้าของสินค้า Client-side Validation อย่างการซ่อนปุ่มไม่เพียงพอ เพราะผู้ใช้สามารถส่งคำขอไปยัง Firestore โดยตรงได้จึงต้องใช้ Security Rules ตรวจสิทธิ์ที่ฝั่ง Firebaseด้วย
 ```
 
 ---
@@ -721,8 +744,13 @@ service cloud.firestore {
 
 > ✅ **Checkpoint 8.1** ถ่ายภาพหน้าจอผลการทดสอบทั้ง 4 ข้อ 
 
+<img width="339" height="652" alt="image" src="https://github.com/user-attachments/assets/80080afe-7912-4086-8f91-c0752d7be4a0" />
+
+<img width="338" height="662" alt="image" src="https://github.com/user-attachments/assets/870b3816-1f87-43e9-904a-3ba565f248a2" />
+
+<img width="340" height="653" alt="image" src="https://github.com/user-attachments/assets/9c484d7d-c470-4855-a842-85e3f2fea2b5" />
 ```text
-บันทึกรูปผลลัพธ์ที่นี่ 
+หมายเหตุ:หนูรันไปรันมาตอนนี้ Emulator หนูค้างค่ะโน๊ตบุ๊คร้อนแล้วมันไม่รีหน้า Emulator เลยไม่แน่ในว่าบางรูปในข้อ8ถูกต้องมั้ยคะ
 ```
 
 ---
