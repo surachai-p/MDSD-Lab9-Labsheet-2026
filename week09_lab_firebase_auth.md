@@ -36,9 +36,8 @@
 
 > ✅ **Checkpoint 1.1** ถ่ายภาพหน้าจอ Firebase Console ที่แสดงหน้า Project Overview ของโปรเจกต์ที่สร้างเสร็จแล้ว
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่
-```
+<img width="1317" height="731" alt="image" src="https://github.com/user-attachments/assets/09f2ae51-37a0-440c-a508-69825291a227" />
+
 
 ### ขั้นตอนที่ 1.2: 🔧 ทำตามขั้นตอน — ติดตั้งเครื่องมือและเชื่อมโปรเจกต์ด้วย FlutterFire CLI
 
@@ -164,9 +163,15 @@ Future<void> main() async {
 
 > ✅ **Checkpoint 2.1** ทดสอบสมัครสมาชิกด้วย Email ใหม่สำเร็จ ถ่ายภาพหน้าจอ Firebase Console เมนู Authentication → Users ที่แสดงบัญชีที่เพิ่งสมัคร จากนั้นทดสอบกรณีผิดพลาด 2 กรณี คือ (ก) สมัครซ้ำด้วย Email เดิม และ (ข) ใส่รหัสผ่านสั้นเกินไป ถ่ายภาพหน้าจอข้อความ Error ทั้งสองกรณี พร้อมอธิบายว่าโค้ดส่วนใดใน `auth_service.dart` เป็นตัวจัดการแต่ละกรณี
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบายของแต่ละกรณี
+<img width="1300" height="725" alt="1" src="https://github.com/user-attachments/assets/56b5f1ca-a2b1-44fe-a439-234b7a074012" />
+
+<img width="1080" height="2408" alt="2" src="https://github.com/user-attachments/assets/d60443ec-da4f-4a4c-a472-0c0dc084742c" />
+
 ```
+บรรทัดที่ 52–53 = ดักจับ Exception จาก Firebase
+บรรทัดที่ 93–94 = แปลง code เป็นข้อความภาษาไทย
+```
+
 
 ---
 
@@ -383,10 +388,18 @@ avdmanager list avd
 
 > ✅ **Checkpoint 3.1** ทดสอบกดปุ่มเข้าสู่ระบบด้วย Google ด้วยบัญชี Google จริงของคุณ ถ่ายภาพหน้าจอตอนเลือกบัญชี Google และภาพหน้าจอ Firebase Console ที่แสดงว่ามีผู้ใช้ใหม่ Provider เป็น Google เพิ่มเข้ามา อธิบายว่า `idToken` กับ `accessToken` ที่ได้จาก Google นำไปใช้ทำอะไรต่อในขั้นตอนการยืนยันตัวตนกับ Firebase (อ้างอิงหัวข้อ 9.4)
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
-```
+<img width="989" height="615" alt="image" src="https://github.com/user-attachments/assets/eca7220e-8910-4702-b437-9e136107e6ae" />
 
+<img width="1080" height="2408" alt="Screenshot_20261015_210211_Google Play services" src="https://github.com/user-attachments/assets/e6ee6551-d37e-400f-9117-4ad3c5e7f95e" />
+
+```
+Google idToken  ──► พิสูจน์ว่า "คุณคือ Google User คนนี้จริง"
+accessToken     ──► พิสูจน์ว่า "คุณได้รับอนุญาตจาก Google แล้ว"
+                         ↓ ทั้งสองรวมกัน
+              Firebase ออก Firebase Session ให้
+              → authStateChanges() emit User ใหม่
+              → AuthGate เปลี่ยนหน้าไป MainScaffold
+```
 ---
 
 ## ส่วนที่ 4: AuthGate — สลับหน้าจอตามสถานะผู้ใช้
@@ -522,11 +535,13 @@ Widget build(BuildContext context) {
 
 > ✅ **Checkpoint 4.1** ถ่ายภาพหน้าจอ 3 ภาพเรียงกัน คือ (ก) แอปตอนเพิ่งเปิดขึ้นมาครั้งแรกแบบยังไม่ล็อกอิน แสดงหน้า Login (ข) หลังล็อกอินสำเร็จ แอปสลับไปแสดง `MainScaffold` อัตโนมัติโดยไม่ต้องกดอะไรเพิ่ม และ (ค) หลังกด "ออกจากระบบ" แอปสลับกลับไปหน้า Login เอง อธิบายว่าทำไมการใช้ `StreamBuilder` ฟัง `authStateChanges()` จึงทำให้ไม่ต้องเขียนโค้ดสั่ง Navigate ไปมาเอง
 
+<img width="1080" height="2408" alt="Screenshot_20261015_211047" src="https://github.com/user-attachments/assets/4a0d855c-fb11-4b6a-98cc-baa01070bc53" />
+<img width="1080" height="2408" alt="Screenshot_20261015_211144" src="https://github.com/user-attachments/assets/40528253-57e0-47c2-900d-55b2c1558014" />
+<img width="1080" height="2408" alt="Screenshot_20261015_211154" src="https://github.com/user-attachments/assets/1107b466-8c3a-4f35-9d33-c04865041818" />
 
-```text
-บันทึกรูปผลลัพธ์ที่นี่ (3 ภาพ) และคำอธิบาย
 ```
-
+ตัวแอปสลับหน้าจอจากการเช็กสถานะผู้ใช้ ณ ปัจจุบันโดยตรง จึงไม่จำเป็นต้องเขียนโค้ดสั่ง Navigator.push หรือ Navigator.pop เพื่อย้ายหน้าไปมาเอง
+```
 ---
 
 ## ส่วนที่ 5: ขยาย Repository Pattern ด้วย ItemRepositoryFirestore
@@ -538,8 +553,18 @@ Widget build(BuildContext context) {
 1. ทำไมเราจึง "เพิ่ม Implementation ใหม่" (`ItemRepositoryFirestore`) แทนที่จะแก้ไข `ItemRepositoryApi` เดิม หรือเขียนโค้ดเรียก Firestore ตรงจาก `HomePage`?
 2. ถ้าในอนาคตอาจารย์สั่งให้เปลี่ยนจาก Fake Store API ไปใช้ API อื่น ต้องแก้ไฟล์กี่ไฟล์ ถ้าทุก Widget เรียกผ่าน Interface `ItemRepository` เท่านั้น?
 
-```text
-บันทึกคำตอบของคุณที่นี่
+```
+1. ทำไมต้องเพิ่มคลาสใหม่ แทนที่จะแก้โค้ดเดิมหรือเขียนใน UI?
+
+ป้องกันโค้ดพัง: ไม่แก้โค้ดเดิมที่ทำงานได้ดีอยู่แล้ว เพื่อลดโอกาสเกิดบั๊ก
+
+แยกหน้าที่ชัดเจน: ให้ UI ทำหน้าที่แค่วาดหน้าจอ ส่วนการดึงข้อมูลปล่อยให้ Repository จัดการ
+
+2. ถ้าอนาคตเปลี่ยน API ต้องแก้กี่ไฟล์?
+
+แก้แค่ 1–2 ไฟล์: คือไฟล์ที่สร้าง Repository ใหม่ และบรรทัดที่เรียกใช้ใน main.dart
+
+ส่วนหน้า UI แก้ 0 ไฟล์: เพราะ UI คุยผ่าน Interface กลางอันเดิมอยู่แล้ว ไม่ต้องรื้อแก้โค้ดเลย
 ```
 
 ### ขั้นตอนที่ 5.2: **นักศึกษาเขียน Code เอง** — ItemRepositoryFirestore
