@@ -37,7 +37,9 @@
 > ✅ **Checkpoint 1.1** ถ่ายภาพหน้าจอ Firebase Console ที่แสดงหน้า Project Overview ของโปรเจกต์ที่สร้างเสร็จแล้ว
 
 ```text
-บันทึกรูปผลลัพธ์ที่นี่
+บันทึกรูปผลลัพธ์ที่นี่:
+![Checkpoint 1.1](images/checkpoint_1_1.png)
+- หน้า Project Overview บน Firebase Console ของโปรเจกต์ campus-market-2026-ittipat
 ```
 
 ### ขั้นตอนที่ 1.2: 🔧 ทำตามขั้นตอน — ติดตั้งเครื่องมือและเชื่อมโปรเจกต์ด้วย FlutterFire CLI
@@ -165,7 +167,29 @@ Future<void> main() async {
 > ✅ **Checkpoint 2.1** ทดสอบสมัครสมาชิกด้วย Email ใหม่สำเร็จ ถ่ายภาพหน้าจอ Firebase Console เมนู Authentication → Users ที่แสดงบัญชีที่เพิ่งสมัคร จากนั้นทดสอบกรณีผิดพลาด 2 กรณี คือ (ก) สมัครซ้ำด้วย Email เดิม และ (ข) ใส่รหัสผ่านสั้นเกินไป ถ่ายภาพหน้าจอข้อความ Error ทั้งสองกรณี พร้อมอธิบายว่าโค้ดส่วนใดใน `auth_service.dart` เป็นตัวจัดการแต่ละกรณี
 
 ```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบายของแต่ละกรณี
+บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบายของแต่ละกรณี:
+
+1. ภาพหน้าจอ Firebase Console (Authentication -> Users) แสดงบัญชีผู้ใช้ใหม่:
+![Checkpoint 2.1 - Users](images/checkpoint_2_1_users.png)
+
+2. ภาพหน้าจอข้อความ Error กรณี (ก) สมัครซ้ำด้วย Email เดิม:
+![Checkpoint 2.1 - Duplicate Email Error](images/checkpoint_2_1_duplicate_email.png)
+
+3. ภาพหน้าจอข้อความ Error กรณี (ข) รหัสผ่านสั้นเกินไป (< 6 ตัวอักษร):
+![Checkpoint 2.1 - Weak Password Error](images/checkpoint_2_1_weak_password.png)
+
+---
+คำอธิบายโค้ดใน lib/services/auth_service.dart:
+1. การดักจับ Exception:
+   เมธอด signUp() เรียกใช้ _auth.createUserWithEmailAndPassword(...) ภายในบล็อก try/catch โดยดักจับ FirebaseAuthException catch (e) แล้วส่งโค้ด e.code ไปแปลภาษาผ่าน _translateErrorCode(e.code)
+2. การจัดการกรณี (ก) สมัครซ้ำด้วย Email เดิม:
+   Firebase จะส่ง error code กลับมาเป็น 'email-already-in-use' ซึ่งฟังก์ชัน _translateErrorCode(String code) มี case จัดการดังนี้:
+   case 'email-already-in-use':
+     return 'อีเมลนี้ถูกใช้งานไปแล้ว กรุณาใช้อีเมลอื่นหรือเข้าสู่ระบบ';
+3. การจัดการกรณี (ข) ใส่รหัสผ่านสั้นเกินไป:
+   Firebase จะส่ง error code กลับมาเป็น 'weak-password' ซึ่งฟังก์ชัน _translateErrorCode(String code) มี case จัดการดังนี้:
+   case 'weak-password':
+     return 'รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร';
 ```
 
 ---
@@ -384,7 +408,22 @@ avdmanager list avd
 > ✅ **Checkpoint 3.1** ทดสอบกดปุ่มเข้าสู่ระบบด้วย Google ด้วยบัญชี Google จริงของคุณ ถ่ายภาพหน้าจอตอนเลือกบัญชี Google และภาพหน้าจอ Firebase Console ที่แสดงว่ามีผู้ใช้ใหม่ Provider เป็น Google เพิ่มเข้ามา อธิบายว่า `idToken` กับ `accessToken` ที่ได้จาก Google นำไปใช้ทำอะไรต่อในขั้นตอนการยืนยันตัวตนกับ Firebase (อ้างอิงหัวข้อ 9.4)
 
 ```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
+บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย:
+
+1. ภาพหน้าจอขณะเลือกบัญชี Google บนแอป / Google Sign-In Sheet:
+![Checkpoint 3.1 - Google Account Picker](images/checkpoint_3_1_picker.png)
+
+2. ภาพหน้าจอ Firebase Console (Authentication -> Users) แสดง Provider เป็น Google:
+![Checkpoint 3.1 - Google Provider in Console](images/checkpoint_3_1_provider.png)
+
+---
+คำอธิบาย: idToken กับ accessToken ที่ได้จาก Google นำไปใช้ทำอะไรต่อในขั้นตอนการยืนยันตัวตนกับ Firebase:
+1. idToken (Identity Token):
+   เป็น JWT (JSON Web Token) ที่ลงนามแบบเข้ารหัสโดย Google มีข้อมูลยืนยันตัวตนของผู้ใช้ (เช่น Google UID, Email, Profile Picture, Expiry Time) นำไปให้ Firebase Server ตรวจสอบว่าผู้ใช้คนนี้ได้ผ่านการยืนยันตัวตนกับ Google จริงและโทเค็นยังไม่หมดอายุ
+2. accessToken (Access Token):
+   เป็น OAuth 2.0 Token ที่ได้รับจากการขอ Scope (เช่น 'email') เพื่อใช้เป็นสิทธิ์ในการเข้าถึง Google API ต่าง ๆ
+3. การส่งต่อไปยัง Firebase:
+   ทั้ง idToken และ accessToken จะถูกนำมาสร้างเป็น Credential ผ่านคำสั่ง GoogleAuthProvider.credential(idToken: idToken, accessToken: authorization?.accessToken) แล้วส่งให้ _auth.signInWithCredential(credential) เพื่อให้ Firebase Authentication ตรวจสอบความถูกต้องและสร้าง/เชื่อมโยง Firebase User Account กลับมาให้แอปใช้งาน
 ```
 
 ---
@@ -524,7 +563,25 @@ Widget build(BuildContext context) {
 
 
 ```text
-บันทึกรูปผลลัพธ์ที่นี่ (3 ภาพ) และคำอธิบาย
+บันทึกรูปผลลัพธ์ที่นี่ (3 ภาพ) และคำอธิบาย:
+
+(ก) แอปเปิดครั้งแรกยังไม่ล็อกอิน แสดงหน้า Login:
+![Checkpoint 4.1 - Login Page](images/checkpoint_4_1_login.png)
+
+(ข) หลังล็อกอินสำเร็จ สลับมาหน้า MainScaffold อัตโนมัติ:
+![Checkpoint 4.1 - Main Scaffold](images/checkpoint_4_1_home.png)
+
+(ค) หลังกด "ออกจากระบบ" สลับกลับหน้า Login อัตโนมัติ:
+![Checkpoint 4.1 - Sign Out to Login](images/checkpoint_4_1_signout.png)
+
+---
+คำอธิบาย: ทำไมการใช้ StreamBuilder ฟัง authStateChanges() จึงทำให้ไม่ต้องเขียนโค้ดสั่ง Navigate ไปมาเอง:
+FirebaseAuth.instance.authStateChanges() ส่งค่าออกมาเป็น Stream<User?> แบบ Reactive Real-time
+- เมื่อสถานะผู้ใช้เปลี่ยน (ล็อกอินสำเร็จ, สมัครสมาชิก, หลุดการเชื่อมต่อ หรือกด Sign Out) Stream จะยิง Event ค่า User? ใหม่ออกมาทันที
+- StreamBuilder ที่ครอบตัวแอปไว้ใน AuthGate จะตรวจจับ Event ใหม่นี้และสั่ง rebuild ตัวเองโดยอัตโนมัติ:
+  - ถ้า snapshot.data == null จะรีเทิร์นแสดง LoginPage()
+  - ถ้า snapshot.data มี User จะรีเทิร์นแสดง MainScaffold(...)
+- ทำให้ UI สลับหน้าจอตามสถานะที่แท้จริงจาก Single Source of Truth โดยไม่ต้องเรียก Navigator.push / pop แบบ Manual ในแต่ละหน้าจอเลย ช่วยป้องกันปัญหาหน้าจอกับสถานะการล็อกอินไม่ตรงกัน
 ```
 
 ---
@@ -539,7 +596,16 @@ Widget build(BuildContext context) {
 2. ถ้าในอนาคตอาจารย์สั่งให้เปลี่ยนจาก Fake Store API ไปใช้ API อื่น ต้องแก้ไฟล์กี่ไฟล์ ถ้าทุก Widget เรียกผ่าน Interface `ItemRepository` เท่านั้น?
 
 ```text
-บันทึกคำตอบของคุณที่นี่
+1. ทำไมจึงเพิ่ม Implementation ใหม่ (ItemRepositoryFirestore) แทนที่จะแก้ ItemRepositoryApi หรือเรียก Firestore ตรงจาก HomePage:
+   - ปฏิบัติตามหลัก Open/Closed Principle (OCP ใน SOLID): ซอฟต์แวร์ควร "เปิดต่อการขยาย (Open for extension) แต่ปิดต่อการแก้ไข (Closed for modification)" การสร้าง ItemRepositoryFirestore ทำให้เราเพิ่มแหล่งข้อมูลใหม่ได้โดยไม่ต้องแตะโค้ด ItemRepositoryApi ที่ทำงานดีอยู่แล้ว
+   - การแยกความรับผิดชอบ (Separation of Concerns & Decoupling): หากเขียนเรียก Firestore ตรงจาก HomePage หน้าจอจะผูกติดกับเทคโนโลยี Cloud Database แพลตฟอร์มใดแพลตฟอร์มหนึ่ง ทำให้ทดสอบ (Unit Test / Mock Test) ได้ยากและโค้ดซับซ้อนขึ้น
+   - ความยืดหยุ่น: ทำให้หน้า Home สามารถรวมข้อมูลจากทั้ง 2 แหล่งพร้อมกัน (Future.wait) ได้อย่างราบรื่นโดยมองทั้งคู่เป็น ItemRepository เหมือนกัน
+
+2. ถ้าในอนาคตต้องการเปลี่ยนจาก Fake Store API ไปใช้ API อื่น ต้องแก้กี่ไฟล์:
+   - แก้เพียง 1-2 ไฟล์เท่านั้น คือ:
+     1) สร้างหรือแก้ไขคลาสที่ implement ItemRepository (เช่น ItemRepositoryNewApi) เพื่อเชื่อมต่อไปยัง API ใหม่
+     2) แก้ไขจุดที่ Inject หรือส่ง Repository ให้กับแอปใน main.dart (หรือ Dependency Injection Setup)
+   - ส่วน Widget ทั้งหมด (เช่น HomePage, ItemCard, MainScaffold) ไม่ต้องแก้ไขโค้ดเลยแม้แต่บรรทัดเดียว เพราะ Widget ทั้งหมดคุยผ่าน Abstraction (Interface ItemRepository) เท่านั้นตาม Dependency Inversion Principle
 ```
 
 ### ขั้นตอนที่ 5.2: **นักศึกษาเขียน Code เอง** — ItemRepositoryFirestore
@@ -612,7 +678,18 @@ final pages = [
 > ✅ **Checkpoint 5.1** ถ่ายภาพหน้าจอ Home ที่แสดงสินค้าจากทั้งสองแหล่งข้อมูลปนกันอยู่ในลิสต์เดียว พร้อม Badge ที่แยกแหล่งที่มาชัดเจน (ถ้ายังไม่เคยมีประกาศจริงใน Firestore เลย ให้ทำส่วนที่ 6 ให้เสร็จก่อนแล้วย้อนกลับมาถ่ายภาพ Checkpoint นี้) อธิบายว่าการออกแบบให้ `HomePage` ไม่รู้จัก `ItemRepositoryApi`/`ItemRepositoryFirestore` โดยตรง แต่รู้จักผ่าน Interface `ItemRepository` เท่านั้น ช่วยให้ทดสอบหรือเปลี่ยนแหล่งข้อมูลในอนาคตง่ายขึ้นอย่างไร
 
 ```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
+บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย:
+
+ภาพหน้าจอ Home แสดงสินค้าจาก API และ Firestore พร้อม Badge แยกแหล่งที่มา (🎓 โพสต์โดยนักศึกษา และ 🏪 ร้านค้า API):
+![Checkpoint 5.1 - Combined Items](images/checkpoint_5_1_home_badges.png)
+
+---
+คำอธิบาย:
+การออกแบบให้ HomePage ขึ้นตรงกับ Interface ItemRepository (Dependency Inversion Principle):
+1. ง่ายต่อการทำ Unit Test / Widget Test:
+   เราสามารถสร้าง Mock หรือ FakeItemRepository ที่คืนค่า List<Item> จำลองส่งให้ HomePage ทดสอบได้ทันที โดยไม่ต้องเชื่อมต่ออินเทอร์เน็ตจริง ไม่ต้องพึ่งพา Fake Store API หรือ Firebase Firestore จริง ทำให้การทดสอบรันได้เร็ว แม่นยำ และไม่พังเมื่อเน็ตหลุด
+2. ง่ายต่อการเปลี่ยนหรือเพิ่มแหล่งข้อมูล:
+   HomePage มีหน้าที่เพียงรับ List<ItemRepository> แล้วเรียก getItems() มารวมกัน ไม่ว่าข้อมูลจะมาจาก REST API, GraphQL, Firestore, Local SQLite (Drift), หรือ Firebase Realtime Database หน้า Home ก็ทำงานได้ทันทีโดยไม่ต้องแก้ไข UI หรือ Logic ภายในหน้าจอเลย
 ```
 
 ---
@@ -664,13 +741,28 @@ final pages = [
 > ✅ **Checkpoint 6.1** โพสต์ขายจริงอย่างน้อย 2 รายการผ่านแอป ถ่ายภาพหน้าจอ Firebase Console เมนู Firestore Database ที่แสดง Collection `items` มีเอกสารที่โพสต์เข้ามาจริง พร้อม field `sellerId` ที่ตรงกับ `uid` ของบัญชีที่ใช้ทดสอบ และยืนยันว่าร่างทั้งสองรายการหายไปจาก `MyDraftsPage` แล้ว
 
 ```text
-บันทึกรูปผลลัพธ์ที่นี่
+บันทึกรูปผลลัพธ์ที่นี่:
+
+1. ภาพหน้าจอ Firebase Console เมนู Firestore Database (Collection "items") แสดงเอกสารที่โพสต์จริง พร้อม field sellerId ตรงกับ UID:
+![Checkpoint 6.1 - Firestore Items](images/checkpoint_6_1_firestore.png)
+
+2. ภาพหน้าจอหน้า MyDraftsPage ในแอป ยืนยันว่าร่างรายการที่กดโพสต์หายไปจากรายการแล้ว:
+![Checkpoint 6.1 - MyDraftsPage Updated](images/checkpoint_6_1_drafts_updated.png)
 ```
 
 > ✅ **Checkpoint 6.2** ถ่ายภาพหน้าจอ Firebase Console เมนู Storage ที่แสดงไฟล์รูปภาพที่อัปโหลดสำเร็จ และภาพหน้าจอ Firestore ที่แสดงว่าเอกสารมี field `imageUrl` เป็น URL จริงที่เปิดดูได้ ถ่ายภาพหน้าจอแอปที่แสดงรูปสินค้านั้นบนหน้า Home ผ่าน `Image.network(imageUrl)` ด้วย (ย้อนกลับไปถ่ายภาพ Checkpoint 5.1 ให้ครบตอนนี้ ถ้ายังไม่ได้ทำ)
 
 ```text
-บันทึกรูปผลลัพธ์ที่นี่
+บันทึกรูปผลลัพธ์ที่นี่:
+
+1. ภาพหน้าจอ Firebase Console เมนู Storage โฟลเดอร์ listings/ แสดงไฟล์รูปภาพที่อัปโหลดสำเร็จ:
+![Checkpoint 6.2 - Firebase Storage](images/checkpoint_6_2_storage.png)
+
+2. ภาพหน้าจอ Firestore แสดง field imageUrl เป็น Download URL จริง:
+![Checkpoint 6.2 - Firestore imageUrl](images/checkpoint_6_2_firestore_imageurl.png)
+
+3. ภาพหน้าจอแอปหน้า Home แสดงสินค้านักศึกษาที่โหลดรูปจาก Firebase Storage URL:
+![Checkpoint 6.2 - Home Network Image](images/checkpoint_6_2_home_network_image.png)
 ```
 
 ---
@@ -703,7 +795,20 @@ service cloud.firestore {
 > ✅ **Checkpoint 7.1 (Self-Study)** ถ่ายภาพหน้าจอผลการทดลองทั้ง 2 กรณีใน Rules Playground เขียนอธิบายสั้น ๆ ว่าทำไม Client-side Validation (การไม่แสดงปุ่มแก้ไขให้เห็น) เพียงอย่างเดียวจึงไม่เพียงพอต่อความปลอดภัยของข้อมูลจริง
 
 ```text
-บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย
+บันทึกรูปผลลัพธ์ที่นี่ และคำอธิบาย:
+
+1. ภาพหน้าจอ Rules Playground กรณี (ก) ผู้ใช้ที่ล็อกอินแก้ไขเอกสารของตัวเอง (Allowed):
+![Checkpoint 7.1 - Rules Allowed](images/checkpoint_7_1_allowed.png)
+
+2. ภาพหน้าจอ Rules Playground กรณี (ข) ผู้ใช้พยายามแก้ไขเอกสารของคนอื่น (Denied):
+![Checkpoint 7.1 - Rules Denied](images/checkpoint_7_1_denied.png)
+
+---
+คำอธิบาย: ทำไม Client-side Validation เพียงอย่างเดียวจึงไม่เพียงพอต่อความปลอดภัยของข้อมูลจริง:
+Client-side Validation (เช่น การซ่อนปุ่มแก้ไข/ลบใน UI ไม่ให้ผู้ใช้คนอื่นเห็น) เป็นเพียงการควบคุมระดับ User Interface บนเครื่องไคลเอนต์เท่านั้น แต่ในความเป็นจริง:
+1. แอปไคลเอนต์ทำงานบนอุปกรณ์ของผู้ใช้ ซึ่งสามารถถูก Decompile, Reverse Engineer หรือดัดแปลงโค้ดเพื่อเปิดปุ่มขึ้นมาใหม่ได้
+2. ผู้ไม่ประสงค์ดีสามารถใช้โปรแกรมอย่าง Postman, cURL, Firebase CLI หรือเขียนสคริปต์ยิง HTTP/REST API ตรงไปยัง Firestore Endpoint โดยส่ง UID หรือแก้ไขข้อมูลได้โดยตรงโดยไม่ต้องผ่าน UI ของแอปเราเลย
+ดังนั้น การรักษาความปลอดภัยที่แท้จริงต้องมี Server-side Authorization เสมอ ซึ่งใน Firebase คือ Firebase Security Rules ที่ตรวจสอบสิทธิ์บน Cloud Server โดยตรง (request.auth.uid == resource.data.sellerId) ทำให้มั่นใจได้ว่าแม้ผู้โจมตีจะยิงคำขอตรงมายังฐานข้อมูล ระบบก็จะปฏิเสธคำขออย่างเด็ดขาด
 ```
 
 ---
@@ -722,7 +827,19 @@ service cloud.firestore {
 > ✅ **Checkpoint 8.1** ถ่ายภาพหน้าจอผลการทดสอบทั้ง 4 ข้อ 
 
 ```text
-บันทึกรูปผลลัพธ์ที่นี่ 
+บันทึกรูปผลลัพธ์ที่นี่:
+
+ข้อ 1: ภาพหน้าจอล็อกอินค้างไว้ แล้วปิดแอปเปิดใหม่ แอปยังคงเข้าหน้า MainScaffold ทันที:
+![Checkpoint 8.1 - Persistent Auth](images/checkpoint_8_1_persistent_auth.png)
+
+ข้อ 2: ภาพหน้าจอปิด WiFi/เน็ต แล้วเปิดแท็บรายการโปรด/ร่างของฉัน ยังดูข้อมูลจาก Drift ได้ตามปกติ:
+![Checkpoint 8.1 - Offline Drift](images/checkpoint_8_1_offline_drift.png)
+
+ข้อ 3: ภาพหน้าจอขณะปิดเน็ต แล้วกด "โพสต์ขายจริง" แอปแสดง Error แจ้งเตือนอย่างเหมาะสมและไม่ Crash:
+![Checkpoint 8.1 - Offline Error](images/checkpoint_8_1_offline_error.png)
+
+ข้อ 4: ภาพหน้าจอเปิดเน็ตกลับมา แล้วกด "โพสต์ขายจริง" รายการเดิม สำเร็จตามปกติ:
+![Checkpoint 8.1 - Online Success](images/checkpoint_8_1_online_success.png)
 ```
 
 ---

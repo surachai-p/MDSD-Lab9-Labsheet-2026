@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "692891860951",
+    "project_id": "campus-market-2026-ittipat",
+    "storage_bucket": "campus-market-2026-ittipat.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:692891860951:android:df9d0e3f74c4861106d592",
+        "android_client_info": {
+          "package_name": "com.example.campus_marketplace_w7"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "692891860951-3oqsgpojlav1fcetb2k1bno75sopvn1b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.campus_marketplace_w7",
+            "certificate_hash": "dde2f42302a6705df6236394e607c3f5d548b01a"
+          }
+        },
+        {
+          "client_id": "692891860951-ri8kl00apllovtgv3dj61sjg4n9i0ueq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCZNOEaMVHOdbdglOw4YSmiYsXWwo1uEA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "692891860951-ri8kl00apllovtgv3dj61sjg4n9i0ueq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
